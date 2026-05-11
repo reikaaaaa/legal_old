@@ -1,0 +1,756 @@
+{
+  "case_id": "case-2024-mc-0001",
+  "status": "ok",
+  "fallback_gate": {
+    "risk_triggered": true,
+    "risk_level": "medium",
+    "reason": [
+      "输入完整度评分 67 处于中风险区间。"
+    ],
+    "recommended_action": "proceed_with_risk_notes",
+    "available_choices": [
+      {
+        "choice": "supplement",
+        "description": "停止裁判输出，按缺口清单补充材料后回退"
+      },
+      {
+        "choice": "proceed_with_risk_notes",
+        "description": "继续输出强裁判结果并附风险提示"
+      },
+      {
+        "choice": "continue_weak_judgment",
+        "description": "改用弱裁判通道（更保守）"
+      }
+    ],
+    "default_choice": "proceed_with_risk_notes",
+    "hard_block": false
+  },
+  "step1": {
+    "case_cause_inferred": [
+      "买卖合同纠纷"
+    ],
+    "legal_domain_inferred": [
+      "合同"
+    ],
+    "fixed_claims": [
+      {
+        "claim_id": "C1",
+        "claim_text_normalized": "支付货款 500,000 元",
+        "claim_type": [
+          "payment_claim"
+        ],
+        "object_type": "金钱",
+        "amount": 500000.0,
+        "claimant": "甲公司",
+        "respondent": "乙公司",
+        "is_clear": true,
+        "is_executable": true,
+        "issues": [],
+        "clarification_questions": [],
+        "priority_type": "primary",
+        "competition_note": null
+      },
+      {
+        "claim_id": "C2",
+        "claim_text_normalized": "支付逾期利息（按 LPR 自 2024-03-01 起计至付清之日）",
+        "claim_type": [
+          "damages_claim"
+        ],
+        "object_type": "金钱",
+        "amount": null,
+        "claimant": "甲公司",
+        "respondent": "乙公司",
+        "is_clear": true,
+        "is_executable": true,
+        "issues": [],
+        "clarification_questions": [],
+        "priority_type": "parallel",
+        "competition_note": "与 C1 构成聚合关系，系违约责任请求"
+      }
+    ],
+    "overall_clarification": [
+      "被告抗辩货物存在质量瑕疵并要求扣减价款，需释明被告是否就此提起反诉，以便确定审理范围。"
+    ]
+  },
+  "step2": {
+    "request_basis_candidates": [],
+    "competition_analysis": null
+  },
+  "step3": {
+    "defense_basis_candidates": [
+      {
+        "defense_id": "d1",
+        "target_claim_id": "C1",
+        "response_type": "抗辩权",
+        "defense_type": [
+          "simultaneous_performance_defense"
+        ],
+        "rule_unit_ref": null,
+        "legal_effect_tags": [
+          "performance_suspended"
+        ],
+        "selection_reason": "被告明确主张同时履行抗辩权，理由是原告交付设备存在质量瑕疵且未予更换，在原告未完全履行交付符合约定货物义务前拒绝支付货款。但候选规则单元中无民法典第 525 条同时履行抗辩权规范",
+        "clarification_needed": false,
+        "risk_note": "候选规则单元中未包含民法典第 525 条同时履行抗辩权规范，当前候选规则单元主要涉及诉讼时效、不当得利、仓储保管、海商法免责等，与本案买卖合同同时履行抗辩权不匹配，需补充相关规则单元以支持该抗辩"
+      }
+    ]
+  },
+  "step4": {
+    "element_matrix": []
+  },
+  "step5": {
+    "claim_fact_mapping": []
+  },
+  "step6": {
+    "issues": [
+      {
+        "issue_id": "I1",
+        "issue_type": "fact_issue",
+        "issue_text": "原被告之间买卖合同是否成立生效且原告是否已履行交付 10 台设备的义务",
+        "linked_element_ids": [],
+        "linked_claim_id": "c1",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e1",
+          "e2",
+          "e3"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I2",
+        "issue_type": "fact_issue",
+        "issue_text": "被告主张的 3 台设备是否存在严重质量瑕疵且无法正常使用",
+        "linked_element_ids": [],
+        "linked_claim_id": "c1",
+        "linked_defense_id": "d1",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e2",
+          "e3",
+          "e6"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I3",
+        "issue_type": "fact_issue",
+        "issue_text": "被告是否就质量瑕疵在合理期限内向原告提出书面异议",
+        "linked_element_ids": [],
+        "linked_claim_id": "c1",
+        "linked_defense_id": "d1",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e5"
+        ],
+        "priority": "medium"
+      },
+      {
+        "issue_id": "I4",
+        "issue_type": "legal_issue",
+        "issue_text": "在原告未完全履行交付符合约定货物义务前，被告是否享有同时履行抗辩权从而拒绝支付货款",
+        "linked_element_ids": [],
+        "linked_claim_id": "c1",
+        "linked_defense_id": "d1",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e5",
+          "e6"
+        ],
+        "priority": "high"
+      }
+    ],
+    "review_order": [
+      "I1",
+      "I2",
+      "I3",
+      "I4"
+    ]
+  },
+  "step7": {
+    "proof_plan": [
+      {
+        "issue_id": "I1",
+        "element_id": "missing",
+        "fact_to_prove": "原被告之间买卖合同成立生效且原告已履行交付 10 台设备的义务",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e1",
+          "e2",
+          "e3"
+        ],
+        "suggested_evidence_types": [
+          "验收单",
+          "调试记录"
+        ],
+        "proof_gap": "被告对送货单真实性无异议，但主张其中 3 台为质量瑕疵设备，交付数量与质量是否符合约定存在争议，缺乏明确的验收合格确认文件。",
+        "effect_if_unknown": "由原告承担举证不能的不利后果"
+      },
+      {
+        "issue_id": "I2",
+        "element_id": "missing",
+        "fact_to_prove": "被告主张的 3 台设备是否存在严重质量瑕疵且无法正常使用",
+        "burden_party": "被告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e2",
+          "e3",
+          "e6"
+        ],
+        "suggested_evidence_types": [
+          "鉴定机构资质证明",
+          "取样过程录像",
+          "交付时验收记录"
+        ],
+        "proof_gap": "原告对第三方检测报告（e6）的鉴定机构资质、取样过程及瑕疵形成时间提出异议，质证意见显示需要补充证明，缺乏瑕疵在交付时即已存在的直接证据。",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      },
+      {
+        "issue_id": "I3",
+        "element_id": "missing",
+        "fact_to_prove": "被告是否就质量瑕疵在合理期限内向原告提出书面异议",
+        "burden_party": "被告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e5"
+        ],
+        "suggested_evidence_types": [
+          "送达回执",
+          "邮件签收记录",
+          "沟通记录"
+        ],
+        "proof_gap": "仅有质量异议通知书原件，缺乏有效送达证明及具体提出时间的证据，难以认定是否在合同约定或法定的合理期限内。",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      },
+      {
+        "issue_id": "I4",
+        "element_id": "missing",
+        "fact_to_prove": "在原告未完全履行交付符合约定货物义务前，被告是否享有同时履行抗辩权从而拒绝支付货款",
+        "burden_party": "被告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e5",
+          "e6"
+        ],
+        "suggested_evidence_types": [
+          "合同付款条款",
+          "履行顺序约定"
+        ],
+        "proof_gap": "需证明质量瑕疵达到根本违约程度或合同明确约定可拒付货款，目前证据主要集中于瑕疵存在与否，抗辩权成立的法律要件证明不足。",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      }
+    ]
+  },
+  "step8": {
+    "fact_findings": [
+      {
+        "fact_finding_id": "F1",
+        "element_id": "E1",
+        "fact_slot": "原被告之间买卖合同成立生效且原告已履行交付 10 台设备的义务",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e1",
+          "e2",
+          "e3"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e1《工业设备买卖合同》经质证无异议，合法性、真实性、关联性均予以确认；证据 e2 送货单被告对真实性无异议，虽主张质量瑕疵但认可送货事实；证据 e3 增值税专用发票与 e1、e2 相互印证，形成完整证据链，足以证明合同成立及 10 台设备已交付的事实。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      },
+      {
+        "fact_finding_id": "F2",
+        "element_id": "E2",
+        "fact_slot": "被告主张的 3 台设备是否存在严重质量瑕疵且无法正常使用",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [],
+        "rejected_evidence_ids": [
+          "e6"
+        ],
+        "reasoning": "证据 e6 第三方检测报告系被告单方委托，原告对鉴定机构资质合法性及取样过程真实性提出异议且被告未补充证明，无法确认瑕疵形成时间是否在交付前，证明力不足；证据 e2、e3 仅能证明交付数量，与质量瑕疵无关联性。该事实真伪不明。",
+        "burden_party": "被告",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      },
+      {
+        "fact_finding_id": "F3",
+        "element_id": "E3",
+        "fact_slot": "被告是否就质量瑕疵在合理期限内向原告提出书面异议",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e5"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e5 设备质量异议通知书原件虽被采信，但缺乏送达回执、邮件签收记录等证明具体提出时间及有效送达的证据，无法认定是否在合同约定或法定的合理期限内提出，证明力不足。该事实真伪不明。",
+        "burden_party": "被告",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      },
+      {
+        "fact_finding_id": "F4",
+        "element_id": "E4",
+        "fact_slot": "在原告未完全履行交付符合约定货物义务前，被告是否享有同时履行抗辩权从而拒绝支付货款",
+        "finding_status": "not_proved",
+        "adopted_evidence_ids": [
+          "e5",
+          "e6"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "被告行使同时履行抗辩权的前提是原告交付货物存在根本违约或合同有明确约定。基于 F2、F3 事实认定，质量瑕疵及合理期限异议均未得到证明，被告提交证据 e5、e6 不足以证明抗辩权成立的法律要件，故该事实不予认定。",
+        "burden_party": "被告",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      }
+    ]
+  },
+  "step9": {
+    "subsumption_results": [
+      {
+        "claim_id": "C1",
+        "request_basis_rule_unit_id": "missing",
+        "request_elements_result": [
+          {
+            "element_id": "E1",
+            "element_name": "合同关系成立并有效且原告已履行交付义务",
+            "finding_status": "proved",
+            "note": "依据事实认定 F1，买卖合同成立生效且 10 台设备已交付"
+          }
+        ],
+        "defense_results": [
+          {
+            "defense_id": "d1",
+            "defense_type": [
+              "simultaneous_performance_defense"
+            ],
+            "elements_status": [
+              {
+                "element_id": "E2",
+                "element_name": "设备存在严重质量瑕疵且无法正常使用",
+                "finding_status": "unknown",
+                "note": "依据事实认定 F2，被告举证不足，真伪不明，由被告承担不利后果"
+              },
+              {
+                "element_id": "E3",
+                "element_name": "在合理期限内提出书面异议",
+                "finding_status": "unknown",
+                "note": "依据事实认定 F3，被告举证不足，真伪不明，由被告承担不利后果"
+              },
+              {
+                "element_id": "E4",
+                "element_name": "享有同时履行抗辩权",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F4，抗辩权成立要件未获证明"
+              }
+            ],
+            "accepted": false,
+            "effect": null
+          }
+        ],
+        "legal_effect_tags": [
+          "liability_arises"
+        ],
+        "disposition_type": "支持支付货款",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，原告甲公司与被告乙公司之间买卖合同关系依法成立并有效，原告已按约交付 10 台设备，履行了主要合同义务，被告应当支付相应货款。关于被告提出的同时履行抗辩权，因被告未能举证证明设备存在严重质量瑕疵及已在合理期限内提出异议，其抗辩权成立的前提要件事实真伪不明或未获证明，故该抗辩不能成立。原告请求支付货款 500,000 元，事实清楚，证据充分，本院予以支持。",
+        "cited_rules": [
+          "民法典_579_001"
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "request_basis_rule_unit_id": "missing",
+        "request_elements_result": [
+          {
+            "element_id": "E1",
+            "element_name": "合同关系成立并有效且原告已履行交付义务",
+            "finding_status": "proved",
+            "note": "依据事实认定 F1，主债务成立，逾期付款违约责任随之产生"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises"
+        ],
+        "disposition_type": "支持逾期利息",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，被告未按期支付货款构成违约，应当赔偿因此给原告造成的利息损失。原告主张以 500,000 元为基数，按 LPR 自 2024-03-01 起计算逾期利息，符合法律规定，且被告未就此提出有效抗辩，本院予以支持。",
+        "cited_rules": [
+          "民法典_577_001"
+        ]
+      }
+    ]
+  },
+  "strong_judgment": {
+    "mode": "strong_judgment",
+    "sufficiency_score": {
+      "claim_clarity": 19,
+      "legal_relation_stability": 12,
+      "request_basis_stability": 2,
+      "defense_path_completeness": 5,
+      "element_fact_coverage": 12,
+      "evidence_coverage": 10,
+      "fact_finding_reliability": 7
+    },
+    "risk_level": "medium",
+    "subsumption_results": [
+      {
+        "claim_id": "C1",
+        "request_basis_rule_unit_id": "missing",
+        "request_elements_result": [
+          {
+            "element_id": "E1",
+            "element_name": "合同关系成立并有效且原告已履行交付义务",
+            "finding_status": "proved",
+            "note": "依据事实认定 F1，买卖合同成立生效且 10 台设备已交付"
+          }
+        ],
+        "defense_results": [
+          {
+            "defense_id": "d1",
+            "defense_type": [
+              "simultaneous_performance_defense"
+            ],
+            "elements_status": [
+              {
+                "element_id": "E2",
+                "element_name": "设备存在严重质量瑕疵且无法正常使用",
+                "finding_status": "unknown",
+                "note": "依据事实认定 F2，被告举证不足，真伪不明，由被告承担不利后果"
+              },
+              {
+                "element_id": "E3",
+                "element_name": "在合理期限内提出书面异议",
+                "finding_status": "unknown",
+                "note": "依据事实认定 F3，被告举证不足，真伪不明，由被告承担不利后果"
+              },
+              {
+                "element_id": "E4",
+                "element_name": "享有同时履行抗辩权",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F4，抗辩权成立要件未获证明"
+              }
+            ],
+            "accepted": false,
+            "effect": null
+          }
+        ],
+        "legal_effect_tags": [
+          "liability_arises"
+        ],
+        "disposition_type": "支持支付货款",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，原告甲公司与被告乙公司之间买卖合同关系依法成立并有效，原告已按约交付 10 台设备，履行了主要合同义务，被告应当支付相应货款。关于被告提出的同时履行抗辩权，因被告未能举证证明设备存在严重质量瑕疵及已在合理期限内提出异议，其抗辩权成立的前提要件事实真伪不明或未获证明，故该抗辩不能成立。原告请求支付货款 500,000 元，事实清楚，证据充分，本院予以支持。",
+        "cited_rules": [
+          "民法典_579_001"
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "request_basis_rule_unit_id": "missing",
+        "request_elements_result": [
+          {
+            "element_id": "E1",
+            "element_name": "合同关系成立并有效且原告已履行交付义务",
+            "finding_status": "proved",
+            "note": "依据事实认定 F1，主债务成立，逾期付款违约责任随之产生"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises"
+        ],
+        "disposition_type": "支持逾期利息",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，被告未按期支付货款构成违约，应当赔偿因此给原告造成的利息损失。原告主张以 500,000 元为基数，按 LPR 自 2024-03-01 起计算逾期利息，符合法律规定，且被告未就此提出有效抗辩，本院予以支持。",
+        "cited_rules": [
+          "民法典_577_001"
+        ]
+      }
+    ],
+    "document_skeleton": {
+      "原告诉讼请求": [
+        {
+          "claim_id": "C1",
+          "claim_text_normalized": "支付货款 500,000 元",
+          "claim_type": [
+            "payment_claim"
+          ],
+          "object_type": "金钱",
+          "amount": 500000.0,
+          "claimant": "甲公司",
+          "respondent": "乙公司",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": null
+        },
+        {
+          "claim_id": "C2",
+          "claim_text_normalized": "支付逾期利息（按 LPR 自 2024-03-01 起计至付清之日）",
+          "claim_type": [
+            "damages_claim"
+          ],
+          "object_type": "金钱",
+          "amount": null,
+          "claimant": "甲公司",
+          "respondent": "乙公司",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "parallel",
+          "competition_note": "与 C1 构成聚合关系，系违约责任请求"
+        }
+      ],
+      "被告辩称": [
+        {
+          "defense_id": "d1",
+          "defense_text_original": "被告乙公司辩称：原告交付的 10 台设备中有 3 台存在严重质量瑕疵，无法正常使用，被告已经书面通知原告要求更换，但原告至今未予处理。在原告未完全履行交付符合约定货物之义务前，被告依法享有同时履行抗辩权，可以拒绝支付货款。",
+          "defense_text_normalized": null,
+          "defense_target_claim_id": "c1",
+          "response_type": "抗辩权",
+          "defense_type_candidate": [
+            "同时履行抗辩权",
+            "质量瑕疵抗辩"
+          ],
+          "new_fact_asserted": true,
+          "linked_evidence_ids": [
+            "e5",
+            "e6"
+          ],
+          "possible_defense_basis": [
+            "同时履行抗辩权（《民法典》第 525 条）"
+          ],
+          "clarification_needed": false
+        }
+      ],
+      "争议焦点": [
+        {
+          "issue_id": "I1",
+          "issue_type": "fact_issue",
+          "issue_text": "原被告之间买卖合同是否成立生效且原告是否已履行交付 10 台设备的义务",
+          "linked_element_ids": [],
+          "linked_claim_id": "c1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e1",
+            "e2",
+            "e3"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I2",
+          "issue_type": "fact_issue",
+          "issue_text": "被告主张的 3 台设备是否存在严重质量瑕疵且无法正常使用",
+          "linked_element_ids": [],
+          "linked_claim_id": "c1",
+          "linked_defense_id": "d1",
+          "burden_party": "被告",
+          "linked_evidence_ids": [
+            "e2",
+            "e3",
+            "e6"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I3",
+          "issue_type": "fact_issue",
+          "issue_text": "被告是否就质量瑕疵在合理期限内向原告提出书面异议",
+          "linked_element_ids": [],
+          "linked_claim_id": "c1",
+          "linked_defense_id": "d1",
+          "burden_party": "被告",
+          "linked_evidence_ids": [
+            "e5"
+          ],
+          "priority": "medium"
+        },
+        {
+          "issue_id": "I4",
+          "issue_type": "legal_issue",
+          "issue_text": "在原告未完全履行交付符合约定货物义务前，被告是否享有同时履行抗辩权从而拒绝支付货款",
+          "linked_element_ids": [],
+          "linked_claim_id": "c1",
+          "linked_defense_id": "d1",
+          "burden_party": "被告",
+          "linked_evidence_ids": [
+            "e5",
+            "e6"
+          ],
+          "priority": "high"
+        }
+      ],
+      "本院查明": [
+        {
+          "fact_finding_id": "F1",
+          "element_id": "E1",
+          "fact_slot": "原被告之间买卖合同成立生效且原告已履行交付 10 台设备的义务",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e1",
+            "e2",
+            "e3"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e1《工业设备买卖合同》经质证无异议，合法性、真实性、关联性均予以确认；证据 e2 送货单被告对真实性无异议，虽主张质量瑕疵但认可送货事实；证据 e3 增值税专用发票与 e1、e2 相互印证，形成完整证据链，足以证明合同成立及 10 台设备已交付的事实。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F2",
+          "element_id": "E2",
+          "fact_slot": "被告主张的 3 台设备是否存在严重质量瑕疵且无法正常使用",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [],
+          "rejected_evidence_ids": [
+            "e6"
+          ],
+          "reasoning": "证据 e6 第三方检测报告系被告单方委托，原告对鉴定机构资质合法性及取样过程真实性提出异议且被告未补充证明，无法确认瑕疵形成时间是否在交付前，证明力不足；证据 e2、e3 仅能证明交付数量，与质量瑕疵无关联性。该事实真伪不明。",
+          "burden_party": "被告",
+          "effect_if_unknown": "由被告承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F3",
+          "element_id": "E3",
+          "fact_slot": "被告是否就质量瑕疵在合理期限内向原告提出书面异议",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e5"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e5 设备质量异议通知书原件虽被采信，但缺乏送达回执、邮件签收记录等证明具体提出时间及有效送达的证据，无法认定是否在合同约定或法定的合理期限内提出，证明力不足。该事实真伪不明。",
+          "burden_party": "被告",
+          "effect_if_unknown": "由被告承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F4",
+          "element_id": "E4",
+          "fact_slot": "在原告未完全履行交付符合约定货物义务前，被告是否享有同时履行抗辩权从而拒绝支付货款",
+          "finding_status": "not_proved",
+          "adopted_evidence_ids": [
+            "e5",
+            "e6"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "被告行使同时履行抗辩权的前提是原告交付货物存在根本违约或合同有明确约定。基于 F2、F3 事实认定，质量瑕疵及合理期限异议均未得到证明，被告提交证据 e5、e6 不足以证明抗辩权成立的法律要件，故该事实不予认定。",
+          "burden_party": "被告",
+          "effect_if_unknown": "由被告承担举证不能的不利后果"
+        }
+      ],
+      "本院认为": [
+        {
+          "claim_id": "C1",
+          "request_basis_rule_unit_id": "missing",
+          "request_elements_result": [
+            {
+              "element_id": "E1",
+              "element_name": "合同关系成立并有效且原告已履行交付义务",
+              "finding_status": "proved",
+              "note": "依据事实认定 F1，买卖合同成立生效且 10 台设备已交付"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "d1",
+              "defense_type": [
+                "simultaneous_performance_defense"
+              ],
+              "elements_status": [
+                {
+                  "element_id": "E2",
+                  "element_name": "设备存在严重质量瑕疵且无法正常使用",
+                  "finding_status": "unknown",
+                  "note": "依据事实认定 F2，被告举证不足，真伪不明，由被告承担不利后果"
+                },
+                {
+                  "element_id": "E3",
+                  "element_name": "在合理期限内提出书面异议",
+                  "finding_status": "unknown",
+                  "note": "依据事实认定 F3，被告举证不足，真伪不明，由被告承担不利后果"
+                },
+                {
+                  "element_id": "E4",
+                  "element_name": "享有同时履行抗辩权",
+                  "finding_status": "not_proved",
+                  "note": "依据事实认定 F4，抗辩权成立要件未获证明"
+                }
+              ],
+              "accepted": false,
+              "effect": null
+            }
+          ],
+          "legal_effect_tags": [
+            "liability_arises"
+          ],
+          "disposition_type": "支持支付货款",
+          "judgment_result": "supported",
+          "reasoning_summary": "本院认为，原告甲公司与被告乙公司之间买卖合同关系依法成立并有效，原告已按约交付 10 台设备，履行了主要合同义务，被告应当支付相应货款。关于被告提出的同时履行抗辩权，因被告未能举证证明设备存在严重质量瑕疵及已在合理期限内提出异议，其抗辩权成立的前提要件事实真伪不明或未获证明，故该抗辩不能成立。原告请求支付货款 500,000 元，事实清楚，证据充分，本院予以支持。",
+          "cited_rules": [
+            "民法典_579_001"
+          ]
+        },
+        {
+          "claim_id": "C2",
+          "request_basis_rule_unit_id": "missing",
+          "request_elements_result": [
+            {
+              "element_id": "E1",
+              "element_name": "合同关系成立并有效且原告已履行交付义务",
+              "finding_status": "proved",
+              "note": "依据事实认定 F1，主债务成立，逾期付款违约责任随之产生"
+            }
+          ],
+          "defense_results": [],
+          "legal_effect_tags": [
+            "liability_arises"
+          ],
+          "disposition_type": "支持逾期利息",
+          "judgment_result": "supported",
+          "reasoning_summary": "本院认为，被告未按期支付货款构成违约，应当赔偿因此给原告造成的利息损失。原告主张以 500,000 元为基数，按 LPR 自 2024-03-01 起计算逾期利息，符合法律规定，且被告未就此提出有效抗辩，本院予以支持。",
+          "cited_rules": [
+            "民法典_577_001"
+          ]
+        }
+      ],
+      "判决主文": [
+        "支持原告关于 C1 的诉讼请求。",
+        "支持原告关于 C2 的诉讼请求。"
+      ],
+      "引用法条": [
+        "民法典_577_001",
+        "民法典_579_001"
+      ]
+    },
+    "consistency_check": {
+      "诉求-固定一致": false,
+      "固定-涵摄一致": true,
+      "缺漏的诉求（涵摄阶段未覆盖）": [],
+      "多出的诉求（涵摄阶段凭空出现）": [],
+      "争点已使用": true,
+      "事实已认定": true,
+      "法条已引用": true
+    }
+  },
+  "weak_judgment": null,
+  "partial_output": null,
+  "timings_ms": {
+    "step1_claim_fixing": 122366,
+    "step2_request_basis": 62587,
+    "step3_defense_basis": 58169,
+    "step4_element_analysis": 25471,
+    "step5_claim_fact_search": 0,
+    "step6_issue_organize": 90226,
+    "step7_proof": 84246,
+    "step8_fact_finding": 93036,
+    "step9_subsumption": 119852,
+    "total": 736194
+  },
+  "errors": [],
+  "warnings": [
+    "评分处于中风险区间，已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。"
+  ]
+}

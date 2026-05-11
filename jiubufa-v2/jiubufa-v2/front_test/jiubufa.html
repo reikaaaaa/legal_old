@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>九步法审案工作流 · Jiubufa Legal Workflow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Ma+Shan+Zheng&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ===================================================================
+     九步法审案工作流 — 庄严肃穆典雅风格
+     色调取自古籍宣纸、玄青官袍、朱砂印泥、赭石界栏
+  =================================================================== */
+  :root {
+    --paper:        #f3ecdd;   /* 宣纸米色 */
+    --paper-deep:   #e8dec9;   /* 深米 */
+    --ink:          #1a1d24;   /* 玄墨 */
+    --ink-soft:     #2c3140;   /* 灰墨 */
+    --ink-muted:    #5a5e6a;   /* 淡墨 */
+    --azure:        #1f3147;   /* 玄青 */
+    --azure-deep:   #11202e;   /* 深玄 */
+    --vermilion:    #9b2a23;   /* 朱砂 */
+    --vermilion-deep:#7a1f19;
+    --gold:         #a8843f;   /* 古铜金 */
+    --gold-soft:    #c9a961;   /* 浅金 */
+    --jade:         #4a6b53;   /* 松绿 */
+    --rule:         #c4b594;   /* 界栏赭 */
+    --rule-soft:    #d8cdb0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+    font-weight: 400;
+    line-height: 1.7;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 宣纸纹理背景 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(168,132,63,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(155,42,35,0.03) 0%, transparent 50%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' /></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.08'/></svg>");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 暗角 */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(26,29,36,0.08) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 1320px; margin: 0 auto; padding: 0 48px; }
+
+  /* ============== 顶部刻铭 ============== */
+  .crown {
+    padding: 56px 48px 32px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .crown::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 48px; right: 48px;
+    height: 1px;
+    background: var(--rule);
+  }
+  .crown-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .seal {
+    width: 92px; height: 92px;
+    background: var(--vermilion);
+    color: var(--paper);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+    font-size: 30px;
+    line-height: 1;
+    text-align: center;
+    box-shadow:
+      inset 0 0 0 3px var(--paper),
+      inset 0 0 0 4px var(--vermilion),
+      0 2px 0 rgba(122, 31, 25, 0.4);
+    position: relative;
+    transform: rotate(-3deg);
+    letter-spacing: 0.05em;
+    padding: 6px;
+  }
+  .seal::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid rgba(243, 236, 221, 0.3);
+    border-radius: 4px;
+  }
+  .seal span { display: block; font-size: 24px; }
+
+  .crown-title h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 42px;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .crown-title .latin {
+    font-family: 'Cormorant Garamond', 'EB Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 17px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+  }
+  .crown-title .latin em {
+    color: var(--vermilion);
+    font-style: italic;
+    margin: 0 6px;
+  }
+
+  .crown-meta {
+    text-align: right;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--ink-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .crown-meta strong {
+    display: block;
+    font-family: 'Noto Serif SC', serif;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .crown-meta .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: var(--jade);
+    border-radius: 50%;
+    margin-right: 6px;
+    box-shadow: 0 0 0 3px rgba(74, 107, 83, 0.15);
+    animation: pulse 2.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(74, 107, 83, 0.15); }
+    50% { box-shadow: 0 0 0 5px rgba(74, 107, 83, 0.05); }
+  }
+
+  /* ============== 导航卷轴 ============== */
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0 48px;
+    margin-top: 0;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+  .nav-tabs::before, .nav-tabs::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    width: 12px; height: 12px;
+    background: var(--vermilion);
+    border-radius: 50%;
+    border: 2px solid var(--paper);
+  }
+  .nav-tabs::before { left: 36px; }
+  .nav-tabs::after  { right: 36px; }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink-muted);
+    padding: 22px 44px;
+    cursor: pointer;
+    position: relative;
+    letter-spacing: 0.18em;
+    transition: color 0.3s ease;
+    border-right: 1px solid var(--rule-soft);
+  }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn .num {
+    font-family: 'Ma Shan Zheng', serif;
+    color: var(--vermilion);
+    font-size: 20px;
+    margin-right: 10px;
+    font-weight: 400;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 4px;
+    background: var(--ink);
+  }
+  .tab-btn.active::before {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 50%;
+    transform: translateX(-50%);
+    width: 6px; height: 6px;
+    background: var(--vermilion);
+    border-radius: 50%;
+    z-index: 2;
+    margin-bottom: -1px;
+  }
+
+  /* ============== 主面板 ============== */
+  main { padding: 56px 48px 96px; min-height: 70vh; }
+
+  .panel { display: none; animation: fadeUp 0.6s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 章节标题 */
+  .chapter {
+    text-align: center;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .chapter::before, .chapter::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 22%;
+    height: 1px;
+    background: var(--rule);
+  }
+  .chapter::before { left: 8%; }
+  .chapter::after  { right: 8%; }
+  .chapter h2 {
+    display: inline-block;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: var(--ink);
+    padding: 0 32px;
+    background: var(--paper);
+    position: relative;
+  }
+  .chapter h2::before {
+    content: '◆';
+    color: var(--vermilion);
+    font-size: 12px;
+    margin-right: 18px;
+    vertical-align: middle;
+  }
+  .chapter h2::after {
+    content: '◆';
+    color: var(--vermilion);
+    font-size: 12px;
+    margin-left: 18px;
+    vertical-align: middle;
+  }
+  .chapter .subtitle {
+    margin-top: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ============== 案件录入 — 表单区 ============== */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--rule);
+    box-shadow:
+      0 1px 0 var(--paper-deep),
+      0 0 0 1px var(--rule-soft),
+      0 2px 12px rgba(26, 29, 36, 0.04);
+  }
+
+  .form-aside {
+    background: linear-gradient(180deg, var(--azure-deep) 0%, var(--azure) 100%);
+    color: var(--paper);
+    padding: 40px 32px;
+    position: relative;
+  }
+  .form-aside::after {
+    content: '';
+    position: absolute;
+    top: 24px; bottom: 24px; right: -1px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--gold-soft), transparent);
+  }
+  .form-aside h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    color: var(--gold-soft);
+    margin-bottom: 6px;
+  }
+  .form-aside .aside-latin {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(243, 236, 221, 0.5);
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(201, 169, 97, 0.2);
+  }
+
+  .toc { list-style: none; }
+  .toc li {
+    padding: 12px 0 12px 22px;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    color: rgba(243, 236, 221, 0.7);
+    position: relative;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.08);
+    transition: color 0.25s, padding 0.25s;
+  }
+  .toc li:hover { color: var(--gold-soft); padding-left: 28px; }
+  .toc li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+  }
+  .toc li.required::before { background: var(--vermilion); opacity: 1; box-shadow: 0 0 0 2px rgba(155,42,35,0.2); }
+  .toc li .num {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    margin-right: 10px;
+    font-style: italic;
+  }
+  .toc li .req-mark {
+    float: right;
+    font-size: 10px;
+    color: var(--vermilion);
+    background: rgba(155,42,35,0.15);
+    padding: 1px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  .form-body { padding: 48px 56px; }
+
+  .field-group { margin-bottom: 36px; }
+  .field-group-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--azure);
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .field-group-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: var(--vermilion);
+    margin-right: 12px;
+    vertical-align: middle;
+    margin-top: -3px;
+  }
+  .field-group-title .en {
+    float: right;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    font-weight: 400;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 18px;
+  }
+  .field-row.full { grid-template-columns: 1fr; }
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+  .field label .req {
+    color: var(--vermilion);
+    margin-right: 4px;
+    font-family: serif;
+  }
+  .field label .hint {
+    float: right;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .field input[type="text"],
+  .field input[type="date"],
+  .field input[type="number"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.7; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--azure);
+    background: #faf6ec;
+    box-shadow: 0 0 0 3px rgba(31, 49, 71, 0.08);
+  }
+
+  .field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%231f3147' d='M6 8L0 0h12z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .radio-group { display: flex; gap: 0; border: 1px solid var(--rule); }
+  .radio-group label {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    padding: 9px 0;
+    cursor: pointer;
+    font-size: 13px;
+    border-right: 1px solid var(--rule);
+    transition: all 0.2s;
+    background: var(--paper);
+  }
+  .radio-group label:last-child { border-right: none; }
+  .radio-group input { display: none; }
+  .radio-group input:checked + span { background: var(--azure); color: var(--paper); display: block; margin: -9px 0; padding: 9px 0; }
+  .radio-group label:hover { background: var(--paper-deep); }
+
+  .tag-input {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 8px 12px;
+    min-height: 42px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .tag {
+    background: var(--azure);
+    color: var(--paper);
+    padding: 3px 10px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tag::after { content: '✕'; opacity: 0.6; cursor: pointer; }
+  .tag.gold { background: var(--gold); }
+  .tag.crimson { background: var(--vermilion); }
+
+  /* 动态列表卡片 */
+  .entry-card {
+    background: linear-gradient(180deg, #fdfaf2 0%, #f8f1de 100%);
+    border: 1px solid var(--rule);
+    padding: 24px 28px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .entry-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 18px; height: 18px;
+    border-top: 2px solid var(--vermilion);
+    border-left: 2px solid var(--vermilion);
+  }
+  .entry-card::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 18px; height: 18px;
+    border-bottom: 2px solid var(--vermilion);
+    border-right: 2px solid var(--vermilion);
+  }
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .entry-header .entry-id {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--azure);
+    letter-spacing: 0.05em;
+  }
+  .entry-header .entry-id strong {
+    font-family: 'Noto Serif SC', serif;
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 600;
+    margin-right: 12px;
+  }
+  .delete-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink-muted);
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .delete-btn:hover { color: var(--vermilion); border-color: var(--vermilion); }
+
+  .add-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: 1px dashed var(--rule);
+    color: var(--ink-muted);
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .add-btn:hover {
+    border-color: var(--azure);
+    color: var(--azure);
+    background: rgba(31,49,71,0.03);
+  }
+  .add-btn::before { content: '＋ '; color: var(--vermilion); margin-right: 6px; }
+
+  /* 操作栏 */
+  .form-actions {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .form-actions::before {
+    content: '';
+    position: absolute;
+    height: 4px;
+    margin-top: -34px;
+    width: 100%;
+    background: var(--ink);
+    display: none;
+  }
+
+  .btn {
+    padding: 14px 36px;
+    border: none;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+  .btn-primary {
+    background: var(--azure);
+    color: var(--paper);
+    border: 1px solid var(--azure);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .btn-primary:hover {
+    background: var(--azure-deep);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .btn-primary:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+  .btn-vermilion {
+    background: var(--vermilion);
+    color: var(--paper);
+    border: 1px solid var(--vermilion);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .btn-vermilion:hover {
+    background: var(--vermilion-deep);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn-ghost:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .secondary-actions { display: flex; gap: 12px; }
+
+  /* ============== 工作流执行 — 进度卷 ============== */
+  .scroll-frame {
+    background: linear-gradient(180deg, #fbf6e8 0%, #f3ecdd 100%);
+    border: 1px solid var(--rule);
+    padding: 56px 64px;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 1px rgba(168, 132, 63, 0.15),
+      0 4px 24px rgba(26, 29, 36, 0.06);
+  }
+  .scroll-frame::before, .scroll-frame::after {
+    content: '';
+    position: absolute;
+    left: -8px; right: -8px;
+    height: 16px;
+    background:
+      linear-gradient(180deg, var(--gold) 0%, var(--gold-soft) 50%, var(--gold) 100%);
+    border: 1px solid var(--vermilion-deep);
+  }
+  .scroll-frame::before { top: -16px; }
+  .scroll-frame::after  { bottom: -16px; }
+
+  .case-banner {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .case-banner .case-no {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--vermilion);
+    letter-spacing: 0.15em;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .case-banner h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .case-banner .case-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+  .case-banner .case-meta span strong { color: var(--azure); margin-right: 6px; font-weight: 600; }
+
+  /* 九步阶梯 */
+  .step-ladder {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 0;
+    margin: 48px 0;
+    position: relative;
+  }
+  .step-ladder::before {
+    content: '';
+    position: absolute;
+    top: 24px; left: 5%; right: 5%;
+    height: 2px;
+    background: var(--rule);
+    z-index: 0;
+  }
+  .step-ladder::after {
+    content: '';
+    position: absolute;
+    top: 24px; left: 5%;
+    width: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--vermilion), var(--gold));
+    z-index: 1;
+    transition: width 0.6s;
+  }
+  .step-node {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .step-circle {
+    width: 48px; height: 48px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--rule);
+    display: grid;
+    place-items: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-muted);
+    transition: all 0.3s;
+  }
+  .step-node.done .step-circle {
+    background: var(--jade);
+    border-color: var(--jade);
+    color: var(--paper);
+  }
+  .step-node.done .step-circle::after {
+    content: '✓';
+    font-family: serif;
+    font-style: normal;
+  }
+  .step-node.done .step-circle .num { display: none; }
+  .step-node.active .step-circle {
+    background: var(--vermilion);
+    border-color: var(--vermilion);
+    color: var(--paper);
+    box-shadow: 0 0 0 6px rgba(155,42,35,0.15);
+    animation: throb 1.6s infinite;
+  }
+  @keyframes throb {
+    0%,100% { box-shadow: 0 0 0 6px rgba(155,42,35,0.15); }
+    50% { box-shadow: 0 0 0 10px rgba(155,42,35,0.05); }
+  }
+  .step-label {
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+  }
+  .step-label .step-cn { display: block; font-weight: 500; }
+  .step-label .step-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 10px;
+    margin-top: 2px;
+  }
+
+  /* 当前步骤说明 */
+  .current-step-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 32px 36px;
+    margin-top: 32px;
+    position: relative;
+  }
+  .current-step-card::before {
+    content: '正在审定';
+    position: absolute;
+    top: -12px; left: 28px;
+    background: var(--vermilion);
+    color: var(--paper);
+    padding: 3px 14px;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+  }
+  .current-step-card h4 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+  }
+  .current-step-card .latin-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 14px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .current-step-card .desc {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .timer-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--rule);
+  }
+  .timer-bar .timer-item .label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+  .timer-bar .timer-item .value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--azure);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .timer-bar .timer-item .value .unit { font-size: 13px; color: var(--ink-muted); margin-left: 4px; font-style: italic; }
+
+  /* ============== 分析结果 — 廊庑 ============== */
+  .results-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 36px;
+  }
+
+  .result-nav {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--rule);
+    padding: 24px 0;
+    height: fit-content;
+    position: sticky;
+    top: 24px;
+  }
+  .result-nav h5 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.3em;
+    padding: 0 24px 16px;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 500;
+  }
+  .result-nav ul { list-style: none; padding: 8px 0; }
+  .result-nav li {
+    padding: 11px 24px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .result-nav li:hover { background: rgba(168,132,63,0.06); border-left-color: var(--gold-soft); }
+  .result-nav li.active {
+    color: var(--ink);
+    background: rgba(155,42,35,0.04);
+    border-left-color: var(--vermilion);
+    font-weight: 500;
+  }
+  .result-nav li .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--vermilion);
+    font-size: 16px;
+    width: 22px;
+  }
+  .result-nav li.section-title {
+    cursor: default;
+    color: var(--vermilion);
+    background: none !important;
+    border-left: none !important;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    margin-top: 12px;
+    padding: 8px 24px 4px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .result-main { min-width: 0; }
+
+  /* 总览仪表 */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 28px;
+    margin-bottom: 36px;
+  }
+
+  .gauge-card, .verdict-card {
+    background: linear-gradient(180deg, #fdfaf2 0%, #f5edd8 100%);
+    border: 1px solid var(--rule);
+    padding: 32px;
+    position: relative;
+  }
+  .gauge-card { text-align: center; }
+  .gauge-card .card-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.25em;
+    margin-bottom: 20px;
+  }
+  .gauge-card .card-title::before { content: '〔 '; color: var(--vermilion); }
+  .gauge-card .card-title::after  { content: ' 〕'; color: var(--vermilion); }
+
+  .gauge-svg-wrap { position: relative; display: inline-block; }
+  .gauge-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -45%);
+    text-align: center;
+  }
+  .gauge-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .gauge-score .max {
+    font-size: 22px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+  .gauge-grade {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 14px;
+    background: var(--jade);
+    color: var(--paper);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+  }
+
+  .gauge-breakdown {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px dashed var(--rule);
+    text-align: left;
+  }
+  .breakdown-item {
+    display: grid;
+    grid-template-columns: 130px 1fr 40px;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .breakdown-item .name { color: var(--ink-soft); letter-spacing: 0.05em; }
+  .breakdown-item .bar {
+    height: 6px;
+    background: var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .breakdown-item .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--azure), var(--gold));
+  }
+  .breakdown-item.weak .bar-fill { background: linear-gradient(90deg, var(--vermilion), #d4655d); }
+  .breakdown-item .val {
+    font-family: 'Cormorant Garamond', serif;
+    text-align: right;
+    color: var(--azure);
+    font-weight: 500;
+  }
+
+  .verdict-card .card-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.25em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .verdict-card .card-title::before { content: '〔 '; color: var(--vermilion); }
+  .verdict-card .card-title::after  { content: ' 〕'; color: var(--vermilion); }
+
+  .verdict-status {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 20px;
+  }
+  .verdict-stamp {
+    display: inline-block;
+    padding: 14px 36px;
+    font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+    font-size: 28px;
+    color: var(--vermilion);
+    border: 3px solid var(--vermilion);
+    letter-spacing: 0.3em;
+    transform: rotate(-2deg);
+    background: rgba(243, 236, 221, 0.5);
+    text-shadow: 0 1px 0 rgba(155,42,35,0.2);
+  }
+  .verdict-stamp.partial { color: var(--gold); border-color: var(--gold); }
+  .verdict-stamp.reject { color: var(--ink); border-color: var(--ink); }
+
+  .verdict-meta dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    font-size: 13px;
+  }
+  .verdict-meta dt {
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    font-size: 12px;
+  }
+  .verdict-meta dd { color: var(--ink); }
+  .verdict-meta dd .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--azure);
+    color: var(--paper);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  /* 涵摄裁判卡 */
+  .judgment-section { margin-bottom: 40px; }
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-heading h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--ink);
+  }
+  .section-heading .step-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--vermilion);
+    letter-spacing: 0.1em;
+    padding: 2px 12px;
+    border: 1px solid var(--vermilion);
+  }
+  .section-heading .step-en {
+    margin-left: auto;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 13px;
+  }
+
+  .subsumption-card {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--rule);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 4px 4px 0 var(--paper-deep);
+  }
+  .sc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .sc-claim-id {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--vermilion);
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .sc-claim-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+    max-width: 70%;
+  }
+  .sc-result {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 26px;
+    color: var(--jade);
+    border: 2px solid var(--jade);
+    padding: 6px 18px;
+    letter-spacing: 0.25em;
+    background: rgba(74,107,83,0.04);
+  }
+  .sc-result.partial { color: var(--gold); border-color: var(--gold); background: rgba(168,132,63,0.04); }
+  .sc-result.reject { color: var(--vermilion); border-color: var(--vermilion); background: rgba(155,42,35,0.04); }
+
+  .sc-body { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .sc-block .block-title {
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.25em;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    border-left: 3px solid var(--vermilion);
+  }
+  .element-row {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--rule-soft);
+    align-items: center;
+  }
+  .element-row:last-child { border-bottom: none; }
+  .e-status {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    color: var(--paper);
+  }
+  .e-status.proved { background: var(--jade); }
+  .e-status.proved::after { content: '✓'; }
+  .e-status.unknown { background: var(--ink-muted); }
+  .e-status.unknown::after { content: '?'; font-style: italic; font-family: serif; }
+  .e-status.notproved { background: var(--vermilion); }
+  .e-status.notproved::after { content: '✗'; }
+  .e-name { color: var(--ink); letter-spacing: 0.03em; }
+  .e-burden {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-muted);
+    padding: 2px 8px;
+    background: var(--paper-deep);
+  }
+
+  .sc-reasoning {
+    margin-top: 24px;
+    padding: 18px 22px;
+    background: linear-gradient(180deg, rgba(31,49,71,0.04) 0%, transparent 100%);
+    border-left: 3px solid var(--azure);
+    font-size: 13px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    font-style: normal;
+  }
+  .sc-reasoning strong {
+    display: block;
+    font-family: 'Noto Serif SC', serif;
+    color: var(--azure);
+    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+  }
+  .sc-reasoning::before {
+    content: '「';
+    font-family: serif;
+    font-size: 24px;
+    color: var(--azure);
+    line-height: 0;
+    vertical-align: -8px;
+    margin-right: 4px;
+  }
+  .sc-reasoning::after {
+    content: '」';
+    font-family: serif;
+    font-size: 24px;
+    color: var(--azure);
+    line-height: 0;
+    vertical-align: -8px;
+  }
+
+  .cited-laws {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+  }
+  .law-pill {
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .law-pill .law-name { font-family: 'Noto Serif SC', serif; color: var(--azure); margin-right: 4px; }
+
+  /* 一致性校验 */
+  .consistency-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--rule);
+    font-size: 13px;
+  }
+  .check-mark {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--jade);
+    color: var(--paper);
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+  }
+  .check-mark::after { content: '✓'; }
+  .check-item.fail .check-mark { background: var(--vermilion); }
+  .check-item.fail .check-mark::after { content: '✗'; }
+
+  /* 文书预览 */
+  .document-preview {
+    background: linear-gradient(180deg, #fdfaf2 0%, #f7eed8 100%);
+    border: 1px solid var(--rule);
+    padding: 56px 80px;
+    box-shadow: 0 6px 32px rgba(26,29,36,0.08);
+    position: relative;
+  }
+  .document-preview::after {
+    content: '';
+    position: absolute;
+    top: 24px; bottom: 24px;
+    left: 24px; right: 24px;
+    border: 1px solid var(--rule-soft);
+    pointer-events: none;
+  }
+
+  .doc-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+  .doc-header::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0; right: 0;
+    height: 1px;
+    background: var(--ink);
+  }
+  .doc-court {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .doc-type {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .doc-no {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--vermilion);
+    letter-spacing: 0.1em;
+  }
+
+  .doc-section { margin-bottom: 28px; }
+  .doc-section h4 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--ink);
+    margin-bottom: 14px;
+    padding-left: 12px;
+    border-left: 4px solid var(--vermilion);
+  }
+  .doc-section p {
+    text-indent: 2em;
+    line-height: 2;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .doc-judgment {
+    background: rgba(155,42,35,0.04);
+    border-top: 2px solid var(--vermilion);
+    border-bottom: 2px solid var(--vermilion);
+    padding: 24px 32px;
+    margin: 36px 0;
+  }
+  .doc-judgment h4 {
+    border-left: none;
+    text-align: center;
+    padding-left: 0;
+    color: var(--vermilion);
+    margin-bottom: 18px;
+    letter-spacing: 0.5em;
+  }
+  .doc-judgment p {
+    text-indent: 2em;
+    font-weight: 500;
+    font-size: 15.5px;
+  }
+
+  .doc-footer {
+    margin-top: 56px;
+    text-align: right;
+    position: relative;
+  }
+  .doc-judges {
+    line-height: 2;
+    font-size: 14px;
+  }
+  .doc-judges span { display: inline-block; min-width: 6em; }
+  .doc-seal-stamp {
+    position: absolute;
+    right: 80px; top: -20px;
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: rgba(155,42,35,0.85);
+    color: var(--paper);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 16px;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    border: 3px solid var(--vermilion-deep);
+    box-shadow: inset 0 0 0 1px rgba(243,236,221,0.5);
+    transform: rotate(8deg);
+    opacity: 0.92;
+  }
+
+  /* 警示对话框 */
+  .alert-box {
+    background: linear-gradient(180deg, rgba(155,42,35,0.06) 0%, rgba(155,42,35,0.02) 100%);
+    border: 1px solid var(--vermilion);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .alert-box::before {
+    content: '誡';
+    position: absolute;
+    top: -1px; left: -1px;
+    background: var(--vermilion);
+    color: var(--paper);
+    width: 32px; height: 32px;
+    display: grid;
+    place-items: center;
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 18px;
+  }
+  .alert-box h5 {
+    color: var(--vermilion);
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    margin-left: 44px;
+    margin-bottom: 12px;
+  }
+  .alert-box p, .alert-box ul {
+    margin-left: 44px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.85;
+  }
+  .alert-box ul { padding-left: 18px; }
+
+  /* 页脚 */
+  footer {
+    margin-top: 80px;
+    padding: 40px 48px;
+    border-top: 1px solid var(--rule);
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    position: relative;
+  }
+  footer::before {
+    content: '◆';
+    color: var(--vermilion);
+    display: block;
+    margin-bottom: 12px;
+    font-size: 10px;
+  }
+  footer .latin {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+  }
+
+  /* 响应 */
+  @media (max-width: 1100px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .results-layout { grid-template-columns: 1fr; }
+    .result-nav { position: static; }
+    .overview-grid { grid-template-columns: 1fr; }
+    .sc-body { grid-template-columns: 1fr; }
+    .step-ladder { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .step-ladder::before, .step-ladder::after { display: none; }
+  }
+  @media (max-width: 720px) {
+    .crown-inner { grid-template-columns: 1fr; text-align: center; gap: 20px; }
+    .crown-meta { text-align: center; }
+    main, .crown { padding-left: 20px; padding-right: 20px; }
+    .container { padding: 0 20px; }
+    .nav-tabs { padding: 0 20px; flex-wrap: wrap; }
+    .tab-btn { padding: 16px 20px; font-size: 14px; }
+    .form-body, .scroll-frame { padding: 28px; }
+    .document-preview { padding: 32px 24px; }
+    .doc-court { font-size: 22px; letter-spacing: 0.2em; }
+    .consistency-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== 顶部刻铭 ============== -->
+<header class="crown">
+  <div class="crown-inner">
+    <div class="seal" aria-hidden="true">
+      <div>
+        <span>九步</span>
+        <span>之印</span>
+      </div>
+    </div>
+    <div class="crown-title">
+      <h1>九步法審案工作流</h1>
+      <p class="latin">Jiubufa <em>·</em> Legal Reasoning Workflow <em>·</em> 智能裁判分析系统</p>
+    </div>
+    <div class="crown-meta">
+      <strong>系统状态</strong>
+      <div><span class="status-dot"></span>服务正常 / Healthy</div>
+      <div>知识库 · <span style="color:var(--gold)">7,888</span> 条法条</div>
+      <div style="font-style:italic;">Qwen-Plus · v1.0.4</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============== 导航 ============== -->
+<nav class="nav-tabs">
+  <button class="tab-btn active" data-tab="input"><span class="num">壹</span>案件录入</button>
+  <button class="tab-btn" data-tab="execution"><span class="num">贰</span>工作流执行</button>
+  <button class="tab-btn" data-tab="results"><span class="num">叁</span>裁判分析</button>
+</nav>
+
+<main>
+
+<!-- ================================================================
+     壹 · 案件录入
+================================================================= -->
+<section class="panel active" id="input">
+  <div class="chapter">
+    <h2>案件材料录入</h2>
+    <p class="subtitle">Case Material Submission · 谨录诉、证、辩之实，以求秉公裁断</p>
+  </div>
+
+  <div class="form-grid">
+    <!-- 侧边目录 -->
+    <aside class="form-aside">
+      <h3>录入目录</h3>
+      <div class="aside-latin">Table of Contents</div>
+      <ul class="toc">
+        <li class="required"><span class="num">i.</span>案件基本信息<span class="req-mark">必</span></li>
+        <li class="required"><span class="num">ii.</span>当事人信息<span class="req-mark">必</span></li>
+        <li class="required"><span class="num">iii.</span>诉讼请求<span class="req-mark">必</span></li>
+        <li><span class="num">iv.</span>事实主张</li>
+        <li><span class="num">v.</span>答辩抗辩</li>
+        <li><span class="num">vi.</span>证据清单</li>
+        <li><span class="num">vii.</span>质证意见</li>
+        <li><span class="num">viii.</span>庭审笔录</li>
+        <li><span class="num">ix.</span>法律意见</li>
+        <li><span class="num">x.</span>程序事项</li>
+      </ul>
+    </aside>
+
+    <!-- 表单主体 -->
+    <div class="form-body">
+
+      <!-- 一·案件基本信息 -->
+      <div class="field-group">
+        <div class="field-group-title">
+          壹 · 案件基本信息
+          <span class="en">Basic Case Information</span>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label><span class="req">*</span>案件编号 <span class="hint">case_id</span></label>
+            <input type="text" placeholder="例：case-2024-mc-0001" value="case-2024-mc-0001" />
+          </div>
+          <div class="field">
+            <label>立案日期 <span class="hint">filing_date</span></label>
+            <input type="date" value="2024-06-15" />
+          </div>
+        </div>
+
+        <div class="field-row full">
+          <div class="field">
+            <label>案件名称 <span class="hint">case_name</span></label>
+            <input type="text" placeholder="例：甲公司诉乙公司买卖合同纠纷案" value="甲公司诉乙公司买卖合同纠纷案" />
+          </div>
+        </div>
+
+        <div class="field-row triple">
+          <div class="field">
+            <label>案由 <span class="hint">case_cause</span></label>
+            <select>
+              <option>买卖合同纠纷</option>
+              <option>借款合同纠纷</option>
+              <option>侵权责任纠纷</option>
+              <option>劳动争议</option>
+              <option>知识产权纠纷</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>审理法院</label>
+            <input type="text" value="示例市某区人民法院" />
+          </div>
+          <div class="field">
+            <label>程序阶段</label>
+            <div class="radio-group">
+              <label><input type="radio" name="stage" checked /><span>一审</span></label>
+              <label><input type="radio" name="stage" /><span>二审</span></label>
+              <label><input type="radio" name="stage" /><span>再审</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-row full">
+          <div class="field">
+            <label>材料来源 <span class="hint">material_sources</span></label>
+            <div class="tag-input">
+              <span class="tag">起诉状</span>
+              <span class="tag">答辩状</span>
+              <span class="tag">证据清单</span>
+              <span class="tag">庭审笔录</span>
+              <span class="tag gold">+ 添加</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-row full">
+          <div class="field">
+            <label>案件摘要 <span class="hint">200 字以内 / 概述案情</span></label>
+            <textarea placeholder="原告甲公司与被告乙公司于 2024 年 1 月 10 日签订《工业设备买卖合同》，约定…">原告甲公司与被告乙公司于 2024 年 1 月 10 日签订《工业设备买卖合同》一份，约定由被告向原告供应数控机床三台，总价款人民币 360 万元。原告依约支付首付款 180 万元，被告于同年 3 月交付设备，但其中两台经验收存在严重质量瑕疵，原告催告整改未果，遂诉至法院请求解除合同并赔偿损失。</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 二·当事人信息 -->
+      <div class="field-group">
+        <div class="field-group-title">
+          贰 · 当事人信息
+          <span class="en">Party Information</span>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-header">
+            <div class="entry-id"><strong>原告</strong>p1 · Party No.1</div>
+            <button class="delete-btn">移除</button>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>当事人名称</label>
+              <input type="text" value="甲公司" />
+            </div>
+            <div class="field">
+              <label>法律身份</label>
+              <select><option>法人</option><option>自然人</option><option>非法人组织</option></select>
+            </div>
+          </div>
+          <div class="field-row full">
+            <div class="field">
+              <label>与案件关系</label>
+              <input type="text" value="买卖合同的买受人" />
+            </div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-header">
+            <div class="entry-id"><strong>被告</strong>p2 · Party No.2</div>
+            <button class="delete-btn">移除</button>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>当事人名称</label>
+              <input type="text" value="乙公司" />
+            </div>
+            <div class="field">
+              <label>法律身份</label>
+              <select><option>法人</option><option>自然人</option><option>非法人组织</option></select>
+            </div>
+          </div>
+          <div class="field-row full">
+            <div class="field">
+              <label>与案件关系</label>
+              <input type="text" value="买卖合同的出卖人" />
+            </div>
+          </div>
+        </div>
+
+        <button class="add-btn">添加当事人</button>
+      </div>
+
+      <!-- 三·诉讼请求 -->
+      <div class="field-group">
+        <div class="field-group-title">
+          叁 · 诉讼请求
+          <span class="en">Plaintiff's Claims</span>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-header">
+            <div class="entry-id"><strong>诉求</strong>c1 · Claim No.1</div>
+            <button class="delete-btn">移除</button>
+          </div>
+          <div class="field-row full">
+            <div class="field">
+              <label><span class="req">*</span>原始诉求文本</label>
+              <textarea>请求依法判令解除原告与被告于 2024 年 1 月 10 日签订的《工业设备买卖合同》。</textarea>
+            </div>
+          </div>
+          <div class="field-row triple">
+            <div class="field">
+              <label>提出方</label>
+              <select><option>p1 · 甲公司</option><option>p2 · 乙公司</option></select>
+            </div>
+            <div class="field">
+              <label>相对方</label>
+              <select><option>p2 · 乙公司</option><option>p1 · 甲公司</option></select>
+            </div>
+            <div class="field">
+              <label>标的类型</label>
+              <select><option>行为</option><option>金钱</option><option>物</option><option>不作为</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-header">
+            <div class="entry-id"><strong>诉求</strong>c2 · Claim No.2</div>
+            <button class="delete-btn">移除</button>
+          </div>
+          <div class="field-row full">
+            <div class="field">
+              <label><span class="req">*</span>原始诉求文本</label>
+              <textarea>请求判令被告返还已支付货款人民币 1,800,000 元，并赔偿原告因合同解除所致损失人民币 320,000 元。</textarea>
+            </div>
+          </div>
+          <div class="field-row triple">
+            <div class="field">
+              <label>提出方</label>
+              <select><option>p1 · 甲公司</option></select>
+            </div>
+            <div class="field">
+              <label>标的类型</label>
+              <select><option>金钱</option></select>
+            </div>
+            <div class="field">
+              <label>金额（元）</label>
+              <input type="number" value="2120000" />
+            </div>
+          </div>
+        </div>
+
+        <button class="add-btn">添加诉讼请求</button>
+      </div>
+
+      <!-- 操作栏 -->
+      <div class="form-actions">
+        <div class="secondary-actions">
+          <button class="btn btn-ghost">导入 JSON</button>
+          <button class="btn btn-ghost">导出 JSON</button>
+          <button class="btn btn-ghost">快速评分</button>
+        </div>
+        <button class="btn btn-vermilion" id="submitBtn">提呈审理</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     贰 · 工作流执行
+================================================================= -->
+<section class="panel" id="execution">
+  <div class="chapter">
+    <h2>九步法审理执行</h2>
+    <p class="subtitle">Workflow Execution · 大模型按九步逐次推演，预计耗时 10–15 分钟</p>
+  </div>
+
+  <div class="scroll-frame">
+    <!-- 案件信息卷首 -->
+    <div class="case-banner">
+      <div class="case-no">CASE NO. case-2024-mc-0001</div>
+      <h3>甲公司诉乙公司买卖合同纠纷案</h3>
+      <div class="case-meta">
+        <span><strong>审理法院</strong>示例市某区人民法院</span>
+        <span><strong>程序阶段</strong>一审</span>
+        <span><strong>提交时间</strong>2026-05-07 14:32</span>
+      </div>
+    </div>
+
+    <!-- 九步阶梯 -->
+    <div class="step-ladder" id="stepLadder">
+      <div class="step-node done"><div class="step-circle"><span class="num">1</span></div><div class="step-label"><span class="step-cn">诉求固定</span><span class="step-en">Claim Fixing</span></div></div>
+      <div class="step-node done"><div class="step-circle"><span class="num">2</span></div><div class="step-label"><span class="step-cn">请求权基础</span><span class="step-en">Request Basis</span></div></div>
+      <div class="step-node done"><div class="step-circle"><span class="num">3</span></div><div class="step-label"><span class="step-cn">抗辩权基础</span><span class="step-en">Defense Basis</span></div></div>
+      <div class="step-node done"><div class="step-circle"><span class="num">4</span></div><div class="step-label"><span class="step-cn">要件分析</span><span class="step-en">Element Analysis</span></div></div>
+      <div class="step-node active"><div class="step-circle"><span class="num">5</span></div><div class="step-label"><span class="step-cn">待证事实</span><span class="step-en">Fact Search</span></div></div>
+      <div class="step-node"><div class="step-circle"><span class="num">6</span></div><div class="step-label"><span class="step-cn">争点整理</span><span class="step-en">Issue Sorting</span></div></div>
+      <div class="step-node"><div class="step-circle"><span class="num">7</span></div><div class="step-label"><span class="step-cn">举证质证</span><span class="step-en">Proof Plan</span></div></div>
+      <div class="step-node"><div class="step-circle"><span class="num">8</span></div><div class="step-label"><span class="step-cn">事实认定</span><span class="step-en">Fact Finding</span></div></div>
+      <div class="step-node"><div class="step-circle"><span class="num">9</span></div><div class="step-label"><span class="step-cn">要件涵摄</span><span class="step-en">Subsumption</span></div></div>
+    </div>
+
+    <!-- 当前步骤 -->
+    <div class="current-step-card">
+      <h4>第伍步 · 待证事实搜索</h4>
+      <div class="latin-sub">Step V · Fact-Slot Mapping &amp; Required Fact Identification</div>
+      <p class="desc">系统正在依据要件矩阵，遍历当事人所主张之事实，将各事实归入相应要件槽位；对未被主张或主张模糊之事实，将提示举证责任方予以澄清。本步骤涉及对 12 项要件进行覆盖性检索。</p>
+      <div class="timer-bar">
+        <div class="timer-item"><div class="label">Elapsed</div><div class="value">06:42<span class="unit">min</span></div></div>
+        <div class="timer-item"><div class="label">Current Step</div><div class="value">02:14<span class="unit">min</span></div></div>
+        <div class="timer-item"><div class="label">Estimated Total</div><div class="value">12:30<span class="unit">min</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     叁 · 裁判分析结果
+================================================================= -->
+<section class="panel" id="results">
+  <div class="chapter">
+    <h2>裁判分析报告</h2>
+    <p class="subtitle">Adjudication Analysis Report · 谨呈本院审理之全部推演与裁判倾向</p>
+  </div>
+
+  <div class="results-layout">
+    <!-- 侧边导航 -->
+    <aside class="result-nav">
+      <h5>章 · 节</h5>
+      <ul>
+        <li class="active"><span class="num">○</span>总览</li>
+        <li class="section-title">九步推演</li>
+        <li><span class="num">i.</span>诉求固定</li>
+        <li><span class="num">ii.</span>请求权基础</li>
+        <li><span class="num">iii.</span>抗辩权基础</li>
+        <li><span class="num">iv.</span>要件分析</li>
+        <li><span class="num">v.</span>待证事实</li>
+        <li><span class="num">vi.</span>争点整理</li>
+        <li><span class="num">vii.</span>举证质证</li>
+        <li><span class="num">viii.</span>事实认定</li>
+        <li><span class="num">ix.</span>要件涵摄</li>
+        <li class="section-title">终态文书</li>
+        <li><span class="num">A.</span>裁判文书</li>
+        <li><span class="num">B.</span>一致性校验</li>
+        <li><span class="num">C.</span>调试信息</li>
+      </ul>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="result-main">
+
+      <!-- 总览 -->
+      <div class="overview-grid">
+        <!-- 评分仪表 -->
+        <div class="gauge-card">
+          <div class="card-title">输入完整度评分</div>
+          <div class="gauge-svg-wrap">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#1f3147"/>
+                  <stop offset="50%" stop-color="#a8843f"/>
+                  <stop offset="100%" stop-color="#4a6b53"/>
+                </linearGradient>
+              </defs>
+              <circle cx="120" cy="120" r="100" fill="none" stroke="#d8cdb0" stroke-width="14"/>
+              <circle cx="120" cy="120" r="100" fill="none" stroke="url(#gaugeGrad)" stroke-width="14"
+                      stroke-dasharray="628" stroke-dashoffset="138"
+                      transform="rotate(-90 120 120)" stroke-linecap="round"/>
+              <circle cx="120" cy="120" r="84" fill="none" stroke="#9b2a23" stroke-width="0.5" opacity="0.3"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-score">78<span class="max">/100</span></div>
+              <div class="gauge-grade">中等 · MEDIUM</div>
+            </div>
+          </div>
+
+          <div class="gauge-breakdown">
+            <div class="breakdown-item"><span class="name">诉求清晰度</span><span class="bar"><span class="bar-fill" style="width:90%"></span></span><span class="val">18/20</span></div>
+            <div class="breakdown-item"><span class="name">法律关系稳定性</span><span class="bar"><span class="bar-fill" style="width:80%"></span></span><span class="val">12/15</span></div>
+            <div class="breakdown-item"><span class="name">请求权基础</span><span class="bar"><span class="bar-fill" style="width:87%"></span></span><span class="val">13/15</span></div>
+            <div class="breakdown-item weak"><span class="name">抗辩路径</span><span class="bar"><span class="bar-fill" style="width:50%"></span></span><span class="val">5/10</span></div>
+            <div class="breakdown-item"><span class="name">要件事实覆盖</span><span class="bar"><span class="bar-fill" style="width:80%"></span></span><span class="val">12/15</span></div>
+            <div class="breakdown-item"><span class="name">证据覆盖</span><span class="bar"><span class="bar-fill" style="width:73%"></span></span><span class="val">11/15</span></div>
+            <div class="breakdown-item weak"><span class="name">事实认定可靠性</span><span class="bar"><span class="bar-fill" style="width:70%"></span></span><span class="val">7/10</span></div>
+          </div>
+        </div>
+
+        <!-- 裁判倾向 -->
+        <div class="verdict-card">
+          <div class="card-title">裁判倾向</div>
+          <div class="verdict-status">
+            <div class="verdict-stamp partial">部 分 支 持</div>
+          </div>
+          <div class="verdict-meta">
+            <dl>
+              <dt>裁判模式</dt><dd><span class="pill">strong_judgment</span></dd>
+              <dt>风险等级</dt><dd>Low · 低风险</dd>
+              <dt>涉及诉求</dt><dd>2 项</dd>
+              <dt>引用法条</dt><dd>民法典 595 / 577 / 566 共 6 条</dd>
+              <dt>已审争点</dt><dd>5 项 · 全部审结</dd>
+              <dt>耗时</dt><dd style="font-family:'Cormorant Garamond',serif;font-style:italic;">13 min 28 sec</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <!-- 裁判倾向警示 -->
+      <div class="alert-box">
+        <h5>风险提示</h5>
+        <p>本案裁判结果中 <strong>诉求 c2</strong> 关于损失赔偿金额存在举证不足，证据 e5（损失评估报告）真实性尚有争议。建议：</p>
+        <ul>
+          <li>补充第三方鉴定机构出具之损失认定意见。</li>
+          <li>就赔偿金额计算依据，提交更详细的财务凭证。</li>
+        </ul>
+      </div>
+
+      <!-- 涵摄裁判 -->
+      <div class="judgment-section">
+        <div class="section-heading">
+          <span class="step-tag">Step IX</span>
+          <h3>要件涵摄并裁判</h3>
+          <span class="step-en">Subsumption &amp; Adjudication</span>
+        </div>
+
+        <!-- 诉求 c1 -->
+        <div class="subsumption-card">
+          <div class="sc-header">
+            <div>
+              <div class="sc-claim-id">CLAIM C1 · 诉求一</div>
+              <div class="sc-claim-text">解除原告与被告于 2024 年 1 月 10 日签订的《工业设备买卖合同》</div>
+            </div>
+            <div class="sc-result">支 持</div>
+          </div>
+
+          <div class="sc-body">
+            <div class="sc-block">
+              <div class="block-title">请求要件审查</div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">合同有效成立</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">出卖人交付义务</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">交付物存在严重瑕疵</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">催告整改未果</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">不能实现合同目的</span><span class="e-burden">原告</span></div>
+            </div>
+
+            <div class="sc-block">
+              <div class="block-title">抗辩审查</div>
+              <div class="element-row"><span class="e-status notproved"></span><span class="e-name">质量瑕疵抗辩 · 被告主张</span><span class="e-burden">被告</span></div>
+              <div class="element-row"><span class="e-status notproved"></span><span class="e-name">同时履行抗辩权</span><span class="e-burden">被告</span></div>
+              <div class="element-row"><span class="e-status unknown"></span><span class="e-name">不可抗力抗辩</span><span class="e-burden">被告</span></div>
+            </div>
+          </div>
+
+          <div class="sc-reasoning">
+            <strong>本院认为</strong>
+            被告交付之数控机床中两台经验收存在严重质量瑕疵，该瑕疵已根本影响合同目的之实现；原告依据《民法典》第五百六十三条第一款第四项之规定，行使法定解除权于法有据。被告所称之瑕疵抗辩，未能就交付时质量符合约定提供有效证据，不予采信。故原告关于解除合同之诉求应予支持。
+          </div>
+
+          <div class="cited-laws">
+            <span class="law-pill"><span class="law-name">民法典</span>第 563 条第 1 款第 (四) 项</span>
+            <span class="law-pill"><span class="law-name">民法典</span>第 577 条</span>
+            <span class="law-pill"><span class="law-name">民法典</span>第 615 条</span>
+          </div>
+        </div>
+
+        <!-- 诉求 c2 -->
+        <div class="subsumption-card">
+          <div class="sc-header">
+            <div>
+              <div class="sc-claim-id">CLAIM C2 · 诉求二</div>
+              <div class="sc-claim-text">返还货款 180 万元并赔偿损失 32 万元，合计 212 万元</div>
+            </div>
+            <div class="sc-result partial">部分支持</div>
+          </div>
+
+          <div class="sc-body">
+            <div class="sc-block">
+              <div class="block-title">返还请求要件</div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">合同已解除</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">已付款 180 万</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">无合法占有依据</span><span class="e-burden">原告</span></div>
+            </div>
+
+            <div class="sc-block">
+              <div class="block-title">损失赔偿要件</div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">违约行为</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status unknown"></span><span class="e-name">损失金额 32 万元</span><span class="e-burden">原告</span></div>
+              <div class="element-row"><span class="e-status proved"></span><span class="e-name">因果关系</span><span class="e-burden">原告</span></div>
+            </div>
+          </div>
+
+          <div class="sc-reasoning">
+            <strong>本院认为</strong>
+            合同解除后，被告应向原告返还其已收取之货款 180 万元，于法有据，应予支持。然原告主张之损失赔偿 32 万元，所提供之损失评估报告系单方委托制作，被告对其真实性提出异议，且原告未能就损失计算之具体依据进行举证。故损失赔偿部分仅支持有据可查之 12 万元。
+          </div>
+
+          <div class="cited-laws">
+            <span class="law-pill"><span class="law-name">民法典</span>第 566 条</span>
+            <span class="law-pill"><span class="law-name">民法典</span>第 577 条</span>
+            <span class="law-pill"><span class="law-name">民法典</span>第 584 条</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 一致性校验 -->
+      <div class="judgment-section">
+        <div class="section-heading">
+          <span class="step-tag">CHECK</span>
+          <h3>八个一致性校验</h3>
+          <span class="step-en">Consistency Verification</span>
+        </div>
+
+        <div class="consistency-grid">
+          <div class="check-item"><span class="check-mark"></span>诉求 — 固定一致</div>
+          <div class="check-item"><span class="check-mark"></span>固定 — 涵摄一致</div>
+          <div class="check-item"><span class="check-mark"></span>诉求覆盖完备</div>
+          <div class="check-item"><span class="check-mark"></span>无凭空诉求</div>
+          <div class="check-item"><span class="check-mark"></span>争点已使用</div>
+          <div class="check-item"><span class="check-mark"></span>事实已认定</div>
+          <div class="check-item"><span class="check-mark"></span>法条已引用</div>
+          <div class="check-item fail"><span class="check-mark"></span>证据采信完整 · 1 项待补</div>
+        </div>
+      </div>
+
+      <!-- 文书预览 -->
+      <div class="judgment-section">
+        <div class="section-heading">
+          <span class="step-tag">DOC</span>
+          <h3>裁判文书框架</h3>
+          <span class="step-en">Judgment Document Skeleton</span>
+        </div>
+
+        <div class="document-preview">
+          <div class="doc-header">
+            <div class="doc-court">示例市某区人民法院</div>
+            <div class="doc-type">民 事 判 决 书</div>
+            <div class="doc-no">（2024）示某民初字第 ○○○ 号</div>
+          </div>
+
+          <div class="doc-section">
+            <h4>原告诉讼请求</h4>
+            <p>一、请求依法判令解除原告与被告于 2024 年 1 月 10 日签订的《工业设备买卖合同》；</p>
+            <p>二、请求判令被告返还已支付货款人民币 1,800,000 元，并赔偿原告因合同解除所致损失人民币 320,000 元。</p>
+          </div>
+
+          <div class="doc-section">
+            <h4>被告辩称</h4>
+            <p>被告辩称，所交付之数控机床均符合合同约定标准，原告所称之瑕疵系其自身使用不当所致；同时主张原告尚有部分款项未付，行使同时履行抗辩权。</p>
+          </div>
+
+          <div class="doc-section">
+            <h4>本院查明</h4>
+            <p>经审理查明：2024 年 1 月 10 日，原、被告签订《工业设备买卖合同》一份，约定由被告供应数控机床三台，总价款人民币 360 万元。原告依约支付首付款 180 万元，被告于同年 3 月交付设备……</p>
+          </div>
+
+          <div class="doc-section">
+            <h4>本院认为</h4>
+            <p>本院认为，本案系买卖合同纠纷。被告交付之标的物存在严重瑕疵，已根本影响合同目的之实现，原告依法享有合同解除权。合同解除后，已收取之款项应当返还；至于损失赔偿部分，原告所举证据不足以支持其全部主张……</p>
+          </div>
+
+          <div class="doc-judgment">
+            <h4>判 决 如 下</h4>
+            <p>一、解除原告甲公司与被告乙公司于 2024 年 1 月 10 日签订的《工业设备买卖合同》；</p>
+            <p>二、被告乙公司于本判决生效之日起十日内向原告甲公司返还货款人民币 1,800,000 元；</p>
+            <p>三、被告乙公司于本判决生效之日起十日内赔偿原告甲公司损失人民币 120,000 元；</p>
+            <p>四、驳回原告甲公司其他诉讼请求。</p>
+          </div>
+
+          <div class="doc-footer">
+            <div class="doc-judges">
+              <div><span>审  判  长</span>○ ○ ○</div>
+              <div><span>审  判  员</span>○ ○ ○</div>
+              <div><span>审  判  员</span>○ ○ ○</div>
+              <div style="margin-top:12px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink-muted);">二〇二六年五月七日</div>
+              <div><span>书  记  员</span>○ ○ ○</div>
+            </div>
+            <div class="doc-seal-stamp">
+              示例市某区<br>人民法院<br>之印
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>九步法审案工作流 · JIUBUFA LEGAL WORKFLOW</div>
+  <div class="latin">Powered by Five-Layer Legal Tag Library &amp; Large Language Model Reasoning · v1.0.4</div>
+</footer>
+
+<script>
+  // ===================================================================
+  //  九步法审案工作流 — 前后端连接逻辑
+  //  后端 API: http://127.0.0.1:8000
+  // ===================================================================
+
+  const API = 'http://127.0.0.1:8000';
+  const STEP_NAMES = [
+    'step1_claim_fixing', 'step2_request_basis', 'step3_defense_basis',
+    'step4_element_analysis', 'step5_claim_fact_search', 'step6_issue_organize',
+    'step7_proof', 'step8_fact_finding', 'step9_subsumption'
+  ];
+  const STEP_LABELS = ['诉求固定','请求权基础','抗辩权基础','要件分析','待证事实','争点整理','举证质证','事实认定','要件涵摄'];
+
+  let workflowResult = null;
+
+  // ============== 页签切换 ==============
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  function switchTab(targetId) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === targetId));
+    panels.forEach(p => p.classList.toggle('active', p.id === targetId));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+  // ============== 结果页侧边导航 ==============
+  document.querySelectorAll('.result-nav li:not(.section-title)').forEach(li => {
+    li.addEventListener('click', () => {
+      document.querySelectorAll('.result-nav li').forEach(x => x.classList.remove('active'));
+      li.classList.add('active');
+    });
+  });
+
+  // ============== 健康检查 ==============
+  async function checkHealth() {
+    try {
+      const res = await fetch(`${API}/api/health`);
+      const data = await res.json();
+      const dot = document.querySelector('.status-dot');
+      if (dot && data.status === 'ok') {
+        dot.style.background = 'var(--jade)';
+        dot.style.boxShadow = '0 0 8px rgba(74,107,83,0.6)';
+        const kbEl = document.querySelector('.crown-meta div:nth-child(2)');
+        if (kbEl) kbEl.innerHTML = `知识库 · <span style="color:var(--gold)">${data.kb_size.toLocaleString()}</span> 条法条`;
+      }
+    } catch (e) {
+      const dot = document.querySelector('.status-dot');
+      if (dot) { dot.style.background = 'var(--vermilion)'; dot.style.boxShadow = '0 0 8px rgba(155,42,35,0.6)'; }
+    }
+  }
+
+  // ============== 采集表单数据 ==============
+  function collectFormData() {
+    const getVal = (sel) => document.querySelector(sel)?.value || '';
+    const getText = (sel) => document.querySelector(sel)?.textContent || '';
+
+    // 案件基本信息
+    const caseBasicInfo = {
+      case_id: getVal('.field-group:nth-of-type(1) input[type="text"]') || 'case-' + Date.now(),
+      case_name: getVal('.field-group:nth-of-type(1) .field-row.full input[type="text"]'),
+      case_cause_text: getVal('.field-group:nth-of-type(1) select'),
+      court: getVal('.field-group:nth-of-type(1) .field-row.triple input[type="text"]'),
+      procedure_stage: document.querySelector('input[name="stage"]:checked')?.parentElement?.textContent?.trim() || '一审',
+      material_sources: Array.from(document.querySelectorAll('.tag-input .tag:not(.gold)')).map(t => t.textContent.trim()).filter(Boolean),
+      case_summary: getVal('.field-group:nth-of-type(1) textarea'),
+    };
+
+    // 当事人
+    const partyInfo = [];
+    document.querySelectorAll('.entry-card').forEach((card, i) => {
+      const header = card.querySelector('.entry-id')?.textContent || '';
+      const isPlaintiff = header.includes('原告');
+      const inputs = card.querySelectorAll('input[type="text"]');
+      const selects = card.querySelectorAll('select');
+      partyInfo.push({
+        party_id: isPlaintiff ? `p${i+1}` : `p${i+1}`,
+        party_name: inputs[0]?.value || '',
+        party_role: header.includes('原告') ? '原告' : header.includes('被告') ? '被告' : '第三人',
+        legal_status: selects[0]?.value || '法人',
+        relationship_to_case: inputs[1]?.value || '',
+      });
+    });
+
+    // 诉讼请求（从 entry-card 中提取）
+    const claims = [];
+    const claimCards = document.querySelectorAll('.field-group:nth-of-type(3) .entry-card');
+    claimCards.forEach((card, i) => {
+      const textarea = card.querySelector('textarea');
+      const selects = card.querySelectorAll('select');
+      const numberInput = card.querySelector('input[type="number"]');
+      if (textarea?.value.trim()) {
+        claims.push({
+          claim_id: `c${i+1}`,
+          claim_text_original: textarea.value.trim(),
+          claim_text_normalized: textarea.value.trim(),
+          claimant: (selects[0]?.value || '').split('·')[0]?.trim() || 'p1',
+          respondent: (selects[1]?.value || '').split('·')[0]?.trim() || 'p2',
+          object_type: selects[selects.length-1]?.value || '金钱',
+          amount: numberInput ? parseFloat(numberInput.value) || null : null,
+          is_clear: true, is_executable: true,
+          priority_type: i === 0 ? 'primary' : 'parallel',
+        });
+      }
+    });
+
+    return {
+      case_basic_info: caseBasicInfo,
+      party_info: partyInfo,
+      claims: claims,
+      claim_facts: [],
+      defense_opinions: [],
+      evidence_list: [],
+      cross_examinations: [],
+      legal_arguments: [],
+      fallback_user_choice: 'proceed_with_risk_notes',
+    };
+  }
+
+  // ============== 提交工作流 ==============
+  document.getElementById('submitBtn')?.addEventListener('click', async () => {
+    const caseInput = collectFormData();
+
+    // 验证最小输入
+    if (!caseInput.case_basic_info.case_name) { alert('请填写案件名称'); return; }
+    if (!caseInput.party_info.length) { alert('请至少添加一方当事人'); return; }
+    if (!caseInput.claims.length) { alert('请至少填写一项诉讼请求'); return; }
+
+    // 切换到执行页
+    switchTab('execution');
+
+    // 更新执行页标题和case信息
+    const caseBanner = document.querySelector('.case-banner');
+    if (caseBanner) {
+      caseBanner.querySelector('.case-no').textContent = 'CASE NO. ' + (caseInput.case_basic_info.case_id || '—');
+      caseBanner.querySelector('h3').textContent = caseInput.case_basic_info.case_name || '未命名案件';
+      const meta = caseBanner.querySelectorAll('.case-meta span');
+      if (meta[0]) meta[0].innerHTML = `<strong>审理法院</strong>${caseInput.case_basic_info.court || '—'}`;
+      if (meta[1]) meta[1].innerHTML = `<strong>程序阶段</strong>${caseInput.case_basic_info.procedure_stage || '—'}`;
+      if (meta[2]) meta[2].innerHTML = `<strong>提交时间</strong>${new Date().toLocaleString('zh-CN')}`;
+    }
+
+    // 重置阶梯
+    const ladder = document.getElementById('stepLadder');
+    if (ladder) {
+      const nodes = ladder.querySelectorAll('.step-node');
+      nodes.forEach(n => { n.classList.remove('done','active'); n.classList.add('pending'); });
+      nodes[0].classList.add('active');
+    }
+
+    // 更新当前步骤卡片为"提交中"
+    const stepCard = document.querySelector('.current-step-card');
+    if (stepCard) {
+      stepCard.querySelector('h4').textContent = '正在提交案件…';
+      stepCard.querySelector('.latin-sub').textContent = 'Submitting CaseInput to Workflow Engine';
+      stepCard.querySelector('.desc').textContent = '系统正在将案件材料发送至后端引擎，初始化九步法审理流程。知识库已加载 7,888 条法条规则单元，将逐步骤进行法律推理。';
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    const origText = submitBtn.textContent;
+    submitBtn.textContent = '审理中…';
+    submitBtn.disabled = true;
+
+    const startTime = Date.now();
+    const timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const el = document.querySelector('.timer-item:first-child .value');
+      const mins = Math.floor(elapsed / 60), secs = elapsed % 60;
+      if (el) el.innerHTML = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}<span class="unit">min</span>`;
+    }, 1000);
+
+    // 模拟步骤推进动画（后端不返回实时进度）
+    let simStep = 0;
+    const stepInterval = setInterval(() => {
+      if (simStep >= 8) { clearInterval(stepInterval); return; }
+      const nodes = ladder?.querySelectorAll('.step-node');
+      if (nodes && nodes[simStep]) {
+        nodes[simStep].classList.remove('active');
+        nodes[simStep].classList.add('done');
+        simStep++;
+        if (nodes[simStep]) {
+          nodes[simStep].classList.add('active');
+          if (stepCard) {
+            stepCard.querySelector('h4').textContent = `第${['壹','贰','叁','肆','伍','陆','柒','捌','玖'][simStep]}步 · ${STEP_LABELS[simStep]}`;
+            stepCard.querySelector('.latin-sub').textContent = `Step ${['I','II','III','IV','V','VI','VII','VIII','IX'][simStep]} · ${STEP_LABELS[simStep]}`;
+          }
+        }
+      }
+    }, 80000); // 每80秒推进一步（总时间约12分钟）
+
+    try {
+      const res = await fetch(`${API}/api/workflow/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_input: caseInput, model_name: 'dashscope-qwen-plus' }),
+      });
+      const data = await res.json();
+      clearInterval(timerInterval);
+      clearInterval(stepInterval);
+      workflowResult = data;
+
+      // 标记所有步骤完成
+      if (ladder) {
+        const nodes = ladder.querySelectorAll('.step-node');
+        nodes.forEach(n => { n.classList.remove('active','pending'); n.classList.add('done'); });
+      }
+      if (stepCard) {
+        stepCard.querySelector('h4').textContent = '审理完成';
+        stepCard.querySelector('.latin-sub').textContent = `Status: ${data.status} · Errors: ${data.errors?.length || 0} · Warnings: ${data.warnings?.length || 0}`;
+        const totalSec = Math.floor(((data.timings_ms?.total || 0) / 1000));
+        stepCard.querySelector('.desc').textContent = `九步法审理已全部完成，总耗时 ${Math.floor(totalSec/60)} 分 ${totalSec%60} 秒。请查看「裁判分析」页面获取完整推演过程与裁判倾向。`;
+      }
+
+      renderResults(data);
+      submitBtn.textContent = '✓ 查看结果';
+      submitBtn.disabled = false;
+      submitBtn.onclick = () => switchTab('results');
+    } catch (err) {
+      clearInterval(timerInterval);
+      clearInterval(stepInterval);
+      alert('工作流执行失败：' + (err.message || String(err)));
+      submitBtn.textContent = origText;
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ============== 渲染结果 ==============
+  function renderResults(data) {
+    // 评分仪表盘
+    const score = data.strong_judgment?.sufficiency_score || {};
+    const total = Object.values(score).reduce((a,b) => (typeof a==='number'?a:0)+(typeof b==='number'?b:0), 0);
+    const level = data.fallback_gate?.risk_level || 'low';
+    const levelCN = { low:'低风险', medium:'中风险', high:'高风险', critical:'严重' }[level] || level;
+
+    // 更新评分 SVG
+    const dashOffset = 628 * (1 - total / 100);
+    const gaugeCircle = document.querySelector('.gauge-card circle:nth-child(3)');
+    if (gaugeCircle) gaugeCircle.setAttribute('stroke-dashoffset', String(dashOffset));
+    const gaugeScore = document.querySelector('.gauge-score');
+    if (gaugeScore) gaugeScore.innerHTML = `${total}<span class="max">/100</span>`;
+    const gaugeGrade = document.querySelector('.gauge-grade');
+    if (gaugeGrade) {
+      gaugeGrade.textContent = (total >= 80 ? '强 · STRONG' : total >= 65 ? '中等 · MEDIUM' : '弱 · WEAK') + ' · ' + levelCN.toUpperCase();
+    }
+
+    // 评分细分条
+    const breakdownItems = document.querySelectorAll('.breakdown-item');
+    const scoreKeys = ['claim_clarity','legal_relation_stability','request_basis_stability','defense_path_completeness','element_fact_coverage','evidence_coverage','fact_finding_reliability'];
+    const scoreMax = [20,15,15,10,15,15,10];
+    scoreKeys.forEach((k, i) => {
+      if (breakdownItems[i]) {
+        const val = score[k] || 0;
+        const bar = breakdownItems[i].querySelector('.bar-fill');
+        if (bar) bar.style.width = (val / scoreMax[i] * 100) + '%';
+        const valEl = breakdownItems[i].querySelector('.val');
+        if (valEl) valEl.textContent = val + '/' + scoreMax[i];
+      }
+    });
+
+    // 裁判倾向
+    const subs = data.strong_judgment?.subsumption_results || data.step9?.subsumption_results || [];
+    const supported = subs.filter(s => s.judgment_result === 'supported').length;
+    const partial = subs.filter(s => s.judgment_result === 'partially_supported').length;
+    const rejected = subs.filter(s => s.judgment_result === 'rejected').length;
+    const stamp = document.querySelector('.verdict-stamp');
+    if (stamp) {
+      stamp.className = 'verdict-stamp ' + (supported === subs.length ? 'supported' : partial > 0 || (supported > 0 && rejected > 0) ? 'partial' : rejected === subs.length ? 'rejected' : 'partial');
+      stamp.textContent = supported === subs.length ? '全 部 支 持' : rejected === subs.length ? '驳 回' : '部 分 支 持';
+    }
+
+    // 裁判元数据
+    const metaDl = document.querySelector('.verdict-meta dl');
+    if (metaDl) {
+      const mode = data.strong_judgment?.mode || '—';
+      const citedRules = subs.reduce((acc, s) => acc.concat(s.cited_rules || []), []);
+      const uniqueRules = [...new Set(citedRules)];
+      const issues = data.step6?.issues || [];
+      const totalMs = data.timings_ms?.total || 0;
+      metaDl.innerHTML = `
+        <dt>裁判模式</dt><dd><span class="pill">${mode}</span></dd>
+        <dt>风险等级</dt><dd>${levelCN}</dd>
+        <dt>涉及诉求</dt><dd>${subs.length} 项</dd>
+        <dt>引用法条</dt><dd>${uniqueRules.length} 条</dd>
+        <dt>已审争点</dt><dd>${issues.length} 项 · 全部审结</dd>
+        <dt>耗时</dt><dd style="font-family:'Cormorant Garamond',serif;font-style:italic;">${Math.floor(totalMs/60000)} min ${Math.floor((totalMs%60000)/1000)} sec</dd>`;
+    }
+
+    // 填充裁判文书内容
+    const skeleton = data.strong_judgment?.document_skeleton || {};
+    const docSections = document.querySelectorAll('.doc-section');
+    if (docSections.length >= 3) {
+      // 判决主文
+      const mainTexts = skeleton['判决主文'] || [];
+      if (docSections[0]) docSections[0].querySelector('p').textContent = mainTexts.join('；') || '无';
+
+      // 本院认为
+      const reasonings = subs.map(s => s.reasoning_summary).filter(Boolean);
+      if (docSections[1]) docSections[1].querySelector('p').textContent = reasonings.join('\n\n') || '无';
+
+      // 引用法条
+      const rules = skeleton['引用法条'] || [];
+      if (docSections[2]) docSections[2].querySelector('p').textContent = rules.join('、') || '无';
+    }
+
+    // 一致性校验
+    const cc = data.strong_judgment?.consistency_check || {};
+    const ccEl = document.querySelector('.consistency-check-grid');
+    if (ccEl) {
+      const items = [
+        ['诉求-固定一致', cc['诉求-固定一致']],
+        ['固定-涵摄一致', cc['固定-涵摄一致']],
+        ['缺漏诉求', cc['缺漏的诉求（涵摄阶段未覆盖）']?.length || 0],
+        ['争点已使用', cc['争点已使用']],
+        ['事实已认定', cc['事实已认定']],
+        ['法条已引用', cc['法条已引用']],
+      ];
+      ccEl.innerHTML = items.map(([label, val]) => `
+        <div class="cc-item">
+          <span>${label}</span>
+          <span class="${val === true || (typeof val === 'number' && val === 0) ? 'pass' : 'fail'}">${val === true ? '✓' : val === false ? '✗' : val}</span>
+        </div>`).join('');
+    }
+  }
+
+  // ============== 页加载时检查后端 ==============
+  checkHealth();
+  setInterval(checkHealth, 60000);
+
+  // ============== 导入 JSON ==============
+  document.querySelector('.btn-ghost:nth-child(1)')?.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          const ci = data.case_input || data;
+          // 填充案件基本信息
+          const bi = ci.case_basic_info || {};
+          const firstGroup = document.querySelector('.field-group:nth-of-type(1)');
+          if (firstGroup) {
+            const inputs = firstGroup.querySelectorAll('input[type="text"]');
+            if (inputs[0]) inputs[0].value = bi.case_id || '';
+            const fullInput = firstGroup.querySelector('.field-row.full input');
+            if (fullInput) fullInput.value = bi.case_name || '';
+            const select = firstGroup.querySelector('select');
+            if (select) select.value = bi.case_cause_text || select.options[0]?.value || '';
+            const tripleInput = firstGroup.querySelector('.field-row.triple input');
+            if (tripleInput) tripleInput.value = bi.court || '';
+            const textarea = firstGroup.querySelector('textarea');
+            if (textarea) textarea.value = bi.case_summary || '';
+          }
+          alert('JSON 已导入，表单字段已填充。');
+        } catch (err) {
+          alert('JSON 解析失败：' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  });
+
+  // ============== 导出 JSON ==============
+  document.querySelector('.btn-ghost:nth-child(2)')?.addEventListener('click', () => {
+    const data = collectFormData();
+    const blob = new Blob([JSON.stringify({ case_input: data }, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `case_input_${data.case_basic_info.case_id || Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ============== 快速评分（仅跑 Step1-8 + 评分，不输出裁判） ==============
+  document.querySelector('.btn-ghost:nth-child(3)')?.addEventListener('click', async () => {
+    const caseInput = collectFormData();
+    if (!caseInput.claims.length) { alert('请至少填写一项诉讼请求'); return; }
+
+    const btn = document.querySelector('.btn-ghost:nth-child(3)');
+    const orig = btn.textContent;
+    btn.textContent = '评分中…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`${API}/api/workflow/score_only`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_input: caseInput }),
+      });
+      const data = await res.json();
+      const score = data.sufficiency_score || {};
+      const total = Object.values(score).reduce((a,b) => (typeof a==='number'?a:0)+(typeof b==='number'?b:0), 0);
+      const level = total >= 80 ? '强(strong)' : total >= 65 ? '中(medium)' : total >= 40 ? '弱(weak_optional)' : '阻断(block)';
+      alert(
+        `快速评分结果\n\n` +
+        `总分: ${total}/100 · 等级: ${level}\n` +
+        `诉求清晰度: ${score.claim_clarity||0}/20\n` +
+        `法律关系稳定性: ${score.legal_relation_stability||0}/15\n` +
+        `请求权基础: ${score.request_basis_stability||0}/15\n` +
+        `抗辩路径: ${score.defense_path_completeness||0}/10\n` +
+        `要件覆盖: ${score.element_fact_coverage||0}/15\n` +
+        `证据覆盖: ${score.evidence_coverage||0}/15\n` +
+        `事实认定可靠性: ${score.fact_finding_reliability||0}/10\n\n` +
+        `${level === '阻断(block)' ? '⚠ 材料严重不足，需补充后重新提交' : level === '弱(weak_optional)' ? '⚠ 材料较薄弱，建议补充' : '可进入强裁判通道'}`
+      );
+    } catch (err) {
+      alert('评分失败：' + (err.message || String(err)));
+    } finally {
+      btn.textContent = orig;
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>

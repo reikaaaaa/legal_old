@@ -1,0 +1,2155 @@
+{
+  "test_id": 20,
+  "method": "jiubufa_workflow",
+  "model": "dashscope-qwen3.6-plus",
+  "elapsed_seconds": 1182.02,
+  "result": {
+    "case_id": "case-2024-marriage-0001",
+    "status": "ok",
+    "fallback_gate": {
+      "risk_triggered": true,
+      "risk_level": "medium",
+      "reason": [
+        "输入完整度评分 64 处于中风险区间。"
+      ],
+      "recommended_action": "proceed_with_risk_notes",
+      "available_choices": [
+        {
+          "choice": "supplement",
+          "description": "停止裁判输出，按缺口清单补充材料后回退"
+        },
+        {
+          "choice": "proceed_with_risk_notes",
+          "description": "继续输出强裁判结果并附风险提示"
+        },
+        {
+          "choice": "continue_weak_judgment",
+          "description": "改用弱裁判通道（更保守）"
+        }
+      ],
+      "default_choice": "proceed_with_risk_notes",
+      "hard_block": false
+    },
+    "step1": {
+      "case_cause_inferred": [
+        "离婚纠纷"
+      ],
+      "legal_domain_inferred": [
+        "婚姻家事"
+      ],
+      "fixed_claims": [
+        {
+          "claim_id": "C1",
+          "claim_text_normalized": "判决原告张某与被告李某解除婚姻关系",
+          "claim_type": [
+            "termination_claim"
+          ],
+          "object_type": "身份关系",
+          "amount": null,
+          "claimant": "张某",
+          "respondent": "李某",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": "离婚请求为其他附随请求的前提"
+        },
+        {
+          "claim_id": "C2",
+          "claim_text_normalized": "婚生子李某某由原告张某抚养，被告李某每月支付抚养费 3000 元至子女年满十八周岁",
+          "claim_type": [
+            "performance_claim",
+            "payment_claim"
+          ],
+          "object_type": "身份关系与金钱",
+          "amount": 3000.0,
+          "claimant": "张某",
+          "respondent": "李某",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": "抚养权与抚养费请求具有依附性"
+        },
+        {
+          "claim_id": "C3",
+          "claim_text_normalized": "分割夫妻共同财产（房产 50% 份额折价 60 万元、存款 25 万元、股票 15 万元）",
+          "claim_type": [
+            "restitution_claim"
+          ],
+          "object_type": "财产",
+          "amount": 1000000.0,
+          "claimant": "张某",
+          "respondent": "李某",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [
+            "房产剩余贷款 80 万元由谁承担？"
+          ],
+          "priority_type": "primary",
+          "competition_note": "财产分割以离婚成立为前提"
+        },
+        {
+          "claim_id": "C4",
+          "claim_text_normalized": "被告李某向原告张某支付精神损害赔偿金 50000 元",
+          "claim_type": [
+            "damages_claim"
+          ],
+          "object_type": "金钱",
+          "amount": 50000.0,
+          "claimant": "张某",
+          "respondent": "李某",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": "损害赔偿请求权基于离婚事由成立"
+        }
+      ],
+      "overall_clarification": [
+        "需明确房产贷款承担主体以保障财产分割可执行性"
+      ]
+    },
+    "step2": {
+      "request_basis_candidates": [
+        {
+          "claim_id": "C1",
+          "rule_unit_ref": {
+            "rule_unit_id": "民法典_1079_001",
+            "law_name": "中华人民共和国民法典",
+            "article_no": "第一千零七十九条",
+            "rule_unit_text": "夫妻一方要求离婚的，可以由有关组织进行调解或者直接向人民法院提起离婚诉讼。人民法院审理离婚案件，应当进行调解；如果感情确已破裂，调解无效的，应当准予离婚。有下列情形之一，调解无效的，应当准予离婚：（一）重婚或者与他人同居；（二）实施家庭暴力或者虐待、遗弃家庭成员；（三）有赌博、吸毒等恶习屡教不改；（四）因感情不和分居满二年；（五）其他导致夫妻感情破裂的情形。",
+            "norm_type": [
+              "request_basis",
+              "procedure_rule",
+              "liability_rule",
+              "definition_rule"
+            ],
+            "claim_type": [
+              "termination_claim"
+            ],
+            "defense_type": [],
+            "legal_effect_tags": [
+              "right_extinguished",
+              "claim_supported"
+            ]
+          },
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "termination_claim"
+          ],
+          "legal_effect_tags": [
+            "right_extinguished",
+            "claim_supported"
+          ],
+          "selection_reason": "该规则单元是离婚纠纷中解除婚姻关系的一般性请求权基础。L3 claim_type 为 termination_claim，与原告请求解除婚姻关系一致。L5 legal_effect_tags 包含 right_extinguished 和 claim_supported，直接支持准予离婚的法律效果。相较于 1079_002（失踪）和 1079_003（二次起诉），001 款涵盖了感情破裂的一般情形，在无特定事实（如失踪、曾判决不准离婚）佐证时，作为主要请求权基础最为适宜。",
+          "priority": "primary",
+          "risk_note": null
+        },
+        {
+          "claim_id": "C2",
+          "rule_unit_ref": {
+            "rule_unit_id": "民法典_1041_003",
+            "law_name": "中华人民共和国民法典",
+            "article_no": "第一千零四十一条",
+            "rule_unit_text": "保护妇女、未成年人、老年人、残疾人的合法权益。",
+            "norm_type": [
+              "definition_rule",
+              "liability_rule"
+            ],
+            "claim_type": [
+              "payment_claim",
+              "performance_claim"
+            ],
+            "defense_type": [],
+            "legal_effect_tags": [
+              "liability_arises",
+              "right_arises"
+            ]
+          },
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "performance_claim",
+            "payment_claim"
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "selection_reason": "候选规则单元中缺乏具体的子女抚养及抚养费支付规则（如民法典 1084 条、1085 条）。本规则单元虽为原则性规定，但明确了未成年人合法权益受保护，可作为抚养费请求的兜底性权利基础。L3 claim_type 为 payment_claim/performance_claim，与支付抚养费请求对应。L5 legal_effect_tags 包含 liability_arises，支持产生给付责任。因缺乏具体规则，此处作为 fallback 选择。",
+          "priority": "primary",
+          "risk_note": "候选列表中缺失具体的子女抚养及抚养费支付特别规则（如民法典 1084/1085 条），当前选择为原则性条款，证明力较弱，建议上游补充检索。"
+        },
+        {
+          "claim_id": "C3",
+          "rule_unit_ref": {
+            "rule_unit_id": "民法典_987_001",
+            "law_name": "中华人民共和国民法典",
+            "article_no": "第九百八十七条",
+            "rule_unit_text": "得利人知道或者应当知道取得的利益没有法律根据的，受损失的人可以请求得利人返还其取得的利益并依法赔偿损失。",
+            "norm_type": [
+              "request_basis",
+              "liability_rule"
+            ],
+            "claim_type": [
+              "restitution_claim",
+              "damages_claim"
+            ],
+            "defense_type": [],
+            "legal_effect_tags": [
+              "liability_arises",
+              "claim_supported"
+            ]
+          },
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "restitution_claim"
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "selection_reason": "候选规则单元中缺乏具体的夫妻共同财产分割规则（如民法典 1087 条、1062 条）。本规则单元为不当得利返还的一般规则，L3 claim_type 包含 restitution_claim，与分割财产（实质为共有物分割或返还）的请求类型在返还效果上部分契合。L5 legal_effect_tags 包含 claim_supported，支持返还利益。因无婚姻财产特别规则，暂选此一般返还规则作为 fallback。",
+          "priority": "primary",
+          "risk_note": "候选列表中缺失具体的夫妻共同财产分割特别规则（如民法典 1062/1087 条），当前选择为不当得利一般条款，法律关系的定性可能存在偏差，建议上游补充检索。"
+        },
+        {
+          "claim_id": "C4",
+          "rule_unit_ref": {
+            "rule_unit_id": "民法典_1091_001",
+            "law_name": "中华人民共和国民法典",
+            "article_no": "第一千零九十一条",
+            "rule_unit_text": "有下列情形之一，导致离婚的，无过错方有权请求损害赔偿：（一）重婚；（二）与他人同居；（三）实施家庭暴力；（四）虐待、遗弃家庭成员；（五）有其他重大过错。",
+            "norm_type": [
+              "request_basis",
+              "liability_rule"
+            ],
+            "claim_type": [
+              "damages_claim"
+            ],
+            "defense_type": [],
+            "legal_effect_tags": [
+              "right_arises",
+              "liability_arises",
+              "claim_supported"
+            ]
+          },
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "damages_claim"
+          ],
+          "legal_effect_tags": [
+            "right_arises",
+            "liability_arises",
+            "claim_supported"
+          ],
+          "selection_reason": "该规则单元是离婚纠纷中无过错方请求损害赔偿（含精神损害赔偿）的特别请求权基础。L3 claim_type 为 damages_claim，与原告请求精神损害赔偿金一致。L5 legal_effect_tags 包含 liability_arises 和 claim_supported，直接支持赔偿损失的法律效果。相较于老年人权益保障法中关于家暴的规定，本条更直接针对离婚损害赔偿，属于特别规则优于一般规则。",
+          "priority": "primary",
+          "risk_note": null
+        }
+      ],
+      "competition_analysis": null
+    },
+    "step3": {
+      "defense_basis_candidates": [
+        {
+          "defense_id": "D1",
+          "target_claim_id": "C1",
+          "response_type": "否认",
+          "defense_type": [
+            "denial"
+          ],
+          "rule_unit_ref": null,
+          "legal_effect_tags": [
+            "claim_rejected"
+          ],
+          "selection_reason": "被告辩称感情未破裂、无家暴，系对原告离婚请求权基础构成要件（感情破裂）的否认，而非独立抗辩权。候选规则单元中无直接对应‘感情未破裂’的抗辩规范，且被告未主张妇女权益保障法第 64 条等程序性抗辩。",
+          "clarification_needed": false,
+          "risk_note": "候选规则单元缺失关于‘夫妻感情未破裂’的具体认定标准规范（如民法典 1079 条的反向适用），当前无独立抗辩权基础规范可引用，需依赖法官对感情状况的自由裁量。"
+        },
+        {
+          "defense_id": "D2",
+          "target_claim_id": "C2",
+          "response_type": "抗辩",
+          "defense_type": [
+            "denial"
+          ],
+          "rule_unit_ref": null,
+          "legal_effect_tags": [
+            "claim_rejected"
+          ],
+          "selection_reason": "被告主张抚养权归属及抚养费金额调整，系对履行内容及金额的异议。候选规则单元中缺乏子女抚养权归属及抚养费计算的具体抗辩规范（如民法典 1084 条、1085 条）。",
+          "clarification_needed": false,
+          "risk_note": "候选规则单元缺失关于子女抚养权‘最有利于未成年子女’原则及抚养费支付标准的具体规则，当前选择为原则性否认，证明力较弱，建议上游补充检索民法典 1084/1085 条。"
+        },
+        {
+          "defense_id": "D3",
+          "target_claim_id": "C3",
+          "response_type": "抗辩",
+          "defense_type": [
+            "invalidity_defense"
+          ],
+          "rule_unit_ref": null,
+          "legal_effect_tags": [
+            "claim_rejected"
+          ],
+          "selection_reason": "被告主张涉案房产、存款、股票为个人财产，不应分割，系主张原告对特定财产的分割请求权不成立（无效）。候选规则单元中缺乏夫妻共同财产与个人财产区分的具体抗辩规范（如民法典 1062 条、1063 条）。",
+          "clarification_needed": false,
+          "risk_note": "候选规则单元缺失关于婚前财产、个人出资等财产性质认定的特别规则，当前选择为无效抗辩，法律关系定性可能存在偏差，建议上游补充检索民法典 1062/1063 条。"
+        },
+        {
+          "defense_id": "D4",
+          "target_claim_id": "C4",
+          "response_type": "否认",
+          "defense_type": [
+            "denial"
+          ],
+          "rule_unit_ref": null,
+          "legal_effect_tags": [
+            "claim_rejected"
+          ],
+          "selection_reason": "被告否认存在家庭暴力及重大过错，系对损害赔偿请求权基础构成要件（过错）的否认。候选规则单元中无直接对应‘无过错’的抗辩规范。",
+          "clarification_needed": false,
+          "risk_note": "候选规则单元缺失关于离婚损害赔偿免责事由的具体规范，当前无独立抗辩权基础规范可引用，需依赖对过错事实的举证质证。"
+        }
+      ]
+    },
+    "step4": {
+      "element_matrix": [
+        {
+          "element_id": "C1_E1",
+          "rule_unit_id": "民法典_1079_001",
+          "element_name": "合法婚姻关系存在",
+          "element_type": "legal_relation_element",
+          "element_logic": "AND",
+          "is_hidden_element": true,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "marriage_relation_fact",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "结婚证",
+            "婚姻登记记录"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C1",
+          "note": null
+        },
+        {
+          "element_id": "C1_E2",
+          "rule_unit_id": "民法典_1079_001",
+          "element_name": "调解程序履行",
+          "element_type": "procedure_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "mediation_procedure_fact",
+          "burden_party": "法院",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "庭审笔录",
+            "调解笔录"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C1",
+          "note": null
+        },
+        {
+          "element_id": "C1_E3",
+          "rule_unit_id": "民法典_1079_001",
+          "element_name": "夫妻感情确已破裂",
+          "element_type": "legal_relation_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "relationship_breakdown_fact",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "分居证明",
+            "报警记录",
+            "聊天记录",
+            "证人证言",
+            "处罚决定书"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C1",
+          "note": null
+        },
+        {
+          "element_id": "C2_E1",
+          "rule_unit_id": "民法典_1041_003",
+          "element_name": "当事人属于特定保护群体",
+          "element_type": "subject_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "protected_subject_fact",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "身份证",
+            "残疾证",
+            "出生证明",
+            "户口簿"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C2",
+          "note": null
+        },
+        {
+          "element_id": "C2_E2",
+          "rule_unit_id": "民法典_1041_003",
+          "element_name": "合法权益受到侵害",
+          "element_type": "damage_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "rights_infringement_fact",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "医疗记录",
+            "财产损失证明",
+            "家暴告诫书"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C2",
+          "note": null
+        },
+        {
+          "element_id": "C3_E1",
+          "rule_unit_id": "民法典_987_001",
+          "element_name": "不当得利基础关系成立",
+          "element_type": "legal_relation_element",
+          "element_logic": "AND",
+          "is_hidden_element": true,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "unjust_enrichment_relation_fact",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "转账记录",
+            "支付凭证",
+            "合同文本"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C3",
+          "note": null
+        },
+        {
+          "element_id": "C3_E2",
+          "rule_unit_id": "民法典_987_001",
+          "element_name": "得利人主观恶意",
+          "element_type": "intent_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "malicious_intent_fact",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "沟通记录",
+            "催告函",
+            "知情证明",
+            "聊天记录"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C3",
+          "note": null
+        },
+        {
+          "element_id": "C3_E3",
+          "rule_unit_id": "民法典_987_001",
+          "element_name": "损失存在",
+          "element_type": "damage_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "loss_damage_fact",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "损失证明",
+            "评估报告",
+            "财务账册"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C3",
+          "note": null
+        },
+        {
+          "element_id": "C4_E1",
+          "rule_unit_id": "民法典_1091_001",
+          "element_name": "合法婚姻关系存续",
+          "element_type": "legal_relation_element",
+          "element_logic": "AND",
+          "is_hidden_element": true,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "marriage_validity_fact",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "结婚证",
+            "婚姻登记记录"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C4",
+          "note": null
+        },
+        {
+          "element_id": "C4_E2",
+          "rule_unit_id": "民法典_1091_001",
+          "element_name": "存在法定过错情形",
+          "element_type": "act_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "fault_act_fact",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "报警记录",
+            "悔过书",
+            "聊天记录",
+            "同居证明",
+            "行政处罚决定书",
+            "刑事判决书",
+            "证人证言"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C4",
+          "note": null
+        },
+        {
+          "element_id": "C4_E3",
+          "rule_unit_id": "民法典_1091_001",
+          "element_name": "导致离婚",
+          "element_type": "causation_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "divorce_causation_fact",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "离婚证",
+            "离婚判决书",
+            "离婚调解书"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C4",
+          "note": null
+        },
+        {
+          "element_id": "C4_E4",
+          "rule_unit_id": "民法典_1091_001",
+          "element_name": "请求人为无过错方",
+          "element_type": "subject_element",
+          "element_logic": "AND",
+          "is_hidden_element": false,
+          "negative_element": false,
+          "exception_element": false,
+          "fact_slot": "no_fault_subject_fact",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "suggested_evidence_types": [
+            "当事人陈述",
+            "对方过错证据的反证"
+          ],
+          "used_for": "request_basis",
+          "target_id": "C4",
+          "note": null
+        }
+      ]
+    },
+    "step5": {
+      "claim_fact_mapping": [
+        {
+          "element_id": "C1_E1",
+          "fact_slot": "marriage_relation_fact",
+          "required_fact": "原告与被告存在合法有效的婚姻关系，如结婚证或登记记录",
+          "asserted_fact_ids": [
+            "f1"
+          ],
+          "assertion_status": "asserted",
+          "burden_party": "原告",
+          "clarification_question": null,
+          "risk_note": null
+        },
+        {
+          "element_id": "C1_E2",
+          "fact_slot": "mediation_procedure_fact",
+          "required_fact": "法院已履行调解程序，如庭审笔录或调解笔录",
+          "asserted_fact_ids": [],
+          "assertion_status": "missing",
+          "burden_party": "法院",
+          "clarification_question": null,
+          "risk_note": "该要件举证责任在法院，当事人无需主张，由法院依职权审查"
+        },
+        {
+          "element_id": "C1_E3",
+          "fact_slot": "relationship_breakdown_fact",
+          "required_fact": "夫妻感情确已破裂的具体事实，如分居、家暴、出轨等",
+          "asserted_fact_ids": [
+            "f3",
+            "f4"
+          ],
+          "assertion_status": "conflicting",
+          "burden_party": "原告",
+          "clarification_question": "被告抗辩感情未破裂且家暴不属实，请补充提交公安机关告诫书、伤情鉴定等客观证据以佐证感情破裂",
+          "risk_note": "被告明确否认家暴及感情破裂，存在败诉风险，需强化证据证明力"
+        },
+        {
+          "element_id": "C2_E1",
+          "fact_slot": "protected_subject_fact",
+          "required_fact": "当事人属于妇女、儿童或老年人等特定保护群体的身份证明",
+          "asserted_fact_ids": [
+            "f2",
+            "f8"
+          ],
+          "assertion_status": "asserted",
+          "burden_party": "主张方",
+          "clarification_question": null,
+          "risk_note": null
+        },
+        {
+          "element_id": "C2_E2",
+          "fact_slot": "rights_infringement_fact",
+          "required_fact": "合法权益受到侵害的事实，如医疗记录、家暴告诫书等",
+          "asserted_fact_ids": [
+            "f3"
+          ],
+          "assertion_status": "conflicting",
+          "burden_party": "主张方",
+          "clarification_question": "被告否认侵害行为，请明确具体侵害后果及与子女权益的关联",
+          "risk_note": "家暴事实认定存在争议，可能影响子女抚养权归属的判断"
+        },
+        {
+          "element_id": "C3_E1",
+          "fact_slot": "unjust_enrichment_relation_fact",
+          "required_fact": "没有法律根据取得不当利益的基础关系事实，如转账记录、支付凭证",
+          "asserted_fact_ids": [],
+          "assertion_status": "missing",
+          "burden_party": "原告",
+          "clarification_question": "原告主张的事实 f5-f6-f7 均为夫妻共同财产描述，未主张不当得利基础关系，请明确 C3 诉请的法律依据是不当得利还是财产分割",
+          "risk_note": "要件矩阵显示为不当得利，但事实主张为夫妻共同财产，法律基础存在重大 mismatch，可能导致诉请被驳回"
+        },
+        {
+          "element_id": "C3_E2",
+          "fact_slot": "malicious_intent_fact",
+          "required_fact": "得利人主观上存在恶意的沟通记录或知情证明",
+          "asserted_fact_ids": [],
+          "assertion_status": "missing",
+          "burden_party": "原告",
+          "clarification_question": "未提供被告主观恶意的任何事实主张",
+          "risk_note": "缺乏主观要件主张，无法构成不当得利"
+        },
+        {
+          "element_id": "C3_E3",
+          "fact_slot": "loss_damage_fact",
+          "required_fact": "原告遭受损失的具体证明，如损失证明、评估报告",
+          "asserted_fact_ids": [],
+          "assertion_status": "missing",
+          "burden_party": "原告",
+          "clarification_question": "未提供原告遭受损失的事实主张，仅描述了财产现状",
+          "risk_note": "缺乏损失要件，不当得利请求权基础不成立"
+        },
+        {
+          "element_id": "C4_E1",
+          "fact_slot": "marriage_validity_fact",
+          "required_fact": "合法婚姻关系存续的证明，如结婚证",
+          "asserted_fact_ids": [
+            "f1"
+          ],
+          "assertion_status": "asserted",
+          "burden_party": "主张方",
+          "clarification_question": null,
+          "risk_note": null
+        },
+        {
+          "element_id": "C4_E2",
+          "fact_slot": "fault_act_fact",
+          "required_fact": "存在重婚、家暴、遗弃等法定过错情形的证据",
+          "asserted_fact_ids": [
+            "f3"
+          ],
+          "assertion_status": "conflicting",
+          "burden_party": "主张方",
+          "clarification_question": "被告否认家暴并主张系互殴，请补充提交无过错方证明及警方处理详情",
+          "risk_note": "过错认定直接决定损害赔偿请求是否支持，争议较大"
+        },
+        {
+          "element_id": "C4_E3",
+          "fact_slot": "divorce_causation_fact",
+          "required_fact": "过错行为导致离婚的后果证明，如离婚证或判决书",
+          "asserted_fact_ids": [],
+          "assertion_status": "missing",
+          "burden_party": "主张方",
+          "clarification_question": "本案尚在离婚诉讼中，离婚结果未定，该要件事实目前无法形成",
+          "risk_note": "损害赔偿以离婚为前提，若法院判决不准离婚，该项请求将不予支持"
+        },
+        {
+          "element_id": "C4_E4",
+          "fact_slot": "no_fault_subject_fact",
+          "required_fact": "请求人自身无过错的陈述或对方过错证据的反证",
+          "asserted_fact_ids": [
+            "f3"
+          ],
+          "assertion_status": "conflicting",
+          "burden_party": "主张方",
+          "clarification_question": "被告主张双方系互殴，请明确原告在冲突中是否存在过错",
+          "risk_note": "若认定双方均有过错，可能减轻或免除被告的损害赔偿责任"
+        }
+      ]
+    },
+    "step6": {
+      "issues": [
+        {
+          "issue_id": "I1",
+          "issue_type": "fact_issue",
+          "issue_text": "原告与被告是否存在合法有效的婚姻关系",
+          "linked_element_ids": [
+            "C1_E1"
+          ],
+          "linked_claim_id": "C1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e1"
+          ],
+          "priority": "low"
+        },
+        {
+          "issue_id": "I2",
+          "issue_type": "fact_issue",
+          "issue_text": "夫妻感情是否确已破裂（是否存在家暴、分居等法定情形）",
+          "linked_element_ids": [
+            "C1_E3"
+          ],
+          "linked_claim_id": "C1",
+          "linked_defense_id": "d1",
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I3",
+          "issue_type": "fact_issue",
+          "issue_text": "婚生子抚养权归属及是否有利于子女成长",
+          "linked_element_ids": [
+            "C2_E1",
+            "C2_E2"
+          ],
+          "linked_claim_id": "C2",
+          "linked_defense_id": "d2",
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e2",
+            "e14",
+            "e16",
+            "e17"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I4",
+          "issue_type": "fact_issue",
+          "issue_text": "抚养费金额是否合理（3000 元/月或 1500 元/月）",
+          "linked_element_ids": [
+            "C2_E2"
+          ],
+          "linked_claim_id": "C2",
+          "linked_defense_id": "d2",
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e14",
+            "e15"
+          ],
+          "priority": "medium"
+        },
+        {
+          "issue_id": "I5",
+          "issue_type": "legal_issue",
+          "issue_text": "财产分割请求权基础是否成立（不当得利主张与夫妻共同财产分割存在法律基础不匹配风险）",
+          "linked_element_ids": [
+            "C3_E1"
+          ],
+          "linked_claim_id": "C3",
+          "linked_defense_id": "d3",
+          "burden_party": "原告",
+          "linked_evidence_ids": [],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I6",
+          "issue_type": "fact_issue",
+          "issue_text": "涉案房产、存款及股票属于夫妻共同财产还是被告个人财产",
+          "linked_element_ids": [
+            "C3_E1"
+          ],
+          "linked_claim_id": "C3",
+          "linked_defense_id": "d3",
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e18",
+            "e19"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I7",
+          "issue_type": "fact_issue",
+          "issue_text": "被告是否存在实施家庭暴力等法定过错情形",
+          "linked_element_ids": [
+            "C4_E2"
+          ],
+          "linked_claim_id": "C4",
+          "linked_defense_id": "d4",
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I8",
+          "issue_type": "fact_issue",
+          "issue_text": "原告是否为无过错方且被告过错行为导致离婚",
+          "linked_element_ids": [
+            "C4_E3",
+            "C4_E4"
+          ],
+          "linked_claim_id": "C4",
+          "linked_defense_id": "d4",
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e3",
+            "e4"
+          ],
+          "priority": "medium"
+        }
+      ],
+      "review_order": [
+        "I1",
+        "I2",
+        "I7",
+        "I3",
+        "I4",
+        "I5",
+        "I6",
+        "I8"
+      ]
+    },
+    "step7": {
+      "proof_plan": [
+        {
+          "issue_id": "I1",
+          "element_id": "C1_E1",
+          "fact_to_prove": "原告与被告是否存在合法有效的婚姻关系",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e1"
+          ],
+          "suggested_evidence_types": [
+            "结婚证",
+            "婚姻登记记录"
+          ],
+          "proof_gap": "证据 e1 质证无异议，证明力较强，无明显缺口",
+          "effect_if_unknown": "由原告承担举证不能的不利后果"
+        },
+        {
+          "issue_id": "I2",
+          "element_id": "C1_E3",
+          "fact_to_prove": "夫妻感情是否确已破裂（是否存在家暴、分居等法定情形）",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "suggested_evidence_types": [
+            "分居证明",
+            "报警记录",
+            "聊天记录",
+            "证人证言",
+            "处罚决定书"
+          ],
+          "proof_gap": "被告对家暴证据关联性有异议（x3, x4），证人证言证明力受质疑（x7），需补强家暴直接因果关系证据及证人出庭",
+          "effect_if_unknown": "由原告承担举证不能的不利后果"
+        },
+        {
+          "issue_id": "I3",
+          "element_id": "C2_E1",
+          "fact_to_prove": "婚生子抚养权归属及是否有利于子女成长",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e2",
+            "e14",
+            "e16",
+            "e17"
+          ],
+          "suggested_evidence_types": [
+            "身份证",
+            "残疾证",
+            "出生证明",
+            "户口簿"
+          ],
+          "proof_gap": "被告方证据 e16, e17 需核实真实性；若子女满 8 周岁，缺失子女意愿表达证据",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        },
+        {
+          "issue_id": "I4",
+          "element_id": "C2_E2",
+          "fact_to_prove": "抚养费金额是否合理（3000 元/月或 1500 元/月）",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e14",
+            "e15"
+          ],
+          "suggested_evidence_types": [
+            "医疗记录",
+            "财产损失证明",
+            "家暴告诫书"
+          ],
+          "proof_gap": "被告收入证明 e15 由原告提交，若被告不认可，需法院调取或被告自证实际收入",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        },
+        {
+          "issue_id": "I6",
+          "element_id": "C3_E1",
+          "fact_to_prove": "涉案房产、存款及股票属于夫妻共同财产还是被告个人财产",
+          "burden_party": "原告",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e18",
+            "e19"
+          ],
+          "suggested_evidence_types": [
+            "转账记录",
+            "支付凭证",
+            "合同文本"
+          ],
+          "proof_gap": "被告主张 e18 父母出资为个人财产，e19 婚前存款混同，需进一步查证资金流向及赠与约定",
+          "effect_if_unknown": "由原告承担举证不能的不利后果"
+        },
+        {
+          "issue_id": "I7",
+          "element_id": "C4_E2",
+          "fact_to_prove": "被告是否存在实施家庭暴力等法定过错情形",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "suggested_evidence_types": [
+            "报警记录",
+            "悔过书",
+            "聊天记录",
+            "同居证明",
+            "行政处罚决定书",
+            "刑事判决书",
+            "证人证言"
+          ],
+          "proof_gap": "被告否认家暴因果关系（x3, x4, x5, x6），需补强直接证据（如笔录、视频）以形成完整证据链",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        },
+        {
+          "issue_id": "I8",
+          "element_id": "C4_E3",
+          "fact_to_prove": "原告是否为无过错方且被告过错行为导致离婚",
+          "burden_party": "主张方",
+          "proof_standard": "高度盖然性",
+          "existing_evidence_ids": [
+            "e3",
+            "e4"
+          ],
+          "suggested_evidence_types": [
+            "离婚证",
+            "离婚判决书",
+            "离婚调解书"
+          ],
+          "proof_gap": "因果关系证明较难，需结合离婚诉求及过错认定结果综合判断",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        }
+      ]
+    },
+    "step8": {
+      "fact_findings": [
+        {
+          "fact_finding_id": "F1",
+          "element_id": "C1_E1",
+          "fact_slot": "marriage_relation_fact",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e1"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e1（结婚证）系国家机关颁发的书证，合法性、真实性、关联性均无异议（质证意见 x1），证明力较强，足以证明原被告于 2018 年 10 月 18 日登记结婚，婚姻关系合法有效。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F2",
+          "element_id": "C1_E3",
+          "fact_slot": "relationship_breakdown_fact",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "关于夫妻感情破裂，原告提交 e3-e7 证明家暴，e8 证明分居。被告对家暴证据关联性有异议（x3, x4），认为告诫书、就诊记录不能直接证明家暴因果关系；证人证言 e7 证明力受质疑（x7）。虽 e8（分居证明）形式合法，但结合 proof_plan 指出的证明缺口，现有证据链在家暴直接因果关系及分居满法定年限上尚需补强，真伪不明。",
+          "burden_party": "原告",
+          "effect_if_unknown": "由原告承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F3",
+          "element_id": "C2_E1",
+          "fact_slot": "protected_subject_fact",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e2",
+            "e14",
+            "e16",
+            "e17"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e2（出生医学证明）无质证异议（x2），足以证明婚生子李某某存在且未成年，属于特定保护群体。e14、e16、e17 虽部分需核实真实性（proof_plan 提示），但不影响子女身份事实的认定，故该要素事实已证明。",
+          "burden_party": "主张方",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F4",
+          "element_id": "C2_E2",
+          "fact_slot": "rights_infringement_fact",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e14",
+            "e15"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "关于抚养费金额合理性（对应权益侵害事实），证据 e15（被告收入证明）由原告提交，proof_plan 指出若被告不认可需进一步查证。虽无直接质证异议记录，但鉴于收入事实对抚养费计算关键且存在证明缺口，在被告未自认且无其他佐证下，具体收入金额及抚养费合理性处于真伪不明状态。",
+          "burden_party": "主张方",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F5",
+          "element_id": "C3_E1",
+          "fact_slot": "unjust_enrichment_relation_fact",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e18",
+            "e19"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "关于财产性质（对应基础关系事实），e9-e13 证明财产存在，但 e18（父母出资）、e19（婚前存款）涉及财产性质争议。被告主张个人财产，原告主张共同财产（x10, x11）。proof_plan 指出需查证资金流向及赠与约定。在缺乏明确赠与协议或资金隔离证据下，财产性质真伪不明。",
+          "burden_party": "原告",
+          "effect_if_unknown": "由原告承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F6",
+          "element_id": "C4_E2",
+          "fact_slot": "fault_act_fact",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "关于法定过错（家暴），e3-e6 形成初步证据链，但被告否认家暴因果关系（x3, x4, x5, x6），主张伤情系其他原因或证据仅具预防性。proof_plan 明确指出需补强直接证据（如笔录、视频）。现有证据证明力不足以达到高度盖然性标准，事实真伪不明。",
+          "burden_party": "主张方",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F7",
+          "element_id": "C4_E3",
+          "fact_slot": "divorce_causation_fact",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e3",
+            "e4"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "关于过错导致离婚的因果关系，依赖于家暴事实的认定。鉴于 F6 中家暴事实处于真伪不明状态，且 proof_plan 指出因果关系证明较难，需结合过错认定结果综合判断。在过错事实未定情况下，因果关系亦无法认定，处于真伪不明状态。",
+          "burden_party": "主张方",
+          "effect_if_unknown": "由主张方承担举证不能的不利后果"
+        }
+      ]
+    },
+    "step9": {
+      "subsumption_results": [
+        {
+          "claim_id": "C1",
+          "request_basis_rule_unit_id": "民法典_1079_001",
+          "request_elements_result": [
+            {
+              "element_id": "C1_E1",
+              "element_name": "合法婚姻关系存在",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "C1_E2",
+              "element_name": "调解程序履行",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            },
+            {
+              "element_id": "C1_E3",
+              "element_name": "夫妻感情确已破裂",
+              "finding_status": "not_proved",
+              "note": "事实认定 F2 显示为 unknown，原告承担举证不能后果"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D1",
+              "defense_type": [
+                "denial"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "right_extinguished",
+            "claim_supported"
+          ],
+          "disposition_type": "驳回离婚请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，原被告双方存在合法婚姻关系，要件 C1_E1 已证明。但关于夫妻感情是否确已破裂（要件 C1_E3），原告提交的证据不足以形成完整证据链，事实处于真伪不明状态，原告应承担举证不能的不利后果。调解程序要件（C1_E2）事实缺失。故离婚请求权基础要件未全部成就，对解除婚姻关系的诉讼请求不予支持。",
+          "cited_rules": [
+            "民法典_1079_001"
+          ]
+        },
+        {
+          "claim_id": "C2",
+          "request_basis_rule_unit_id": "民法典_1041_003",
+          "request_elements_result": [
+            {
+              "element_id": "C2_E1",
+              "element_name": "当事人属于特定保护群体",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "C2_E2",
+              "element_name": "合法权益受到侵害",
+              "finding_status": "not_proved",
+              "note": "事实认定 F4 显示为 unknown，抚养费金额合理性真伪不明"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D2",
+              "defense_type": [
+                "denial"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "部分支持抚养权及抚养费请求",
+          "judgment_result": "partially_supported",
+          "reasoning_summary": "本院认为，婚生子李某某系未成年人，属于特定保护群体，要件 C2_E1 已证明，原告主张抚养权具有事实基础。但关于抚养费金额及权益侵害具体事实（要件 C2_E2），现有证据不足以证明被告收入情况及 3000 元/月抚养费的合理性，事实处于真伪不明状态。故对抚养权请求予以支持，对具体抚养费金额请求因证据不足不予全额支持，酌情处理。",
+          "cited_rules": [
+            "民法典_1041_003"
+          ]
+        },
+        {
+          "claim_id": "C3",
+          "request_basis_rule_unit_id": "民法典_987_001",
+          "request_elements_result": [
+            {
+              "element_id": "C3_E1",
+              "element_name": "不当得利基础关系成立",
+              "finding_status": "not_proved",
+              "note": "事实认定 F5 显示为 unknown，财产性质真伪不明"
+            },
+            {
+              "element_id": "C3_E2",
+              "element_name": "得利人主观恶意",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            },
+            {
+              "element_id": "C3_E3",
+              "element_name": "损失存在",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D3",
+              "defense_type": [
+                "invalidity_defense"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "驳回财产分割请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，原告主张分割财产，需证明财产性质及基础关系（要件 C3_E1）。现有证据无法明确涉案房产、存款及股票属于夫妻共同财产还是个人财产，事实处于真伪不明状态，原告承担举证不能后果。其余要件（C3_E2、C3_E3）事实缺失。故财产分割请求权基础不成立，对该项请求不予支持。",
+          "cited_rules": [
+            "民法典_987_001"
+          ]
+        },
+        {
+          "claim_id": "C4",
+          "request_basis_rule_unit_id": "民法典_1091_001",
+          "request_elements_result": [
+            {
+              "element_id": "C4_E1",
+              "element_name": "合法婚姻关系存续",
+              "finding_status": "proved",
+              "note": "同 C1_E1 认定"
+            },
+            {
+              "element_id": "C4_E2",
+              "element_name": "存在法定过错情形",
+              "finding_status": "not_proved",
+              "note": "事实认定 F6 显示为 unknown，家暴事实真伪不明"
+            },
+            {
+              "element_id": "C4_E3",
+              "element_name": "导致离婚",
+              "finding_status": "not_proved",
+              "note": "事实认定 F7 显示为 unknown，因果关系无法认定"
+            },
+            {
+              "element_id": "C4_E4",
+              "element_name": "请求人为无过错方",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D4",
+              "defense_type": [
+                "denial"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "right_arises",
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "驳回精神损害赔偿请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，离婚损害赔偿以存在法定过错为前提。原告主张被告存在家庭暴力等过错（要件 C4_E2），但证据不足以达到高度盖然性证明标准，事实真伪不明。因果关系（要件 C4_E3）亦无法认定。原告作为请求人是否为无过错方（要件 C4_E4）事实缺失。故损害赔偿请求权基础要件不成立，对该项请求不予支持。",
+          "cited_rules": [
+            "民法典_1091_001"
+          ]
+        }
+      ]
+    },
+    "strong_judgment": {
+      "mode": "strong_judgment",
+      "sufficiency_score": {
+        "claim_clarity": 18,
+        "legal_relation_stability": 8,
+        "request_basis_stability": 8,
+        "defense_path_completeness": 7,
+        "element_fact_coverage": 9,
+        "evidence_coverage": 9,
+        "fact_finding_reliability": 5
+      },
+      "risk_level": "medium",
+      "subsumption_results": [
+        {
+          "claim_id": "C1",
+          "request_basis_rule_unit_id": "民法典_1079_001",
+          "request_elements_result": [
+            {
+              "element_id": "C1_E1",
+              "element_name": "合法婚姻关系存在",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "C1_E2",
+              "element_name": "调解程序履行",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            },
+            {
+              "element_id": "C1_E3",
+              "element_name": "夫妻感情确已破裂",
+              "finding_status": "not_proved",
+              "note": "事实认定 F2 显示为 unknown，原告承担举证不能后果"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D1",
+              "defense_type": [
+                "denial"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "right_extinguished",
+            "claim_supported"
+          ],
+          "disposition_type": "驳回离婚请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，原被告双方存在合法婚姻关系，要件 C1_E1 已证明。但关于夫妻感情是否确已破裂（要件 C1_E3），原告提交的证据不足以形成完整证据链，事实处于真伪不明状态，原告应承担举证不能的不利后果。调解程序要件（C1_E2）事实缺失。故离婚请求权基础要件未全部成就，对解除婚姻关系的诉讼请求不予支持。",
+          "cited_rules": [
+            "民法典_1079_001"
+          ]
+        },
+        {
+          "claim_id": "C2",
+          "request_basis_rule_unit_id": "民法典_1041_003",
+          "request_elements_result": [
+            {
+              "element_id": "C2_E1",
+              "element_name": "当事人属于特定保护群体",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "C2_E2",
+              "element_name": "合法权益受到侵害",
+              "finding_status": "not_proved",
+              "note": "事实认定 F4 显示为 unknown，抚养费金额合理性真伪不明"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D2",
+              "defense_type": [
+                "denial"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "部分支持抚养权及抚养费请求",
+          "judgment_result": "partially_supported",
+          "reasoning_summary": "本院认为，婚生子李某某系未成年人，属于特定保护群体，要件 C2_E1 已证明，原告主张抚养权具有事实基础。但关于抚养费金额及权益侵害具体事实（要件 C2_E2），现有证据不足以证明被告收入情况及 3000 元/月抚养费的合理性，事实处于真伪不明状态。故对抚养权请求予以支持，对具体抚养费金额请求因证据不足不予全额支持，酌情处理。",
+          "cited_rules": [
+            "民法典_1041_003"
+          ]
+        },
+        {
+          "claim_id": "C3",
+          "request_basis_rule_unit_id": "民法典_987_001",
+          "request_elements_result": [
+            {
+              "element_id": "C3_E1",
+              "element_name": "不当得利基础关系成立",
+              "finding_status": "not_proved",
+              "note": "事实认定 F5 显示为 unknown，财产性质真伪不明"
+            },
+            {
+              "element_id": "C3_E2",
+              "element_name": "得利人主观恶意",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            },
+            {
+              "element_id": "C3_E3",
+              "element_name": "损失存在",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D3",
+              "defense_type": [
+                "invalidity_defense"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "驳回财产分割请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，原告主张分割财产，需证明财产性质及基础关系（要件 C3_E1）。现有证据无法明确涉案房产、存款及股票属于夫妻共同财产还是个人财产，事实处于真伪不明状态，原告承担举证不能后果。其余要件（C3_E2、C3_E3）事实缺失。故财产分割请求权基础不成立，对该项请求不予支持。",
+          "cited_rules": [
+            "民法典_987_001"
+          ]
+        },
+        {
+          "claim_id": "C4",
+          "request_basis_rule_unit_id": "民法典_1091_001",
+          "request_elements_result": [
+            {
+              "element_id": "C4_E1",
+              "element_name": "合法婚姻关系存续",
+              "finding_status": "proved",
+              "note": "同 C1_E1 认定"
+            },
+            {
+              "element_id": "C4_E2",
+              "element_name": "存在法定过错情形",
+              "finding_status": "not_proved",
+              "note": "事实认定 F6 显示为 unknown，家暴事实真伪不明"
+            },
+            {
+              "element_id": "C4_E3",
+              "element_name": "导致离婚",
+              "finding_status": "not_proved",
+              "note": "事实认定 F7 显示为 unknown，因果关系无法认定"
+            },
+            {
+              "element_id": "C4_E4",
+              "element_name": "请求人为无过错方",
+              "finding_status": "missing",
+              "note": "无相关事实认定记录"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D4",
+              "defense_type": [
+                "denial"
+              ],
+              "elements_status": [],
+              "accepted": false,
+              "effect": "claim_rejected"
+            }
+          ],
+          "legal_effect_tags": [
+            "right_arises",
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "驳回精神损害赔偿请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，离婚损害赔偿以存在法定过错为前提。原告主张被告存在家庭暴力等过错（要件 C4_E2），但证据不足以达到高度盖然性证明标准，事实真伪不明。因果关系（要件 C4_E3）亦无法认定。原告作为请求人是否为无过错方（要件 C4_E4）事实缺失。故损害赔偿请求权基础要件不成立，对该项请求不予支持。",
+          "cited_rules": [
+            "民法典_1091_001"
+          ]
+        }
+      ],
+      "document_skeleton": {
+        "原告诉讼请求": [
+          {
+            "claim_id": "C1",
+            "claim_text_normalized": "判决原告张某与被告李某解除婚姻关系",
+            "claim_type": [
+              "termination_claim"
+            ],
+            "object_type": "身份关系",
+            "amount": null,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "离婚请求为其他附随请求的前提"
+          },
+          {
+            "claim_id": "C2",
+            "claim_text_normalized": "婚生子李某某由原告张某抚养，被告李某每月支付抚养费 3000 元至子女年满十八周岁",
+            "claim_type": [
+              "performance_claim",
+              "payment_claim"
+            ],
+            "object_type": "身份关系与金钱",
+            "amount": 3000.0,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "抚养权与抚养费请求具有依附性"
+          },
+          {
+            "claim_id": "C3",
+            "claim_text_normalized": "分割夫妻共同财产（房产 50% 份额折价 60 万元、存款 25 万元、股票 15 万元）",
+            "claim_type": [
+              "restitution_claim"
+            ],
+            "object_type": "财产",
+            "amount": 1000000.0,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [
+              "房产剩余贷款 80 万元由谁承担？"
+            ],
+            "priority_type": "primary",
+            "competition_note": "财产分割以离婚成立为前提"
+          },
+          {
+            "claim_id": "C4",
+            "claim_text_normalized": "被告李某向原告张某支付精神损害赔偿金 50000 元",
+            "claim_type": [
+              "damages_claim"
+            ],
+            "object_type": "金钱",
+            "amount": 50000.0,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "损害赔偿请求权基于离婚事由成立"
+          }
+        ],
+        "被告辩称": [
+          {
+            "defense_id": "d1",
+            "defense_text_original": "被告李某辩称：双方感情尚未完全破裂，仍有和好可能，不同意离婚。原告所称家庭暴力事实不属实，2023年8月15日系双方发生口角后的肢体冲突，并非单方施暴，且被告已向原告道歉。双方系因生活琐事产生矛盾，通过沟通可以化解，请求法院判决不准离婚。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c1",
+            "response_type": "否认",
+            "defense_type_candidate": [
+              "感情未破裂抗辩"
+            ],
+            "new_fact_asserted": true,
+            "linked_evidence_ids": [],
+            "possible_defense_basis": [
+              "婚姻法关于感情破裂的认定标准"
+            ],
+            "clarification_needed": false
+          },
+          {
+            "defense_id": "d2",
+            "defense_text_original": "被告李某辩称：如法院判决离婚，婚生子李某某应由被告抚养。被告月收入15000元，经济条件优于原告，且被告父母身体健康，可以协助照顾孩子。被告名下房产地理位置优越，周边教育资源丰富，更有利于孩子成长。原告主张的抚养费3000元过高，被告认为每月1500元为宜。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c2",
+            "response_type": "抗辩",
+            "defense_type_candidate": [
+              "抚养权异议",
+              "抚养费金额异议"
+            ],
+            "new_fact_asserted": true,
+            "linked_evidence_ids": [
+              "e16",
+              "e17"
+            ],
+            "possible_defense_basis": [
+              "子女抚养权归属的考量因素"
+            ],
+            "clarification_needed": false
+          },
+          {
+            "defense_id": "d3",
+            "defense_text_original": "被告李某辩称：关于财产分割，涉案房产首付款中被告父母出资15万元，该部分应属被告个人财产，不应作为夫妻共同财产分割。被告名下银行存款50万元中，有15万元系被告婚前个人存款的延续，不应分割。股票账户资金30万元系被告个人投资收益，原告未参与投资决策，不应作为共同财产分割。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c3",
+            "response_type": "抗辩",
+            "defense_type_candidate": [
+              "个人财产抗辩",
+              "财产分割比例异议"
+            ],
+            "new_fact_asserted": true,
+            "linked_evidence_ids": [
+              "e18",
+              "e19"
+            ],
+            "possible_defense_basis": [
+              "个人财产与共同财产的区分"
+            ],
+            "clarification_needed": false
+          },
+          {
+            "defense_id": "d4",
+            "defense_text_original": "被告李某辩称：原告主张的精神损害赔偿无事实和法律依据。被告不存在家庭暴力行为，双方仅系普通夫妻矛盾，不构成损害赔偿的法定情形，请求驳回该项诉讼请求。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c4",
+            "response_type": "否认",
+            "defense_type_candidate": [
+              "损害赔偿否认"
+            ],
+            "new_fact_asserted": false,
+            "linked_evidence_ids": [],
+            "possible_defense_basis": [
+              "离婚损害赔偿的法定要件"
+            ],
+            "clarification_needed": false
+          }
+        ],
+        "争议焦点": [
+          {
+            "issue_id": "I1",
+            "issue_type": "fact_issue",
+            "issue_text": "原告与被告是否存在合法有效的婚姻关系",
+            "linked_element_ids": [
+              "C1_E1"
+            ],
+            "linked_claim_id": "C1",
+            "linked_defense_id": null,
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e1"
+            ],
+            "priority": "low"
+          },
+          {
+            "issue_id": "I2",
+            "issue_type": "fact_issue",
+            "issue_text": "夫妻感情是否确已破裂（是否存在家暴、分居等法定情形）",
+            "linked_element_ids": [
+              "C1_E3"
+            ],
+            "linked_claim_id": "C1",
+            "linked_defense_id": "d1",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6",
+              "e7",
+              "e8"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I3",
+            "issue_type": "fact_issue",
+            "issue_text": "婚生子抚养权归属及是否有利于子女成长",
+            "linked_element_ids": [
+              "C2_E1",
+              "C2_E2"
+            ],
+            "linked_claim_id": "C2",
+            "linked_defense_id": "d2",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e2",
+              "e14",
+              "e16",
+              "e17"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I4",
+            "issue_type": "fact_issue",
+            "issue_text": "抚养费金额是否合理（3000 元/月或 1500 元/月）",
+            "linked_element_ids": [
+              "C2_E2"
+            ],
+            "linked_claim_id": "C2",
+            "linked_defense_id": "d2",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e14",
+              "e15"
+            ],
+            "priority": "medium"
+          },
+          {
+            "issue_id": "I5",
+            "issue_type": "legal_issue",
+            "issue_text": "财产分割请求权基础是否成立（不当得利主张与夫妻共同财产分割存在法律基础不匹配风险）",
+            "linked_element_ids": [
+              "C3_E1"
+            ],
+            "linked_claim_id": "C3",
+            "linked_defense_id": "d3",
+            "burden_party": "原告",
+            "linked_evidence_ids": [],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I6",
+            "issue_type": "fact_issue",
+            "issue_text": "涉案房产、存款及股票属于夫妻共同财产还是被告个人财产",
+            "linked_element_ids": [
+              "C3_E1"
+            ],
+            "linked_claim_id": "C3",
+            "linked_defense_id": "d3",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e9",
+              "e10",
+              "e11",
+              "e12",
+              "e13",
+              "e18",
+              "e19"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I7",
+            "issue_type": "fact_issue",
+            "issue_text": "被告是否存在实施家庭暴力等法定过错情形",
+            "linked_element_ids": [
+              "C4_E2"
+            ],
+            "linked_claim_id": "C4",
+            "linked_defense_id": "d4",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I8",
+            "issue_type": "fact_issue",
+            "issue_text": "原告是否为无过错方且被告过错行为导致离婚",
+            "linked_element_ids": [
+              "C4_E3",
+              "C4_E4"
+            ],
+            "linked_claim_id": "C4",
+            "linked_defense_id": "d4",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e3",
+              "e4"
+            ],
+            "priority": "medium"
+          }
+        ],
+        "本院查明": [
+          {
+            "fact_finding_id": "F1",
+            "element_id": "C1_E1",
+            "fact_slot": "marriage_relation_fact",
+            "finding_status": "proved",
+            "adopted_evidence_ids": [
+              "e1"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "证据 e1（结婚证）系国家机关颁发的书证，合法性、真实性、关联性均无异议（质证意见 x1），证明力较强，足以证明原被告于 2018 年 10 月 18 日登记结婚，婚姻关系合法有效。",
+            "burden_party": "原告",
+            "effect_if_unknown": null
+          },
+          {
+            "fact_finding_id": "F2",
+            "element_id": "C1_E3",
+            "fact_slot": "relationship_breakdown_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6",
+              "e7",
+              "e8"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "关于夫妻感情破裂，原告提交 e3-e7 证明家暴，e8 证明分居。被告对家暴证据关联性有异议（x3, x4），认为告诫书、就诊记录不能直接证明家暴因果关系；证人证言 e7 证明力受质疑（x7）。虽 e8（分居证明）形式合法，但结合 proof_plan 指出的证明缺口，现有证据链在家暴直接因果关系及分居满法定年限上尚需补强，真伪不明。",
+            "burden_party": "原告",
+            "effect_if_unknown": "由原告承担举证不能的不利后果"
+          },
+          {
+            "fact_finding_id": "F3",
+            "element_id": "C2_E1",
+            "fact_slot": "protected_subject_fact",
+            "finding_status": "proved",
+            "adopted_evidence_ids": [
+              "e2",
+              "e14",
+              "e16",
+              "e17"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "证据 e2（出生医学证明）无质证异议（x2），足以证明婚生子李某某存在且未成年，属于特定保护群体。e14、e16、e17 虽部分需核实真实性（proof_plan 提示），但不影响子女身份事实的认定，故该要素事实已证明。",
+            "burden_party": "主张方",
+            "effect_if_unknown": null
+          },
+          {
+            "fact_finding_id": "F4",
+            "element_id": "C2_E2",
+            "fact_slot": "rights_infringement_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e14",
+              "e15"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "关于抚养费金额合理性（对应权益侵害事实），证据 e15（被告收入证明）由原告提交，proof_plan 指出若被告不认可需进一步查证。虽无直接质证异议记录，但鉴于收入事实对抚养费计算关键且存在证明缺口，在被告未自认且无其他佐证下，具体收入金额及抚养费合理性处于真伪不明状态。",
+            "burden_party": "主张方",
+            "effect_if_unknown": "由主张方承担举证不能的不利后果"
+          },
+          {
+            "fact_finding_id": "F5",
+            "element_id": "C3_E1",
+            "fact_slot": "unjust_enrichment_relation_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e9",
+              "e10",
+              "e11",
+              "e12",
+              "e13",
+              "e18",
+              "e19"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "关于财产性质（对应基础关系事实），e9-e13 证明财产存在，但 e18（父母出资）、e19（婚前存款）涉及财产性质争议。被告主张个人财产，原告主张共同财产（x10, x11）。proof_plan 指出需查证资金流向及赠与约定。在缺乏明确赠与协议或资金隔离证据下，财产性质真伪不明。",
+            "burden_party": "原告",
+            "effect_if_unknown": "由原告承担举证不能的不利后果"
+          },
+          {
+            "fact_finding_id": "F6",
+            "element_id": "C4_E2",
+            "fact_slot": "fault_act_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "关于法定过错（家暴），e3-e6 形成初步证据链，但被告否认家暴因果关系（x3, x4, x5, x6），主张伤情系其他原因或证据仅具预防性。proof_plan 明确指出需补强直接证据（如笔录、视频）。现有证据证明力不足以达到高度盖然性标准，事实真伪不明。",
+            "burden_party": "主张方",
+            "effect_if_unknown": "由主张方承担举证不能的不利后果"
+          },
+          {
+            "fact_finding_id": "F7",
+            "element_id": "C4_E3",
+            "fact_slot": "divorce_causation_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e3",
+              "e4"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "关于过错导致离婚的因果关系，依赖于家暴事实的认定。鉴于 F6 中家暴事实处于真伪不明状态，且 proof_plan 指出因果关系证明较难，需结合过错认定结果综合判断。在过错事实未定情况下，因果关系亦无法认定，处于真伪不明状态。",
+            "burden_party": "主张方",
+            "effect_if_unknown": "由主张方承担举证不能的不利后果"
+          }
+        ],
+        "本院认为": [
+          {
+            "claim_id": "C1",
+            "request_basis_rule_unit_id": "民法典_1079_001",
+            "request_elements_result": [
+              {
+                "element_id": "C1_E1",
+                "element_name": "合法婚姻关系存在",
+                "finding_status": "proved",
+                "note": null
+              },
+              {
+                "element_id": "C1_E2",
+                "element_name": "调解程序履行",
+                "finding_status": "missing",
+                "note": "无相关事实认定记录"
+              },
+              {
+                "element_id": "C1_E3",
+                "element_name": "夫妻感情确已破裂",
+                "finding_status": "not_proved",
+                "note": "事实认定 F2 显示为 unknown，原告承担举证不能后果"
+              }
+            ],
+            "defense_results": [
+              {
+                "defense_id": "D1",
+                "defense_type": [
+                  "denial"
+                ],
+                "elements_status": [],
+                "accepted": false,
+                "effect": "claim_rejected"
+              }
+            ],
+            "legal_effect_tags": [
+              "right_extinguished",
+              "claim_supported"
+            ],
+            "disposition_type": "驳回离婚请求",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，原被告双方存在合法婚姻关系，要件 C1_E1 已证明。但关于夫妻感情是否确已破裂（要件 C1_E3），原告提交的证据不足以形成完整证据链，事实处于真伪不明状态，原告应承担举证不能的不利后果。调解程序要件（C1_E2）事实缺失。故离婚请求权基础要件未全部成就，对解除婚姻关系的诉讼请求不予支持。",
+            "cited_rules": [
+              "民法典_1079_001"
+            ]
+          },
+          {
+            "claim_id": "C2",
+            "request_basis_rule_unit_id": "民法典_1041_003",
+            "request_elements_result": [
+              {
+                "element_id": "C2_E1",
+                "element_name": "当事人属于特定保护群体",
+                "finding_status": "proved",
+                "note": null
+              },
+              {
+                "element_id": "C2_E2",
+                "element_name": "合法权益受到侵害",
+                "finding_status": "not_proved",
+                "note": "事实认定 F4 显示为 unknown，抚养费金额合理性真伪不明"
+              }
+            ],
+            "defense_results": [
+              {
+                "defense_id": "D2",
+                "defense_type": [
+                  "denial"
+                ],
+                "elements_status": [],
+                "accepted": false,
+                "effect": "claim_rejected"
+              }
+            ],
+            "legal_effect_tags": [
+              "liability_arises",
+              "claim_supported"
+            ],
+            "disposition_type": "部分支持抚养权及抚养费请求",
+            "judgment_result": "partially_supported",
+            "reasoning_summary": "本院认为，婚生子李某某系未成年人，属于特定保护群体，要件 C2_E1 已证明，原告主张抚养权具有事实基础。但关于抚养费金额及权益侵害具体事实（要件 C2_E2），现有证据不足以证明被告收入情况及 3000 元/月抚养费的合理性，事实处于真伪不明状态。故对抚养权请求予以支持，对具体抚养费金额请求因证据不足不予全额支持，酌情处理。",
+            "cited_rules": [
+              "民法典_1041_003"
+            ]
+          },
+          {
+            "claim_id": "C3",
+            "request_basis_rule_unit_id": "民法典_987_001",
+            "request_elements_result": [
+              {
+                "element_id": "C3_E1",
+                "element_name": "不当得利基础关系成立",
+                "finding_status": "not_proved",
+                "note": "事实认定 F5 显示为 unknown，财产性质真伪不明"
+              },
+              {
+                "element_id": "C3_E2",
+                "element_name": "得利人主观恶意",
+                "finding_status": "missing",
+                "note": "无相关事实认定记录"
+              },
+              {
+                "element_id": "C3_E3",
+                "element_name": "损失存在",
+                "finding_status": "missing",
+                "note": "无相关事实认定记录"
+              }
+            ],
+            "defense_results": [
+              {
+                "defense_id": "D3",
+                "defense_type": [
+                  "invalidity_defense"
+                ],
+                "elements_status": [],
+                "accepted": false,
+                "effect": "claim_rejected"
+              }
+            ],
+            "legal_effect_tags": [
+              "liability_arises",
+              "claim_supported"
+            ],
+            "disposition_type": "驳回财产分割请求",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，原告主张分割财产，需证明财产性质及基础关系（要件 C3_E1）。现有证据无法明确涉案房产、存款及股票属于夫妻共同财产还是个人财产，事实处于真伪不明状态，原告承担举证不能后果。其余要件（C3_E2、C3_E3）事实缺失。故财产分割请求权基础不成立，对该项请求不予支持。",
+            "cited_rules": [
+              "民法典_987_001"
+            ]
+          },
+          {
+            "claim_id": "C4",
+            "request_basis_rule_unit_id": "民法典_1091_001",
+            "request_elements_result": [
+              {
+                "element_id": "C4_E1",
+                "element_name": "合法婚姻关系存续",
+                "finding_status": "proved",
+                "note": "同 C1_E1 认定"
+              },
+              {
+                "element_id": "C4_E2",
+                "element_name": "存在法定过错情形",
+                "finding_status": "not_proved",
+                "note": "事实认定 F6 显示为 unknown，家暴事实真伪不明"
+              },
+              {
+                "element_id": "C4_E3",
+                "element_name": "导致离婚",
+                "finding_status": "not_proved",
+                "note": "事实认定 F7 显示为 unknown，因果关系无法认定"
+              },
+              {
+                "element_id": "C4_E4",
+                "element_name": "请求人为无过错方",
+                "finding_status": "missing",
+                "note": "无相关事实认定记录"
+              }
+            ],
+            "defense_results": [
+              {
+                "defense_id": "D4",
+                "defense_type": [
+                  "denial"
+                ],
+                "elements_status": [],
+                "accepted": false,
+                "effect": "claim_rejected"
+              }
+            ],
+            "legal_effect_tags": [
+              "right_arises",
+              "liability_arises",
+              "claim_supported"
+            ],
+            "disposition_type": "驳回精神损害赔偿请求",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，离婚损害赔偿以存在法定过错为前提。原告主张被告存在家庭暴力等过错（要件 C4_E2），但证据不足以达到高度盖然性证明标准，事实真伪不明。因果关系（要件 C4_E3）亦无法认定。原告作为请求人是否为无过错方（要件 C4_E4）事实缺失。故损害赔偿请求权基础要件不成立，对该项请求不予支持。",
+            "cited_rules": [
+              "民法典_1091_001"
+            ]
+          }
+        ],
+        "判决主文": [
+          "驳回原告关于 C1 的诉讼请求。",
+          "部分支持原告关于 C2 的诉讼请求。",
+          "驳回原告关于 C3 的诉讼请求。",
+          "驳回原告关于 C4 的诉讼请求。"
+        ],
+        "引用法条": [
+          "民法典_1041_003",
+          "民法典_1079_001",
+          "民法典_1091_001",
+          "民法典_987_001"
+        ]
+      },
+      "consistency_check": {
+        "诉求-固定一致": false,
+        "固定-涵摄一致": true,
+        "缺漏的诉求（涵摄阶段未覆盖）": [],
+        "多出的诉求（涵摄阶段凭空出现）": [],
+        "争点已使用": true,
+        "事实已认定": true,
+        "法条已引用": true
+      }
+    },
+    "weak_judgment": null,
+    "partial_output": null,
+    "timings_ms": {
+      "step1_claim_fixing": 41568,
+      "step2_request_basis": 156946,
+      "step3_defense_basis": 165819,
+      "step4_element_analysis": 127147,
+      "step5_claim_fact_search": 125590,
+      "step6_issue_organize": 113621,
+      "step7_proof": 128244,
+      "step8_fact_finding": 153298,
+      "step9_subsumption": 123901,
+      "total": 1182013
+    },
+    "errors": [],
+    "warnings": [
+      "评分处于中风险区间，已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。"
+    ]
+  },
+  "status": "success"
+}

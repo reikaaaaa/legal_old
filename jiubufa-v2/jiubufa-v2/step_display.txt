@@ -1,0 +1,682 @@
+
+============================================================
+  第一步：固定权利请求 (Step1)
+============================================================
+{
+  "case_cause_inferred": [
+    "物业服务合同纠纷"
+  ],
+  "legal_domain_inferred": [
+    "合同"
+  ],
+  "fixed_claims": [
+    {
+      "claim_id": "c1",
+      "claim_text_normalized": "支付拖欠物业服务费、公摊水电费、管污清理费、垃圾清运费及滞纳金合计 10855 元",
+      "claim_type": [
+        "payment_claim"
+      ],
+      "object_type": "金钱",
+      "amount": 10855.0,
+      "claimant": "汉中某物业公司",
+      "respondent": "李某",
+      "is_clear": true,
+      "is_executable": true,
+      "issues": [],
+      "clarification_questions": [
+        "请列明 10855 元总额中物业服务费、公摊水电费、管污清理费、垃圾清运费本金各为多少，滞纳金具体为多少，以便审查滞纳金计算标准及是否过高。"
+      ],
+      "priority_type": "primary",
+      "competition_note": null
+    }
+  ],
+  "overall_clarification": []
+}
+
+============================================================
+  第二步：请求权基础规范 (Step2)
+============================================================
+{
+  "request_basis_candidates": [
+    {
+      "claim_id": "c1",
+      "rule_unit_ref": {
+        "rule_unit_id": "民法典_944_001",
+        "law_name": "中华人民共和国民法典",
+        "article_no": "第九百四十四条",
+        "rule_unit_text": "业主应当按照约定向物业服务人支付物业费。物业服务人已经按照约定和有关规定提供服务的，业主不得以未接受或者无需接受相关物业服务为由拒绝支付物业费。",
+        "norm_type": [
+          "request_basis",
+          "liability_rule",
+          "exception_rule"
+        ],
+        "claim_type": [
+          "payment_claim"
+        ],
+        "defense_type": [
+          "denial"
+        ],
+        "legal_effect_tags": [
+          "liability_arises",
+          "claim_supported"
+        ]
+      },
+      "norm_type": [
+        "request_basis",
+        "liability_rule",
+        "exception_rule"
+      ],
+      "claim_type": [
+        "payment_claim"
+      ],
+      "legal_effect_tags": [
+        "liability_arises",
+        "claim_supported"
+      ],
+      "selection_reason": "该规则单元（民法典第 944 条）直接规定了业主在物业服务合同关系中的付费义务，是物业服务合同纠纷中请求支付物业费的核心请求权基础。其 L3 claim_type 为 payment_claim，与本案诉讼请求（支付拖欠物业服务费等）一致；L5 法律效果标签包含 liability_arises 和 claim_supported，表明满足要件后可支持原告请求。相较于其他候选（如债务加入、悬赏广告、土地管理等），该规则与案由“物业服务合同纠纷”匹配度最高，且为特别规则优于一般合同规则。",
+      "priority": "primary",
+      "risk_note": "请求中包含滞纳金，需结合合同约定及民法典关于违约金的一般规定进一步审查，本条主要支持物业费本金请求。"
+    }
+  ],
+  "competition_analysis": null
+}
+
+============================================================
+  第三步：抗辩权基础规范 (Step3)
+============================================================
+{
+  "defense_basis_candidates": []
+}
+
+============================================================
+  第四步：构成要件分析 (Step4)
+============================================================
+{
+  "element_matrix": [
+    {
+      "element_id": "E1",
+      "rule_unit_id": "民法典_944_001",
+      "element_name": "物业服务合同关系成立",
+      "element_type": "legal_relation_element",
+      "element_logic": "AND",
+      "is_hidden_element": true,
+      "negative_element": false,
+      "exception_element": false,
+      "fact_slot": "contract_relation_fact",
+      "burden_party": "原告",
+      "proof_standard": "高度盖然性",
+      "suggested_evidence_types": [
+        "物业服务合同",
+        "业主入住证明"
+      ],
+      "used_for": "request_basis",
+      "target_id": "c1",
+      "note": null
+    },
+    {
+      "element_id": "E2",
+      "rule_unit_id": "民法典_944_001",
+      "element_name": "物业服务人已提供服务",
+      "element_type": "act_element",
+      "element_logic": "AND",
+      "is_hidden_element": false,
+      "negative_element": false,
+      "exception_element": false,
+      "fact_slot": "service_provided_fact",
+      "burden_party": "原告",
+      "proof_standard": "高度盖然性",
+      "suggested_evidence_types": [
+        "服务记录",
+        "工作日志",
+        "公共设施维护记录"
+      ],
+      "used_for": "request_basis",
+      "target_id": "c1",
+      "note": null
+    },
+    {
+      "element_id": "E3",
+      "rule_unit_id": "民法典_944_001",
+      "element_name": "业主未支付物业费",
+      "element_type": "breach_element",
+      "element_logic": "AND",
+      "is_hidden_element": false,
+      "negative_element": false,
+      "exception_element": false,
+      "fact_slot": "fee_unpaid_fact",
+      "burden_party": "原告",
+      "proof_standard": "高度盖然性",
+      "suggested_evidence_types": [
+        "催缴通知",
+        "欠费明细",
+        "银行流水"
+      ],
+      "used_for": "request_basis",
+      "target_id": "c1",
+      "note": null
+    },
+    {
+      "element_id": "E4",
+      "rule_unit_id": "民法典_944_001",
+      "element_name": "业主以未接受服务为由抗辩",
+      "element_type": "act_element",
+      "element_logic": "AND",
+      "is_hidden_element": false,
+      "negative_element": true,
+      "exception_element": true,
+      "fact_slot": "defense_non_acceptance_fact",
+      "burden_party": "被告",
+      "proof_standard": "高度盖然性",
+      "suggested_evidence_types": [
+        "答辩状",
+        "空置房证明"
+      ],
+      "used_for": "request_basis",
+      "target_id": "c1",
+      "note": null
+    }
+  ]
+}
+
+============================================================
+  第五步：诉讼主张检索 (Step5)
+============================================================
+{
+  "claim_fact_mapping": [
+    {
+      "element_id": "E1",
+      "fact_slot": "contract_relation_fact",
+      "required_fact": "证明物业服务合同关系成立的事实，如合同签订、生效等",
+      "asserted_fact_ids": [
+        "f1"
+      ],
+      "assertion_status": "asserted",
+      "burden_party": "原告",
+      "clarification_question": null,
+      "risk_note": null
+    },
+    {
+      "element_id": "E2",
+      "fact_slot": "service_provided_fact",
+      "required_fact": "证明物业服务人已提供服务的事实，如服务记录、工作日志等",
+      "asserted_fact_ids": [
+        "f2"
+      ],
+      "assertion_status": "asserted",
+      "burden_party": "原告",
+      "clarification_question": null,
+      "risk_note": null
+    },
+    {
+      "element_id": "E3",
+      "fact_slot": "fee_unpaid_fact",
+      "required_fact": "证明业主未支付物业费的事实，如欠费明细、催缴记录等",
+      "asserted_fact_ids": [
+        "f3"
+      ],
+      "assertion_status": "asserted",
+      "burden_party": "原告",
+      "clarification_question": null,
+      "risk_note": null
+    },
+    {
+      "element_id": "E4",
+      "fact_slot": "defense_non_acceptance_fact",
+      "required_fact": "证明业主以未接受服务为由抗辩的事实，如答辩状、空置房证明等",
+      "asserted_fact_ids": [],
+      "assertion_status": "missing",
+      "burden_party": "被告",
+      "clarification_question": "被告是否主张未接受物业服务或不需要服务？",
+      "risk_note": "被告尚未提交答辩意见，若庭审中提出此抗辩，可能影响物业费全额支持，原告需准备反驳证据"
+    }
+  ]
+}
+
+============================================================
+  第六步：争点整理 (Step6)
+============================================================
+{
+  "issues": [
+    {
+      "issue_id": "I1",
+      "issue_type": "fact_issue",
+      "issue_text": "物业服务合同关系是否成立",
+      "linked_element_ids": [
+        "E1"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "原告",
+      "linked_evidence_ids": [
+        "e1"
+      ],
+      "priority": "high"
+    },
+    {
+      "issue_id": "I2",
+      "issue_type": "fact_issue",
+      "issue_text": "物业服务人是否已按照约定提供服务",
+      "linked_element_ids": [
+        "E2"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "原告",
+      "linked_evidence_ids": [
+        "e2"
+      ],
+      "priority": "high"
+    },
+    {
+      "issue_id": "I3",
+      "issue_type": "fact_issue",
+      "issue_text": "业主是否存在未支付物业费的事实及欠费金额",
+      "linked_element_ids": [
+        "E3"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "原告",
+      "linked_evidence_ids": [
+        "e3",
+        "e4"
+      ],
+      "priority": "high"
+    },
+    {
+      "issue_id": "I4",
+      "issue_type": "fact_issue",
+      "issue_text": "被告是否以未接受或无需接受物业服务为由提出抗辩",
+      "linked_element_ids": [
+        "E4"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "被告",
+      "linked_evidence_ids": [],
+      "priority": "low"
+    }
+  ],
+  "review_order": [
+    "I1",
+    "I2",
+    "I3",
+    "I4"
+  ]
+}
+
+============================================================
+  第七步：要件事实证明 (Step7)
+============================================================
+{
+  "proof_plan": [
+    {
+      "issue_id": "I1",
+      "element_id": "E1",
+      "fact_to_prove": "物业服务合同关系成立",
+      "burden_party": "原告",
+      "proof_standard": "高度盖然性",
+      "existing_evidence_ids": [
+        "e1"
+      ],
+      "suggested_evidence_types": [
+        "物业服务合同",
+        "业主入住证明"
+      ],
+      "proof_gap": "证据 e1 仅为物业公司与业委会签订的合同，需进一步证明该合同对被告业主具有约束力，缺乏被告入住证明或业主名册",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "issue_id": "I2",
+      "element_id": "E2",
+      "fact_to_prove": "物业服务人已按照约定提供服务",
+      "burden_party": "原告",
+      "proof_standard": "高度盖然性",
+      "existing_evidence_ids": [
+        "e2"
+      ],
+      "suggested_evidence_types": [
+        "服务记录",
+        "工作日志",
+        "公共设施维护记录"
+      ],
+      "proof_gap": "证据 e2 为概括性服务记录，缺乏具体时段、具体项目的详细维护日志或第三方质量评估报告，难以证明服务完全达标",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "issue_id": "I3",
+      "element_id": "E3",
+      "fact_to_prove": "业主存在未支付物业费的事实及欠费金额",
+      "burden_party": "原告",
+      "proof_standard": "高度盖然性",
+      "existing_evidence_ids": [
+        "e3",
+        "e4"
+      ],
+      "suggested_evidence_types": [
+        "催缴通知",
+        "欠费明细",
+        "银行流水"
+      ],
+      "proof_gap": "证据 e3、e4 多为原告单方制作的催收记录及计算表，缺乏银行流水佐证未到账事实，且欠费明细未经被告确认",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "issue_id": "I4",
+      "element_id": "E4",
+      "fact_to_prove": "被告以未接受或无需接受物业服务为由提出抗辩",
+      "burden_party": "被告",
+      "proof_standard": "高度盖然性",
+      "existing_evidence_ids": [],
+      "suggested_evidence_types": [
+        "答辩状",
+        "空置房证明"
+      ],
+      "proof_gap": "被告尚未提交任何实质性证据证明未接受服务或房屋空置，仅有抗辩主张无证据支撑",
+      "effect_if_unknown": "由被告承担举证不能的不利后果"
+    }
+  ]
+}
+
+============================================================
+  第八步：事实认定 (Step8)
+============================================================
+{
+  "fact_findings": [
+    {
+      "fact_finding_id": "F1",
+      "element_id": "E1",
+      "fact_slot": "contract_relation_fact",
+      "finding_status": "unknown",
+      "adopted_evidence_ids": [
+        "e1"
+      ],
+      "rejected_evidence_ids": [],
+      "reasoning": "证据 e1《物业管理服务合同》形式合法，具有关联性。但该合同系物业公司与业主委员会签订，证明力不足以直接证明对被告业主具有约束力。因缺乏被告入住证明或业主名册佐证，合同关系对被告的效力处于真伪不明状态。",
+      "burden_party": "原告",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "fact_finding_id": "F2",
+      "element_id": "E2",
+      "fact_slot": "service_provided_fact",
+      "finding_status": "unknown",
+      "adopted_evidence_ids": [
+        "e2"
+      ],
+      "rejected_evidence_ids": [],
+      "reasoning": "证据 e2 物业服务记录为原告单方制作，真实性需补强。虽具有关联性，但内容为概括性记录，缺乏具体时段、具体项目的详细维护日志或第三方质量评估报告，证明力较弱，难以证明服务完全达标，事实处于真伪不明状态。",
+      "burden_party": "原告",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "fact_finding_id": "F3",
+      "element_id": "E3",
+      "fact_slot": "fee_unpaid_fact",
+      "finding_status": "unknown",
+      "adopted_evidence_ids": [
+        "e3",
+        "e4"
+      ],
+      "rejected_evidence_ids": [],
+      "reasoning": "证据 e3 催收通知及记录、e4 费用明细及计算表均为原告单方制作，真实性缺乏被告确认或银行流水佐证。虽具有关联性，但欠费明细未经被告确认，证明力不足，欠费金额事实处于真伪不明状态。",
+      "burden_party": "原告",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "fact_finding_id": "F4",
+      "element_id": "E4",
+      "fact_slot": "defense_non_acceptance_fact",
+      "finding_status": "not_proved",
+      "adopted_evidence_ids": [],
+      "rejected_evidence_ids": [],
+      "reasoning": "被告以未接受或无需接受物业服务为由提出抗辩，但未提交任何实质性证据（如答辩状、空置房证明等）支撑。仅有抗辩主张无证据佐证，无法认定该事实成立。",
+      "burden_party": "被告",
+      "effect_if_unknown": null
+    }
+  ]
+}
+
+============================================================
+  第九步：要件归入并裁判 (Step9)
+============================================================
+{
+  "subsumption_results": [
+    {
+      "claim_id": "c1",
+      "request_basis_rule_unit_id": "民法典_944_001",
+      "request_elements_result": [
+        {
+          "element_id": "E1",
+          "element_name": "物业服务合同关系成立",
+          "finding_status": "not_proved",
+          "note": "事实认定状态为 unknown，原告举证不足，承担举证不能后果"
+        },
+        {
+          "element_id": "E2",
+          "element_name": "物业服务人已提供服务",
+          "finding_status": "not_proved",
+          "note": "事实认定状态为 unknown，原告举证不足，承担举证不能后果"
+        },
+        {
+          "element_id": "E3",
+          "element_name": "业主未支付物业费",
+          "finding_status": "not_proved",
+          "note": "事实认定状态为 unknown，原告举证不足，承担举证不能后果"
+        },
+        {
+          "element_id": "E4",
+          "element_name": "业主以未接受服务为由抗辩",
+          "finding_status": "not_proved",
+          "note": "被告抗辩事实未获证明"
+        }
+      ],
+      "defense_results": [],
+      "legal_effect_tags": [
+        "claim_rejected"
+      ],
+      "disposition_type": "驳回诉讼请求",
+      "judgment_result": "rejected",
+      "reasoning_summary": "本院认为，原告主张被告支付物业服务费等费用，依据《中华人民共和国民法典》第九百四十四条，应就物业服务合同关系成立、已提供服务及被告欠费事实承担举证责任。本案中，原告提供的《物业管理服务合同》系与业主委员会签订，缺乏被告入住证明或业主名册佐证，无法证明对被告具有约束力；服务记录及欠费明细均为原告单方制作，真实性不足，且无其他证据补强。上述关键事实处于真伪不明状态，原告应承担举证不能的不利后果。被告虽提出未接受服务抗辩但未举证，该抗辩不成立，但不影响因原告举证不足导致的请求权基础要件不成立。综上，原告诉讼请求缺乏事实依据，本院不予支持。",
+      "cited_rules": [
+        "民法典_944_001"
+      ]
+    }
+  ]
+}
+
+============================================================
+  保底机制 · 充分度评分
+============================================================
+{
+  "claim_clarity": 16,
+  "legal_relation_stability": 13,
+  "request_basis_stability": 12,
+  "defense_path_completeness": 6,
+  "element_fact_coverage": 12,
+  "evidence_coverage": 8,
+  "fact_finding_reliability": 5
+}
+
+============================================================
+  裁判文书框架 (document_skeleton)
+============================================================
+{
+  "原告诉讼请求": [
+    {
+      "claim_id": "c1",
+      "claim_text_normalized": "支付拖欠物业服务费、公摊水电费、管污清理费、垃圾清运费及滞纳金合计 10855 元",
+      "claim_type": [
+        "payment_claim"
+      ],
+      "object_type": "金钱",
+      "amount": 10855.0,
+      "claimant": "汉中某物业公司",
+      "respondent": "李某",
+      "is_clear": true,
+      "is_executable": true,
+      "issues": [],
+      "clarification_questions": [
+        "请列明 10855 元总额中物业服务费、公摊水电费、管污清理费、垃圾清运费本金各为多少，滞纳金具体为多少，以便审查滞纳金计算标准及是否过高。"
+      ],
+      "priority_type": "primary",
+      "competition_note": null
+    }
+  ],
+  "被告辩称": [],
+  "争议焦点": [
+    {
+      "issue_id": "I1",
+      "issue_type": "fact_issue",
+      "issue_text": "物业服务合同关系是否成立",
+      "linked_element_ids": [
+        "E1"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "原告",
+      "linked_evidence_ids": [
+        "e1"
+      ],
+      "priority": "high"
+    },
+    {
+      "issue_id": "I2",
+      "issue_type": "fact_issue",
+      "issue_text": "物业服务人是否已按照约定提供服务",
+      "linked_element_ids": [
+        "E2"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "原告",
+      "linked_evidence_ids": [
+        "e2"
+      ],
+      "priority": "high"
+    },
+    {
+      "issue_id": "I3",
+      "issue_type": "fact_issue",
+      "issue_text": "业主是否存在未支付物业费的事实及欠费金额",
+      "linked_element_ids": [
+        "E3"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "原告",
+      "linked_evidence_ids": [
+        "e3",
+        "e4"
+      ],
+      "priority": "high"
+    },
+    {
+      "issue_id": "I4",
+      "issue_type": "fact_issue",
+      "issue_text": "被告是否以未接受或无需接受物业服务为由提出抗辩",
+      "linked_element_ids": [
+        "E4"
+      ],
+      "linked_claim_id": "c1",
+      "linked_defense_id": null,
+      "burden_party": "被告",
+      "linked_evidence_ids": [],
+      "priority": "low"
+    }
+  ],
+  "本院查明": [
+    {
+      "fact_finding_id": "F1",
+      "element_id": "E1",
+      "fact_slot": "contract_relation_fact",
+      "finding_status": "unknown",
+      "adopted_evidence_ids": [
+        "e1"
+      ],
+      "rejected_evidence_ids": [],
+      "reasoning": "证据 e1《物业管理服务合同》形式合法，具有关联性。但该合同系物业公司与业主委员会签订，证明力不足以直接证明对被告业主具有约束力。因缺乏被告入住证明或业主名册佐证，合同关系对被告的效力处于真伪不明状态。",
+      "burden_party": "原告",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "fact_finding_id": "F2",
+      "element_id": "E2",
+      "fact_slot": "service_provided_fact",
+      "finding_status": "unknown",
+      "adopted_evidence_ids": [
+        "e2"
+      ],
+      "rejected_evidence_ids": [],
+      "reasoning": "证据 e2 物业服务记录为原告单方制作，真实性需补强。虽具有关联性，但内容为概括性记录，缺乏具体时段、具体项目的详细维护日志或第三方质量评估报告，证明力较弱，难以证明服务完全达标，事实处于真伪不明状态。",
+      "burden_party": "原告",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "fact_finding_id": "F3",
+      "element_id": "E3",
+      "fact_slot": "fee_unpaid_fact",
+      "finding_status": "unknown",
+      "adopted_evidence_ids": [
+        "e3",
+        "e4"
+      ],
+      "rejected_evidence_ids": [],
+      "reasoning": "证据 e3 催收通知及记录、e4 费用明细及计算表均为原告单方制作，真实性缺乏被告确认或银行流水佐证。虽具有关联性，但欠费明细未经被告确认，证明力不足，欠费金额事实处于真伪不明状态。",
+      "burden_party": "原告",
+      "effect_if_unknown": "由原告承担举证不能的不利后果"
+    },
+    {
+      "fact_finding_id": "F4",
+      "element_id": "E4",
+      "fact_slot": "defense_non_acceptance_fact",
+      "finding_status": "not_proved",
+      "adopted_evidence_ids": [],
+      "rejected_evidence_ids": [],
+      "reasoning": "被告以未接受或无需接受物业服务为由提出抗辩，但未提交任何实质性证据（如答辩状、空置房证明等）支撑。仅有抗辩主张无证据佐证，无法认定该事实成立。",
+      "burden_party": "被告",
+      "effect_if_unknown": null
+    }
+  ],
+  "本院认为": [
+    {
+      "claim_id": "c1",
+      "request_basis_rule_unit_id": "民法典_944_001",
+      "request_elements_result": [
+        {
+          "element_id": "E1",
+          "element_name": "物业服务合同关系成立",
+          "finding_status": "not_proved",
+          "note": "事实认定状态为 unknown，原告举证不足，承担举证不能后果"
+        },
+        {
+          "element_id": "E2",
+          "element_name": "物业服务人已提供服务",
+          "finding_status": "not_proved",
+          "note": "事实认定状态为 unknown，原告举证不足，承担举证不能后果"
+        },
+        {
+          "element_id": "E3",
+          "element_name": "业主未支付物业费",
+          "finding_status": "not_proved",
+          "note": "事实认定状态为 unknown，原告举证不足，承担举证不能后果"
+        },
+        {
+          "element_id": "E4",
+          "element_name": "业主以未接受服务为由抗辩",
+          "finding_status": "not_proved",
+          "note": "被告抗辩事实未获证明"
+        }
+      ],
+      "defense_results": [],
+      "legal_effect_tags": [
+        "claim_rejected"
+      ],
+      "disposition_type": "驳回诉讼请求",
+      "judgment_result": "rejected",
+      "reasoning_summary": "本院认为，原告主张被告支付物业服务费等费用，依据《中华人民共和国民法典》第九百四十四条，应就物业服务合同关系成立、已提供服务及被告欠费事实承担举证责任。本案中，原告提供的《物业管理服务合同》系与业主委员会签订，缺乏被告入住证明或业主名册佐证，无法证明对被告具有约束力；服务记录及欠费明细均为原告单方制作，真实性不足，且无其他证据补强。上述关键事实处于真伪不明状态，原告应承担举证不能的不利后果。被告虽提出未接受服务抗辩但未举证，该抗辩不成立，但不影响因原告举证不足导致的请求权基础要件不成立。综上，原告诉讼请求缺乏事实依据，本院不予支持。",
+      "cited_rules": [
+        "民法典_944_001"
+      ]
+    }
+  ]...

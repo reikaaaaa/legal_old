@@ -1,0 +1,224 @@
+{
+  "case_basic_info": {
+    "case_id": "case-2024-mc-0001",
+    "case_name": "甲公司诉乙公司买卖合同纠纷案",
+    "case_cause_text": "买卖合同纠纷",
+    "court": "示例市某区人民法院",
+    "procedure_stage": "一审",
+    "filing_date": "2024-06-15",
+    "material_sources": ["起诉状", "答辩状", "证据清单", "庭审笔录"],
+    "case_summary": "原告甲公司主张已交付货物但被告乙公司未支付货款人民币 500,000 元，请求支付货款及逾期利息。被告抗辩货物存在质量瑕疵，主张同时履行抗辩并要求扣减价款。"
+  },
+  "party_info": [
+    {
+      "party_id": "p1",
+      "party_name": "甲公司",
+      "party_role": "原告",
+      "legal_status": "法人",
+      "relationship_to_case": "买卖合同的出卖人",
+      "identity_evidence": ["营业执照", "法定代表人身份证明"]
+    },
+    {
+      "party_id": "p2",
+      "party_name": "乙公司",
+      "party_role": "被告",
+      "legal_status": "法人",
+      "relationship_to_case": "买卖合同的买受人",
+      "identity_evidence": ["营业执照", "法定代表人身份证明"]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "claim_text_original": "请求判令被告乙公司向原告支付货款人民币 500,000 元。",
+      "claim_text_normalized": "支付货款 500,000 元",
+      "claimant": "p1",
+      "respondent": "p2",
+      "claim_type_candidate": ["合同履行请求权", "金钱给付请求权"],
+      "object_type": "金钱",
+      "amount": 500000,
+      "behavior_requested": "支付货款",
+      "is_clear": true,
+      "is_executable": true,
+      "priority_type": "primary"
+    },
+    {
+      "claim_id": "c2",
+      "claim_text_original": "请求判令被告以未付货款为基数，自 2024 年 3 月 1 日起按全国银行间同业拆借中心公布的贷款市场报价利率（LPR）支付逾期利息至款项实际付清之日止。",
+      "claim_text_normalized": "支付逾期利息（按 LPR 自 2024-03-01 起计至付清之日）",
+      "claimant": "p1",
+      "respondent": "p2",
+      "claim_type_candidate": ["违约责任", "金钱给付请求权"],
+      "object_type": "金钱",
+      "behavior_requested": "支付逾期利息",
+      "is_clear": true,
+      "is_executable": true,
+      "priority_type": "parallel"
+    }
+  ],
+  "claim_facts": [
+    {
+      "fact_id": "f1",
+      "fact_text_original": "原被告于 2024 年 1 月 10 日签订《工业设备买卖合同》一份，约定原告向被告交付指定型号设备 10 台，单价 50,000 元，总价 500,000 元；交付时间为 2024 年 2 月 15 日；付款时间为 2024 年 2 月 28 日前一次性付清。",
+      "fact_time": "2024-01-10",
+      "fact_actor": "p1",
+      "fact_counterparty": "p2",
+      "fact_type_candidate": ["合同成立", "合同生效"],
+      "linked_claim_id": "c1",
+      "linked_evidence_ids": ["e1"],
+      "possible_fact_slot": ["合同关系成立", "履行期限"],
+      "clarity_status": "明确",
+      "opponent_response": "承认"
+    },
+    {
+      "fact_id": "f2",
+      "fact_text_original": "原告于 2024 年 2 月 15 日按合同约定向被告交付设备 10 台，被告签收。",
+      "fact_time": "2024-02-15",
+      "fact_actor": "p1",
+      "fact_counterparty": "p2",
+      "fact_type_candidate": ["履行行为"],
+      "linked_claim_id": "c1",
+      "linked_evidence_ids": ["e2", "e3"],
+      "possible_fact_slot": ["原告已履行主给付义务"],
+      "clarity_status": "明确",
+      "opponent_response": "承认"
+    },
+    {
+      "fact_id": "f3",
+      "fact_text_original": "被告至起诉之日仍未支付任何货款。",
+      "fact_time": "2024-06-15",
+      "fact_actor": "p2",
+      "fact_type_candidate": ["违约行为"],
+      "linked_claim_id": "c1",
+      "linked_evidence_ids": ["e4"],
+      "possible_fact_slot": ["被告未履行付款义务"],
+      "clarity_status": "明确",
+      "opponent_response": "抗辩"
+    }
+  ],
+  "defense_opinions": [
+    {
+      "defense_id": "d1",
+      "defense_text_original": "被告乙公司辩称：原告交付的 10 台设备中有 3 台存在严重质量瑕疵，无法正常使用，被告已经书面通知原告要求更换，但原告至今未予处理。在原告未完全履行交付符合约定货物之义务前，被告依法享有同时履行抗辩权，可以拒绝支付货款。",
+      "defense_target_claim_id": "c1",
+      "response_type": "抗辩权",
+      "defense_type_candidate": ["同时履行抗辩权", "质量瑕疵抗辩"],
+      "new_fact_asserted": true,
+      "linked_evidence_ids": ["e5", "e6"],
+      "possible_defense_basis": ["同时履行抗辩权（《民法典》第 525 条）"],
+      "clarification_needed": false
+    }
+  ],
+  "counterclaims": [],
+  "evidence_list": [
+    {
+      "evidence_id": "e1",
+      "evidence_name": "《工业设备买卖合同》",
+      "submitted_by": "p1",
+      "evidence_type": "书证",
+      "proof_purpose_original": "证明原被告签订买卖合同、合同条款及付款约定",
+      "linked_claim_id": "c1",
+      "linked_fact_ids": ["f1"]
+    },
+    {
+      "evidence_id": "e2",
+      "evidence_name": "送货单 10 份",
+      "submitted_by": "p1",
+      "evidence_type": "书证",
+      "proof_purpose_original": "证明原告已按约交付 10 台设备且被告已签收",
+      "linked_claim_id": "c1",
+      "linked_fact_ids": ["f2"]
+    },
+    {
+      "evidence_id": "e3",
+      "evidence_name": "增值税专用发票",
+      "submitted_by": "p1",
+      "evidence_type": "书证",
+      "proof_purpose_original": "证明设备已交付且已开具发票",
+      "linked_claim_id": "c1",
+      "linked_fact_ids": ["f2"]
+    },
+    {
+      "evidence_id": "e4",
+      "evidence_name": "原告催款函与 EMS 邮寄回执",
+      "submitted_by": "p1",
+      "evidence_type": "书证",
+      "proof_purpose_original": "证明原告已多次催讨货款，被告未支付",
+      "linked_claim_id": "c1",
+      "linked_fact_ids": ["f3"]
+    },
+    {
+      "evidence_id": "e5",
+      "evidence_name": "设备质量异议通知书",
+      "submitted_by": "p2",
+      "evidence_type": "书证",
+      "proof_purpose_original": "证明被告已就 3 台设备质量问题向原告提出书面异议",
+      "linked_defense_id": "d1"
+    },
+    {
+      "evidence_id": "e6",
+      "evidence_name": "第三方检测报告",
+      "submitted_by": "p2",
+      "evidence_type": "鉴定意见",
+      "proof_purpose_original": "证明 3 台设备核心部件存在质量瑕疵，无法满足合同约定的功能",
+      "linked_defense_id": "d1"
+    }
+  ],
+  "cross_examinations": [
+    {
+      "cross_id": "x1",
+      "evidence_id": "e1",
+      "opponent": "p2",
+      "legality_opinion": "无异议",
+      "relevance_opinion": "无异议",
+      "authenticity_opinion": "无异议",
+      "probative_force_opinion": "无异议"
+    },
+    {
+      "cross_id": "x2",
+      "evidence_id": "e2",
+      "opponent": "p2",
+      "authenticity_opinion": "对真实性无异议，但主张其中 3 台为质量瑕疵设备",
+      "probative_force_opinion": "认可送货事实，不认可数量与合同约定相符"
+    },
+    {
+      "cross_id": "x3",
+      "evidence_id": "e6",
+      "opponent": "p1",
+      "legality_opinion": "对鉴定机构资质提出异议",
+      "authenticity_opinion": "对检测取样过程提出异议",
+      "probative_force_opinion": "认为不能证明瑕疵在交付时即已存在",
+      "need_supplementary_proof": true
+    }
+  ],
+  "court_records": [
+    "原告陈述：合同签订后，我方按时交付 10 台设备，被告至今未付货款，故起诉。",
+    "被告陈述：3 台设备存在质量问题，已经书面通知，原告拒不更换，故不应当支付全部货款。"
+  ],
+  "legal_arguments": [
+    {
+      "argument_id": "la1",
+      "submitted_by": "p1",
+      "target_claim_or_defense": "c1",
+      "cited_law_name": "中华人民共和国民法典",
+      "cited_article_no": "第 595 条",
+      "argument_text": "买卖合同是出卖人转移标的物所有权于买受人，买受人支付价款的合同。被告应当支付货款。",
+      "norm_type_candidate": ["请求权基础", "合同履行规则"]
+    },
+    {
+      "argument_id": "la2",
+      "submitted_by": "p2",
+      "target_claim_or_defense": "d1",
+      "cited_law_name": "中华人民共和国民法典",
+      "cited_article_no": "第 525 条",
+      "argument_text": "当事人互负债务，没有先后履行顺序的，应当同时履行。一方在对方履行之前有权拒绝其履行请求。",
+      "norm_type_candidate": ["抗辩权"]
+    }
+  ],
+  "procedural_info": {
+    "jurisdiction": "被告住所地法院，无管辖权异议",
+    "limitation_period_status": "未过诉讼时效",
+    "proof_period_status": "举证期限内提交完毕"
+  },
+  "fallback_user_choice": null
+}

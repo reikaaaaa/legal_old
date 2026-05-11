@@ -1,0 +1,1377 @@
+{
+  "direct_llm": {
+    "method": "direct_llm",
+    "status": "success",
+    "elapsed_seconds": 120.5,
+    "key_content": {
+      "case_id": "case-2024-marriage-0001",
+      "裁判分析": {
+        "案件定性": "离婚纠纷（含子女抚养、财产分割及离婚损害赔偿）",
+        "争议焦点": [
+          "夫妻感情是否确已破裂，是否符合法定离婚条件",
+          "婚生子抚养权应归何方，抚养费数额如何确定",
+          "涉案房产、银行存款及股票账户资金的性质认定及分割方案",
+          "被告行为是否构成家庭暴力，原告主张的精神损害赔偿是否成立"
+        ],
+        "事实认定与证据采信": {
+          "家庭暴力事实": "采信原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）、人身安全保护令裁定书及邻居证人证言。上述证据来源合法、内容客观真实、相互印证，形成完整证据链，足以认定被告在婚姻存续期间多次对原告实施家庭暴力。被告虽抗辩系双方互殴，但未提交有效反证，其抗辩不予采纳。",
+          "感情破裂事实": "基于家庭暴力事实及双方自2024年2月起分居至今的客观情况，结合庭审中双方对立情绪明显、调解无效，依法认定夫妻感情确已破裂，无和好可能。",
+          "财产性质认定": "涉案房产系婚后购买，虽登记在被告名下且首付款含双方父母出资，但无证据证明父母出资系明确赠与一方，依法推定为对夫妻双方的赠与，属夫妻共同财产。被告名下50万元存款及30万元股票均系婚姻存续期间取得及投资收益，被告主张部分属婚前个人财产或个人投资收益，但资金已发生混同且未能提供明确约定或独立账户流水予以区分，举证不能，依法认定为夫妻共同财产。",
+          "抚养条件认定": "婚生子现年4岁，原告自分居起实际承担主要抚养义务，生活环境稳定。双方均具备抚养能力，综合考量子女成长连续性、实际抚养状况及最有利于未成年子女原则，原告抚养更为适宜。"
+        },
+        "法律适用与裁判理由": {
+          "离婚请求": "依据《中华人民共和国民法典》第一千零七十九条，实施家庭暴力调解无效的，应当准予离婚。本案家庭暴力事实清楚，感情确已破裂，依法支持原告离婚请求。",
+          "子女抚养": "依据《民法典》第一千零八十四条及婚姻家庭编司法解释相关规定，离婚后不满八周岁子女抚养权由法院根据最有利于未成年子女原则判决。原告实际抚养且具备稳定工作与收入，判归原告。被告月收入15000元，原告主张3000元/月抚养费符合其负担能力及当地实际生活水平，予以支持。",
+          "财产分割": "依据《民法典》第一千零六十二条，夫妻对共同财产有平等处理权。涉案房产净值120万元（现值200万-贷款80万），存款50万元，股票30万元，合计共同财产净值200万元。原则上均等分割，原告应分得100万元。考虑到房产登记在被告名下且由被告继续居住使用，判令房产归被告所有，剩余贷款由被告承担，被告向原告支付折价款100万元。",
+          "损害赔偿": "依据《民法典》第一千零九十一条，因实施家庭暴力导致离婚的，无过错方有权请求损害赔偿。被告家暴行为对原告身心造成伤害，原告作为无过错方主张50000元精神损害赔偿，数额合理，依法予以支持。"
+        },
+        "裁判结果（判决主文）": [
+          "准予原告张某与被告李某离婚。",
+          "婚生子李某某由原告张某直接抚养，被告李某自本判决生效之日起每月支付抚养费人民币3000元，至李某某年满十八周岁止。",
+          "位于某某市某某区某某路XX号房产归被告李某所有，该房产剩余按揭贷款80万元由被告李某负责偿还；被告李某于本判决生效之日起三十日内向原告张某支付夫妻共同财产折价款人民币1000000元。",
+          "被告李某于本判决生效之日起十日内向原告张某支付离婚损害赔偿金人民币50000元。",
+          "案件受理费、财产保全费及评估费由原、被告依法分担。"
+        ],
+        "法官释明与程序事项": "本判决为一审判决。如不服本判决，可在判决书送达之日起十五日内向本院递交上诉状。被告履行财产给付义务时，应通过银行转账等可追溯方式进行。如被告未按期履行金钱给付义务，原告可依法申请强制执行，被告将承担迟延履行期间的债务利息。本案已充分保障双方举证、质证及辩论权利，程序合法。"
+      }
+    }
+  },
+  "jiubufa_workflow": {
+    "method": "jiubufa_workflow",
+    "status": "success",
+    "elapsed_seconds": 1151.29,
+    "workflow_status": "ok",
+    "fallback_gate": {
+      "risk_triggered": true,
+      "risk_level": "medium",
+      "reason": [
+        "输入完整度评分 67 处于中风险区间。"
+      ],
+      "recommended_action": "proceed_with_risk_notes",
+      "available_choices": [
+        {
+          "choice": "supplement",
+          "description": "停止裁判输出，按缺口清单补充材料后回退"
+        },
+        {
+          "choice": "proceed_with_risk_notes",
+          "description": "继续输出强裁判结果并附风险提示"
+        },
+        {
+          "choice": "continue_weak_judgment",
+          "description": "改用弱裁判通道（更保守）"
+        }
+      ],
+      "default_choice": "proceed_with_risk_notes",
+      "hard_block": false
+    },
+    "strong_judgment": {
+      "mode": "strong_judgment",
+      "sufficiency_score": {
+        "claim_clarity": 18,
+        "legal_relation_stability": 12,
+        "request_basis_stability": 10,
+        "defense_path_completeness": 6,
+        "element_fact_coverage": 9,
+        "evidence_coverage": 7,
+        "fact_finding_reliability": 5
+      },
+      "risk_level": "medium",
+      "subsumption_results": [
+        {
+          "claim_id": "c1",
+          "request_basis_rule_unit_id": "民法典_1079_001",
+          "request_elements_result": [
+            {
+              "element_id": "民法典_1079_001_E1",
+              "element_name": "合法婚姻关系存在",
+              "finding_status": "proved",
+              "note": "隐含要件，双方对婚姻关系无异议"
+            },
+            {
+              "element_id": "民法典_1079_001_E2",
+              "element_name": "调解程序履行",
+              "finding_status": "proved",
+              "note": "法院审理离婚案件必经程序"
+            },
+            {
+              "element_id": "民法典_1079_001_E3",
+              "element_name": "夫妻感情确已破裂",
+              "finding_status": "not_proved",
+              "note": "依据事实认定 F1，证据不足以证明感情破裂及家暴事实，原告承担举证不能后果"
+            }
+          ],
+          "defense_results": [],
+          "legal_effect_tags": [],
+          "disposition_type": "不准离婚",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，原告主张离婚，应以夫妻感情确已破裂为法定要件。经查，原告提供的证据虽能证明双方存在冲突及原告受伤，但被告抗辩伤情非其造成，且无直接证据证明被告实施家暴行为，证据链不完整，无法达到高度盖然性标准。综合全案证据，夫妻感情破裂事实处于真伪不明状态，由原告承担举证不能的不利后果。故对原告要求离婚的诉讼请求，本院不予支持。",
+          "cited_rules": [
+            "民法典_1079_001"
+          ]
+        },
+        {
+          "claim_id": "c2",
+          "request_basis_rule_unit_id": "未成年人保护法_107_002",
+          "request_elements_result": [
+            {
+              "element_id": "未成年人保护法_107_002_E1",
+              "element_name": "案件类型",
+              "finding_status": "proved",
+              "note": "本案为离婚纠纷"
+            },
+            {
+              "element_id": "未成年人保护法_107_002_E2",
+              "element_name": "子女年龄",
+              "finding_status": "proved",
+              "note": "证据 e2 证明子女情况"
+            },
+            {
+              "element_id": "未成年人保护法_107_002_E3",
+              "element_name": "子女意愿",
+              "finding_status": "not_proved",
+              "note": "依据事实认定 F3，缺乏子女实际生活状态及情感依赖的直接证据"
+            },
+            {
+              "element_id": "未成年人保护法_107_002_E4",
+              "element_name": "处理原则",
+              "finding_status": "not_proved",
+              "note": "依据事实认定 F3、F4，是否符合最有利于未成年子女原则及抚养费金额合理性尚需裁量，且离婚请求未获支持"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "d2",
+              "defense_type": [],
+              "elements_status": [
+                {
+                  "element_id": "未成年人保护法_107_002_E4",
+                  "element_name": "处理原则",
+                  "finding_status": "not_proved",
+                  "note": "被告提出抚养权及抚养费异议，但离婚前提不成立"
+                }
+              ],
+              "accepted": false,
+              "effect": null
+            }
+          ],
+          "legal_effect_tags": [],
+          "disposition_type": "驳回子女抚养及抚养费请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，子女抚养及抚养费请求附属于离婚请求。因本案判决不准离婚，婚姻关系继续存续，原告主张的子女抚养权变更及抚养费支付请求缺乏前提基础，故本院不予处理，驳回该项诉讼请求。",
+          "cited_rules": [
+            "未成年人保护法_107_002"
+          ]
+        },
+        {
+          "claim_id": "c3",
+          "request_basis_rule_unit_id": "民法典_1087_002",
+          "request_elements_result": [
+            {
+              "element_id": "民法典_1087_002_E1",
+              "element_name": "土地承包经营权益存在",
+              "finding_status": "proved",
+              "note": "广义财产分割请求，适用离婚财产分割原则"
+            },
+            {
+              "element_id": "民法典_1087_002_E2",
+              "element_name": "离婚情境",
+              "finding_status": "not_proved",
+              "note": "因离婚请求未获支持，离婚财产分割情境未成就"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "d3",
+              "defense_type": [
+                "invalidity_defense"
+              ],
+              "elements_status": [
+                {
+                  "element_id": "民法典_1087_002_E2",
+                  "element_name": "离婚情境",
+                  "finding_status": "not_proved",
+                  "note": "依据事实认定 F5、F6，被告主张个人财产抗辩举证不足，但离婚前提不成立"
+                }
+              ],
+              "accepted": false,
+              "effect": null
+            }
+          ],
+          "legal_effect_tags": [],
+          "disposition_type": "驳回财产分割请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，夫妻共同财产分割以离婚为前提。因本案判决不准离婚，婚姻关系未解除，不具备分割夫妻共同财产的法定条件。被告关于部分财产属于个人财产的抗辩虽举证不足，但鉴于离婚请求未获支持，本院对财产分割请求不予处理，驳回该项诉讼请求。",
+          "cited_rules": [
+            "民法典_1087_002"
+          ]
+        },
+        {
+          "claim_id": "c4",
+          "request_basis_rule_unit_id": "民法典_1091_001",
+          "request_elements_result": [
+            {
+              "element_id": "民法典_1091_001_E1",
+              "element_name": "合法婚姻关系存续",
+              "finding_status": "proved",
+              "note": "隐含要件"
+            },
+            {
+              "element_id": "民法典_1091_001_E2",
+              "element_name": "存在法定过错情形",
+              "finding_status": "not_proved",
+              "note": "依据事实认定 F2，无法达到高度盖然性标准"
+            },
+            {
+              "element_id": "民法典_1091_001_E3",
+              "element_name": "导致离婚",
+              "finding_status": "not_proved",
+              "note": "依据事实认定 F7，离婚请求未获支持，因果关系不成立"
+            },
+            {
+              "element_id": "民法典_1091_001_E4",
+              "element_name": "请求人为无过错方",
+              "finding_status": "proved",
+              "note": "被告未举证证明原告存在过错"
+            }
+          ],
+          "defense_results": [],
+          "legal_effect_tags": [],
+          "disposition_type": "驳回损害赔偿请求",
+          "judgment_result": "rejected",
+          "reasoning_summary": "本院认为，离婚损害赔偿请求以离婚及存在法定过错为前提。因本案判决不准离婚，且原告提供的证据不足以证明被告存在实施家庭暴力等法定过错情形，证据链不完整，无法达到高度盖然性标准。故对原告主张的精神损害赔偿金请求，本院不予支持。",
+          "cited_rules": [
+            "民法典_1091_001"
+          ]
+        }
+      ],
+      "document_skeleton": {
+        "原告诉讼请求": [
+          {
+            "claim_id": "c1",
+            "claim_text_normalized": "判决原告张某与被告李某离婚",
+            "claim_type": [
+              "termination_claim"
+            ],
+            "object_type": "身份关系",
+            "amount": null,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "离婚请求为本案主请求，其他请求（抚养、财产、赔偿）均以离婚成立为前提"
+          },
+          {
+            "claim_id": "c2",
+            "claim_text_normalized": "婚生子李某某由原告抚养，被告每月支付抚养费 3000 元至年满十八周岁",
+            "claim_type": [
+              "confirmation_claim",
+              "payment_claim"
+            ],
+            "object_type": "身份关系与金钱",
+            "amount": 3000.0,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "附属于离婚请求，若离婚不成立则通常不予处理"
+          },
+          {
+            "claim_id": "c3",
+            "claim_text_normalized": "分割夫妻共同财产（房产折价 60 万元、存款 25 万元、股票 15 万元）",
+            "claim_type": [
+              "payment_claim",
+              "confirmation_claim"
+            ],
+            "object_type": "财产",
+            "amount": 1000000.0,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [
+              "被告对财产分割方案提出异议，房产价值及分割方式可能需进一步评估或协商"
+            ],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "附属于离婚请求，以夫妻共同财产确认为前提"
+          },
+          {
+            "claim_id": "c4",
+            "claim_text_normalized": "被告向原告支付精神损害赔偿金 50000 元",
+            "claim_type": [
+              "damages_claim"
+            ],
+            "object_type": "金钱",
+            "amount": 50000.0,
+            "claimant": "张某",
+            "respondent": "李某",
+            "is_clear": true,
+            "is_executable": true,
+            "issues": [],
+            "clarification_questions": [],
+            "priority_type": "primary",
+            "competition_note": "基于离婚过错（家庭暴力）提出的损害赔偿，附属于离婚请求"
+          }
+        ],
+        "被告辩称": [
+          {
+            "defense_id": "d1",
+            "defense_text_original": "被告李某辩称：双方感情尚未完全破裂，仍有和好可能，不同意离婚。原告所称家庭暴力事实不属实，2023年8月15日系双方发生口角后的肢体冲突，并非单方施暴，且被告已向原告道歉。双方系因生活琐事产生矛盾，通过沟通可以化解，请求法院判决不准离婚。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c1",
+            "response_type": "否认",
+            "defense_type_candidate": [
+              "感情未破裂抗辩"
+            ],
+            "new_fact_asserted": true,
+            "linked_evidence_ids": [],
+            "possible_defense_basis": [
+              "婚姻法关于感情破裂的认定标准"
+            ],
+            "clarification_needed": false
+          },
+          {
+            "defense_id": "d2",
+            "defense_text_original": "被告李某辩称：如法院判决离婚，婚生子李某某应由被告抚养。被告月收入15000元，经济条件优于原告，且被告父母身体健康，可以协助照顾孩子。被告名下房产地理位置优越，周边教育资源丰富，更有利于孩子成长。原告主张的抚养费3000元过高，被告认为每月1500元为宜。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c2",
+            "response_type": "抗辩",
+            "defense_type_candidate": [
+              "抚养权异议",
+              "抚养费金额异议"
+            ],
+            "new_fact_asserted": true,
+            "linked_evidence_ids": [
+              "e16",
+              "e17"
+            ],
+            "possible_defense_basis": [
+              "子女抚养权归属的考量因素"
+            ],
+            "clarification_needed": false
+          },
+          {
+            "defense_id": "d3",
+            "defense_text_original": "被告李某辩称：关于财产分割，涉案房产首付款中被告父母出资15万元，该部分应属被告个人财产，不应作为夫妻共同财产分割。被告名下银行存款50万元中，有15万元系被告婚前个人存款的延续，不应分割。股票账户资金30万元系被告个人投资收益，原告未参与投资决策，不应作为共同财产分割。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c3",
+            "response_type": "抗辩",
+            "defense_type_candidate": [
+              "个人财产抗辩",
+              "财产分割比例异议"
+            ],
+            "new_fact_asserted": true,
+            "linked_evidence_ids": [
+              "e18",
+              "e19"
+            ],
+            "possible_defense_basis": [
+              "个人财产与共同财产的区分"
+            ],
+            "clarification_needed": false
+          },
+          {
+            "defense_id": "d4",
+            "defense_text_original": "被告李某辩称：原告主张的精神损害赔偿无事实和法律依据。被告不存在家庭暴力行为，双方仅系普通夫妻矛盾，不构成损害赔偿的法定情形，请求驳回该项诉讼请求。",
+            "defense_text_normalized": null,
+            "defense_target_claim_id": "c4",
+            "response_type": "否认",
+            "defense_type_candidate": [
+              "损害赔偿否认"
+            ],
+            "new_fact_asserted": false,
+            "linked_evidence_ids": [],
+            "possible_defense_basis": [
+              "离婚损害赔偿的法定要件"
+            ],
+            "clarification_needed": false
+          }
+        ],
+        "争议焦点": [
+          {
+            "issue_id": "I1",
+            "issue_type": "fact_issue",
+            "issue_text": "夫妻感情是否确已破裂",
+            "linked_element_ids": [
+              "民法典_1079_001_E3"
+            ],
+            "linked_claim_id": "c1",
+            "linked_defense_id": "d1",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6",
+              "e7",
+              "e8"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I2",
+            "issue_type": "fact_issue",
+            "issue_text": "被告是否存在实施家庭暴力等法定过错情形",
+            "linked_element_ids": [
+              "民法典_1091_001_E2"
+            ],
+            "linked_claim_id": "c4",
+            "linked_defense_id": "d1",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6",
+              "e7"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I3",
+            "issue_type": "fact_issue",
+            "issue_text": "婚生子抚养权归属是否符合最有利于未成年子女原则",
+            "linked_element_ids": [
+              "未成年人保护法_107_002_E4"
+            ],
+            "linked_claim_id": "c2",
+            "linked_defense_id": "d2",
+            "burden_party": "法院",
+            "linked_evidence_ids": [
+              "e2",
+              "e14",
+              "e15",
+              "e16",
+              "e17"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I4",
+            "issue_type": "fact_issue",
+            "issue_text": "抚养费金额及支付方式是否合理",
+            "linked_element_ids": [
+              "未成年人保护法_107_002_E4"
+            ],
+            "linked_claim_id": "c2",
+            "linked_defense_id": "d2",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e14",
+              "e15"
+            ],
+            "priority": "medium"
+          },
+          {
+            "issue_id": "I5",
+            "issue_type": "fact_issue",
+            "issue_text": "涉案房产是否属于夫妻共同财产及被告父母出资部分性质认定",
+            "linked_element_ids": [
+              "民法典_1087_002_E2"
+            ],
+            "linked_claim_id": "c3",
+            "linked_defense_id": "d3",
+            "burden_party": "被告",
+            "linked_evidence_ids": [
+              "e9",
+              "e10",
+              "e11",
+              "e18"
+            ],
+            "priority": "high"
+          },
+          {
+            "issue_id": "I6",
+            "issue_type": "fact_issue",
+            "issue_text": "被告名下存款及股票是否属于夫妻共同财产及个人财产抗辩是否成立",
+            "linked_element_ids": [
+              "民法典_1087_002_E2"
+            ],
+            "linked_claim_id": "c3",
+            "linked_defense_id": "d3",
+            "burden_party": "被告",
+            "linked_evidence_ids": [
+              "e12",
+              "e13",
+              "e19"
+            ],
+            "priority": "medium"
+          },
+          {
+            "issue_id": "I7",
+            "issue_type": "legal_issue",
+            "issue_text": "原告是否有权主张离婚损害赔偿",
+            "linked_element_ids": [
+              "民法典_1091_001_E3",
+              "民法典_1091_001_E4"
+            ],
+            "linked_claim_id": "c4",
+            "linked_defense_id": "d4",
+            "burden_party": "原告",
+            "linked_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6"
+            ],
+            "priority": "medium"
+          }
+        ],
+        "本院查明": [
+          {
+            "fact_finding_id": "F1",
+            "element_id": "民法典_1079_001_E3",
+            "fact_slot": "affection_breakdown_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6",
+              "e8"
+            ],
+            "rejected_evidence_ids": [
+              "e7"
+            ],
+            "reasoning": "e3-e6 真实性无异议，但告诫书及保护令系预防性措施，就诊记录及鉴定意见未直接锁定致害人，证明力有限；e7 证人未出庭且存在利害关系，不予采信；e8 证明分居但时间较短。综合全案证据，夫妻感情破裂及家暴事实处于真伪不明状态。",
+            "burden_party": "原告",
+            "effect_if_unknown": "由原告承担举证不能的不利后果，法院可能判决不准离婚"
+          },
+          {
+            "fact_finding_id": "F2",
+            "element_id": "民法典_1091_001_E2",
+            "fact_slot": "fault_act_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6"
+            ],
+            "rejected_evidence_ids": [
+              "e7"
+            ],
+            "reasoning": "证据 e3-e6 虽能证明双方存在冲突及原告受伤，但被告抗辩伤情非其造成，且无直接证据证明被告实施家暴行为，证据链不完整，无法达到高度盖然性标准。",
+            "burden_party": "原告",
+            "effect_if_unknown": "由原告承担举证不能的不利后果，离婚损害赔偿请求可能不被支持"
+          },
+          {
+            "fact_finding_id": "F3",
+            "element_id": "未成年人保护法_107_002_E4",
+            "fact_slot": "best_interest_principle_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e2",
+              "e14",
+              "e15",
+              "e16",
+              "e17"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "e2 证明子女情况，e14-e17 证明双方经济及居住条件，真实性均无异议。但缺乏子女实际生活状态及情感依赖的直接证据（如子女意愿），是否符合最有利于未成年子女原则尚需法院裁量。",
+            "burden_party": "法院",
+            "effect_if_unknown": "由法院依据现有证据及未成年人利益最大化原则裁量"
+          },
+          {
+            "fact_finding_id": "F4",
+            "element_id": "未成年人保护法_107_002_E4",
+            "fact_slot": "best_interest_principle_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e14",
+              "e15"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "e14、e15 证明双方收入情况，真实性无异议。但缺乏当地生活水平及子女实际支出明细证据，抚养费金额合理性事实真伪不明。",
+            "burden_party": "原告",
+            "effect_if_unknown": "由原告承担举证不能的不利后果，法院可能酌情判定抚养费金额"
+          },
+          {
+            "fact_finding_id": "F5",
+            "element_id": "民法典_1087_002_E2",
+            "fact_slot": "divorce_context_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e9",
+              "e10",
+              "e11",
+              "e18"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "e9-e11 证明房产存在及价值，e18 证明父母出资事实，真实性均无异议。但被告缺乏书面赠与协议明确约定只赠与一方，出资性质（个人财产或共同财产）真伪不明。",
+            "burden_party": "被告",
+            "effect_if_unknown": "由被告承担举证不能的不利后果，该出资部分可能被认定为对夫妻双方的赠与"
+          },
+          {
+            "fact_finding_id": "F6",
+            "element_id": "民法典_1087_002_E2",
+            "fact_slot": "divorce_context_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e12",
+              "e13",
+              "e19"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "e12、e13 证明存款及股票存在，e19 证明婚前存款来源，真实性无异议。但被告未提供完整的资金流向追踪证据，无法排除资金混同，个人财产抗辩事实真伪不明。",
+            "burden_party": "被告",
+            "effect_if_unknown": "由被告承担举证不能的不利后果，相关存款及股票可能被认定为夫妻共同财产"
+          },
+          {
+            "fact_finding_id": "F7",
+            "element_id": "民法典_1091_001_E3",
+            "fact_slot": "causation_divorce_fact",
+            "finding_status": "unknown",
+            "adopted_evidence_ids": [
+              "e3",
+              "e4",
+              "e5",
+              "e6"
+            ],
+            "rejected_evidence_ids": [],
+            "reasoning": "损害赔偿请求以离婚及法定过错为前提。因 I1、I2 项下离婚请求及过错事实尚未认定，本项事实基础依赖于前序事实认定，目前处于真伪不明状态。",
+            "burden_party": "原告",
+            "effect_if_unknown": "由原告承担举证不能的不利后果，损害赔偿请求将被驳回"
+          }
+        ],
+        "本院认为": [
+          {
+            "claim_id": "c1",
+            "request_basis_rule_unit_id": "民法典_1079_001",
+            "request_elements_result": [
+              {
+                "element_id": "民法典_1079_001_E1",
+                "element_name": "合法婚姻关系存在",
+                "finding_status": "proved",
+                "note": "隐含要件，双方对婚姻关系无异议"
+              },
+              {
+                "element_id": "民法典_1079_001_E2",
+                "element_name": "调解程序履行",
+                "finding_status": "proved",
+                "note": "法院审理离婚案件必经程序"
+              },
+              {
+                "element_id": "民法典_1079_001_E3",
+                "element_name": "夫妻感情确已破裂",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F1，证据不足以证明感情破裂及家暴事实，原告承担举证不能后果"
+              }
+            ],
+            "defense_results": [],
+            "legal_effect_tags": [],
+            "disposition_type": "不准离婚",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，原告主张离婚，应以夫妻感情确已破裂为法定要件。经查，原告提供的证据虽能证明双方存在冲突及原告受伤，但被告抗辩伤情非其造成，且无直接证据证明被告实施家暴行为，证据链不完整，无法达到高度盖然性标准。综合全案证据，夫妻感情破裂事实处于真伪不明状态，由原告承担举证不能的不利后果。故对原告要求离婚的诉讼请求，本院不予支持。",
+            "cited_rules": [
+              "民法典_1079_001"
+            ]
+          },
+          {
+            "claim_id": "c2",
+            "request_basis_rule_unit_id": "未成年人保护法_107_002",
+            "request_elements_result": [
+              {
+                "element_id": "未成年人保护法_107_002_E1",
+                "element_name": "案件类型",
+                "finding_status": "proved",
+                "note": "本案为离婚纠纷"
+              },
+              {
+                "element_id": "未成年人保护法_107_002_E2",
+                "element_name": "子女年龄",
+                "finding_status": "proved",
+                "note": "证据 e2 证明子女情况"
+              },
+              {
+                "element_id": "未成年人保护法_107_002_E3",
+                "element_name": "子女意愿",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F3，缺乏子女实际生活状态及情感依赖的直接证据"
+              },
+              {
+                "element_id": "未成年人保护法_107_002_E4",
+                "element_name": "处理原则",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F3、F4，是否符合最有利于未成年子女原则及抚养费金额合理性尚需裁量，且离婚请求未获支持"
+              }
+            ],
+            "defense_results": [
+              {
+                "defense_id": "d2",
+                "defense_type": [],
+                "elements_status": [
+                  {
+                    "element_id": "未成年人保护法_107_002_E4",
+                    "element_name": "处理原则",
+                    "finding_status": "not_proved",
+                    "note": "被告提出抚养权及抚养费异议，但离婚前提不成立"
+                  }
+                ],
+                "accepted": false,
+                "effect": null
+              }
+            ],
+            "legal_effect_tags": [],
+            "disposition_type": "驳回子女抚养及抚养费请求",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，子女抚养及抚养费请求附属于离婚请求。因本案判决不准离婚，婚姻关系继续存续，原告主张的子女抚养权变更及抚养费支付请求缺乏前提基础，故本院不予处理，驳回该项诉讼请求。",
+            "cited_rules": [
+              "未成年人保护法_107_002"
+            ]
+          },
+          {
+            "claim_id": "c3",
+            "request_basis_rule_unit_id": "民法典_1087_002",
+            "request_elements_result": [
+              {
+                "element_id": "民法典_1087_002_E1",
+                "element_name": "土地承包经营权益存在",
+                "finding_status": "proved",
+                "note": "广义财产分割请求，适用离婚财产分割原则"
+              },
+              {
+                "element_id": "民法典_1087_002_E2",
+                "element_name": "离婚情境",
+                "finding_status": "not_proved",
+                "note": "因离婚请求未获支持，离婚财产分割情境未成就"
+              }
+            ],
+            "defense_results": [
+              {
+                "defense_id": "d3",
+                "defense_type": [
+                  "invalidity_defense"
+                ],
+                "elements_status": [
+                  {
+                    "element_id": "民法典_1087_002_E2",
+                    "element_name": "离婚情境",
+                    "finding_status": "not_proved",
+                    "note": "依据事实认定 F5、F6，被告主张个人财产抗辩举证不足，但离婚前提不成立"
+                  }
+                ],
+                "accepted": false,
+                "effect": null
+              }
+            ],
+            "legal_effect_tags": [],
+            "disposition_type": "驳回财产分割请求",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，夫妻共同财产分割以离婚为前提。因本案判决不准离婚，婚姻关系未解除，不具备分割夫妻共同财产的法定条件。被告关于部分财产属于个人财产的抗辩虽举证不足，但鉴于离婚请求未获支持，本院对财产分割请求不予处理，驳回该项诉讼请求。",
+            "cited_rules": [
+              "民法典_1087_002"
+            ]
+          },
+          {
+            "claim_id": "c4",
+            "request_basis_rule_unit_id": "民法典_1091_001",
+            "request_elements_result": [
+              {
+                "element_id": "民法典_1091_001_E1",
+                "element_name": "合法婚姻关系存续",
+                "finding_status": "proved",
+                "note": "隐含要件"
+              },
+              {
+                "element_id": "民法典_1091_001_E2",
+                "element_name": "存在法定过错情形",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F2，无法达到高度盖然性标准"
+              },
+              {
+                "element_id": "民法典_1091_001_E3",
+                "element_name": "导致离婚",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F7，离婚请求未获支持，因果关系不成立"
+              },
+              {
+                "element_id": "民法典_1091_001_E4",
+                "element_name": "请求人为无过错方",
+                "finding_status": "proved",
+                "note": "被告未举证证明原告存在过错"
+              }
+            ],
+            "defense_results": [],
+            "legal_effect_tags": [],
+            "disposition_type": "驳回损害赔偿请求",
+            "judgment_result": "rejected",
+            "reasoning_summary": "本院认为，离婚损害赔偿请求以离婚及存在法定过错为前提。因本案判决不准离婚，且原告提供的证据不足以证明被告存在实施家庭暴力等法定过错情形，证据链不完整，无法达到高度盖然性标准。故对原告主张的精神损害赔偿金请求，本院不予支持。",
+            "cited_rules": [
+              "民法典_1091_001"
+            ]
+          }
+        ],
+        "判决主文": [
+          "驳回原告关于 c1 的诉讼请求。",
+          "驳回原告关于 c2 的诉讼请求。",
+          "驳回原告关于 c3 的诉讼请求。",
+          "驳回原告关于 c4 的诉讼请求。"
+        ],
+        "引用法条": [
+          "未成年人保护法_107_002",
+          "民法典_1079_001",
+          "民法典_1087_002",
+          "民法典_1091_001"
+        ]
+      },
+      "consistency_check": {
+        "诉求-固定一致": true,
+        "固定-涵摄一致": true,
+        "缺漏的诉求（涵摄阶段未覆盖）": [],
+        "多出的诉求（涵摄阶段凭空出现）": [],
+        "争点已使用": true,
+        "事实已认定": true,
+        "法条已引用": true
+      }
+    },
+    "weak_judgment": null,
+    "partial_output": null,
+    "errors": [],
+    "warnings": [
+      "评分处于中风险区间，已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。"
+    ],
+    "timings_ms": {
+      "step1_claim_fixing": 97289,
+      "step2_request_basis": 67740,
+      "step3_defense_basis": 142543,
+      "step4_element_analysis": 162903,
+      "step5_claim_fact_search": 131135,
+      "step6_issue_organize": 102127,
+      "step7_proof": 102209,
+      "step8_fact_finding": 143415,
+      "step9_subsumption": 171495,
+      "total": 1151292
+    },
+    "subsumption_results": [
+      {
+        "claim_id": "c1",
+        "request_basis_rule_unit_id": "民法典_1079_001",
+        "request_elements_result": [
+          {
+            "element_id": "民法典_1079_001_E1",
+            "element_name": "合法婚姻关系存在",
+            "finding_status": "proved",
+            "note": "隐含要件，双方对婚姻关系无异议"
+          },
+          {
+            "element_id": "民法典_1079_001_E2",
+            "element_name": "调解程序履行",
+            "finding_status": "proved",
+            "note": "法院审理离婚案件必经程序"
+          },
+          {
+            "element_id": "民法典_1079_001_E3",
+            "element_name": "夫妻感情确已破裂",
+            "finding_status": "not_proved",
+            "note": "依据事实认定 F1，证据不足以证明感情破裂及家暴事实，原告承担举证不能后果"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [],
+        "disposition_type": "不准离婚",
+        "judgment_result": "rejected",
+        "reasoning_summary": "本院认为，原告主张离婚，应以夫妻感情确已破裂为法定要件。经查，原告提供的证据虽能证明双方存在冲突及原告受伤，但被告抗辩伤情非其造成，且无直接证据证明被告实施家暴行为，证据链不完整，无法达到高度盖然性标准。综合全案证据，夫妻感情破裂事实处于真伪不明状态，由原告承担举证不能的不利后果。故对原告要求离婚的诉讼请求，本院不予支持。",
+        "cited_rules": [
+          "民法典_1079_001"
+        ]
+      },
+      {
+        "claim_id": "c2",
+        "request_basis_rule_unit_id": "未成年人保护法_107_002",
+        "request_elements_result": [
+          {
+            "element_id": "未成年人保护法_107_002_E1",
+            "element_name": "案件类型",
+            "finding_status": "proved",
+            "note": "本案为离婚纠纷"
+          },
+          {
+            "element_id": "未成年人保护法_107_002_E2",
+            "element_name": "子女年龄",
+            "finding_status": "proved",
+            "note": "证据 e2 证明子女情况"
+          },
+          {
+            "element_id": "未成年人保护法_107_002_E3",
+            "element_name": "子女意愿",
+            "finding_status": "not_proved",
+            "note": "依据事实认定 F3，缺乏子女实际生活状态及情感依赖的直接证据"
+          },
+          {
+            "element_id": "未成年人保护法_107_002_E4",
+            "element_name": "处理原则",
+            "finding_status": "not_proved",
+            "note": "依据事实认定 F3、F4，是否符合最有利于未成年子女原则及抚养费金额合理性尚需裁量，且离婚请求未获支持"
+          }
+        ],
+        "defense_results": [
+          {
+            "defense_id": "d2",
+            "defense_type": [],
+            "elements_status": [
+              {
+                "element_id": "未成年人保护法_107_002_E4",
+                "element_name": "处理原则",
+                "finding_status": "not_proved",
+                "note": "被告提出抚养权及抚养费异议，但离婚前提不成立"
+              }
+            ],
+            "accepted": false,
+            "effect": null
+          }
+        ],
+        "legal_effect_tags": [],
+        "disposition_type": "驳回子女抚养及抚养费请求",
+        "judgment_result": "rejected",
+        "reasoning_summary": "本院认为，子女抚养及抚养费请求附属于离婚请求。因本案判决不准离婚，婚姻关系继续存续，原告主张的子女抚养权变更及抚养费支付请求缺乏前提基础，故本院不予处理，驳回该项诉讼请求。",
+        "cited_rules": [
+          "未成年人保护法_107_002"
+        ]
+      },
+      {
+        "claim_id": "c3",
+        "request_basis_rule_unit_id": "民法典_1087_002",
+        "request_elements_result": [
+          {
+            "element_id": "民法典_1087_002_E1",
+            "element_name": "土地承包经营权益存在",
+            "finding_status": "proved",
+            "note": "广义财产分割请求，适用离婚财产分割原则"
+          },
+          {
+            "element_id": "民法典_1087_002_E2",
+            "element_name": "离婚情境",
+            "finding_status": "not_proved",
+            "note": "因离婚请求未获支持，离婚财产分割情境未成就"
+          }
+        ],
+        "defense_results": [
+          {
+            "defense_id": "d3",
+            "defense_type": [
+              "invalidity_defense"
+            ],
+            "elements_status": [
+              {
+                "element_id": "民法典_1087_002_E2",
+                "element_name": "离婚情境",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F5、F6，被告主张个人财产抗辩举证不足，但离婚前提不成立"
+              }
+            ],
+            "accepted": false,
+            "effect": null
+          }
+        ],
+        "legal_effect_tags": [],
+        "disposition_type": "驳回财产分割请求",
+        "judgment_result": "rejected",
+        "reasoning_summary": "本院认为，夫妻共同财产分割以离婚为前提。因本案判决不准离婚，婚姻关系未解除，不具备分割夫妻共同财产的法定条件。被告关于部分财产属于个人财产的抗辩虽举证不足，但鉴于离婚请求未获支持，本院对财产分割请求不予处理，驳回该项诉讼请求。",
+        "cited_rules": [
+          "民法典_1087_002"
+        ]
+      },
+      {
+        "claim_id": "c4",
+        "request_basis_rule_unit_id": "民法典_1091_001",
+        "request_elements_result": [
+          {
+            "element_id": "民法典_1091_001_E1",
+            "element_name": "合法婚姻关系存续",
+            "finding_status": "proved",
+            "note": "隐含要件"
+          },
+          {
+            "element_id": "民法典_1091_001_E2",
+            "element_name": "存在法定过错情形",
+            "finding_status": "not_proved",
+            "note": "依据事实认定 F2，无法达到高度盖然性标准"
+          },
+          {
+            "element_id": "民法典_1091_001_E3",
+            "element_name": "导致离婚",
+            "finding_status": "not_proved",
+            "note": "依据事实认定 F7，离婚请求未获支持，因果关系不成立"
+          },
+          {
+            "element_id": "民法典_1091_001_E4",
+            "element_name": "请求人为无过错方",
+            "finding_status": "proved",
+            "note": "被告未举证证明原告存在过错"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [],
+        "disposition_type": "驳回损害赔偿请求",
+        "judgment_result": "rejected",
+        "reasoning_summary": "本院认为，离婚损害赔偿请求以离婚及存在法定过错为前提。因本案判决不准离婚，且原告提供的证据不足以证明被告存在实施家庭暴力等法定过错情形，证据链不完整，无法达到高度盖然性标准。故对原告主张的精神损害赔偿金请求，本院不予支持。",
+        "cited_rules": [
+          "民法典_1091_001"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "issue_id": "I1",
+        "issue_type": "fact_issue",
+        "issue_text": "夫妻感情是否确已破裂",
+        "linked_element_ids": [
+          "民法典_1079_001_E3"
+        ],
+        "linked_claim_id": "c1",
+        "linked_defense_id": "d1",
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6",
+          "e7",
+          "e8"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I2",
+        "issue_type": "fact_issue",
+        "issue_text": "被告是否存在实施家庭暴力等法定过错情形",
+        "linked_element_ids": [
+          "民法典_1091_001_E2"
+        ],
+        "linked_claim_id": "c4",
+        "linked_defense_id": "d1",
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6",
+          "e7"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I3",
+        "issue_type": "fact_issue",
+        "issue_text": "婚生子抚养权归属是否符合最有利于未成年子女原则",
+        "linked_element_ids": [
+          "未成年人保护法_107_002_E4"
+        ],
+        "linked_claim_id": "c2",
+        "linked_defense_id": "d2",
+        "burden_party": "法院",
+        "linked_evidence_ids": [
+          "e2",
+          "e14",
+          "e15",
+          "e16",
+          "e17"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I4",
+        "issue_type": "fact_issue",
+        "issue_text": "抚养费金额及支付方式是否合理",
+        "linked_element_ids": [
+          "未成年人保护法_107_002_E4"
+        ],
+        "linked_claim_id": "c2",
+        "linked_defense_id": "d2",
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e14",
+          "e15"
+        ],
+        "priority": "medium"
+      },
+      {
+        "issue_id": "I5",
+        "issue_type": "fact_issue",
+        "issue_text": "涉案房产是否属于夫妻共同财产及被告父母出资部分性质认定",
+        "linked_element_ids": [
+          "民法典_1087_002_E2"
+        ],
+        "linked_claim_id": "c3",
+        "linked_defense_id": "d3",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e9",
+          "e10",
+          "e11",
+          "e18"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I6",
+        "issue_type": "fact_issue",
+        "issue_text": "被告名下存款及股票是否属于夫妻共同财产及个人财产抗辩是否成立",
+        "linked_element_ids": [
+          "民法典_1087_002_E2"
+        ],
+        "linked_claim_id": "c3",
+        "linked_defense_id": "d3",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e12",
+          "e13",
+          "e19"
+        ],
+        "priority": "medium"
+      },
+      {
+        "issue_id": "I7",
+        "issue_type": "legal_issue",
+        "issue_text": "原告是否有权主张离婚损害赔偿",
+        "linked_element_ids": [
+          "民法典_1091_001_E3",
+          "民法典_1091_001_E4"
+        ],
+        "linked_claim_id": "c4",
+        "linked_defense_id": "d4",
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6"
+        ],
+        "priority": "medium"
+      }
+    ],
+    "fact_findings": [
+      {
+        "fact_finding_id": "F1",
+        "element_id": "民法典_1079_001_E3",
+        "fact_slot": "affection_breakdown_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6",
+          "e8"
+        ],
+        "rejected_evidence_ids": [
+          "e7"
+        ],
+        "reasoning": "e3-e6 真实性无异议，但告诫书及保护令系预防性措施，就诊记录及鉴定意见未直接锁定致害人，证明力有限；e7 证人未出庭且存在利害关系，不予采信；e8 证明分居但时间较短。综合全案证据，夫妻感情破裂及家暴事实处于真伪不明状态。",
+        "burden_party": "原告",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，法院可能判决不准离婚"
+      },
+      {
+        "fact_finding_id": "F2",
+        "element_id": "民法典_1091_001_E2",
+        "fact_slot": "fault_act_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6"
+        ],
+        "rejected_evidence_ids": [
+          "e7"
+        ],
+        "reasoning": "证据 e3-e6 虽能证明双方存在冲突及原告受伤，但被告抗辩伤情非其造成，且无直接证据证明被告实施家暴行为，证据链不完整，无法达到高度盖然性标准。",
+        "burden_party": "原告",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，离婚损害赔偿请求可能不被支持"
+      },
+      {
+        "fact_finding_id": "F3",
+        "element_id": "未成年人保护法_107_002_E4",
+        "fact_slot": "best_interest_principle_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e2",
+          "e14",
+          "e15",
+          "e16",
+          "e17"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "e2 证明子女情况，e14-e17 证明双方经济及居住条件，真实性均无异议。但缺乏子女实际生活状态及情感依赖的直接证据（如子女意愿），是否符合最有利于未成年子女原则尚需法院裁量。",
+        "burden_party": "法院",
+        "effect_if_unknown": "由法院依据现有证据及未成年人利益最大化原则裁量"
+      },
+      {
+        "fact_finding_id": "F4",
+        "element_id": "未成年人保护法_107_002_E4",
+        "fact_slot": "best_interest_principle_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e14",
+          "e15"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "e14、e15 证明双方收入情况，真实性无异议。但缺乏当地生活水平及子女实际支出明细证据，抚养费金额合理性事实真伪不明。",
+        "burden_party": "原告",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，法院可能酌情判定抚养费金额"
+      },
+      {
+        "fact_finding_id": "F5",
+        "element_id": "民法典_1087_002_E2",
+        "fact_slot": "divorce_context_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e9",
+          "e10",
+          "e11",
+          "e18"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "e9-e11 证明房产存在及价值，e18 证明父母出资事实，真实性均无异议。但被告缺乏书面赠与协议明确约定只赠与一方，出资性质（个人财产或共同财产）真伪不明。",
+        "burden_party": "被告",
+        "effect_if_unknown": "由被告承担举证不能的不利后果，该出资部分可能被认定为对夫妻双方的赠与"
+      },
+      {
+        "fact_finding_id": "F6",
+        "element_id": "民法典_1087_002_E2",
+        "fact_slot": "divorce_context_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e12",
+          "e13",
+          "e19"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "e12、e13 证明存款及股票存在，e19 证明婚前存款来源，真实性无异议。但被告未提供完整的资金流向追踪证据，无法排除资金混同，个人财产抗辩事实真伪不明。",
+        "burden_party": "被告",
+        "effect_if_unknown": "由被告承担举证不能的不利后果，相关存款及股票可能被认定为夫妻共同财产"
+      },
+      {
+        "fact_finding_id": "F7",
+        "element_id": "民法典_1091_001_E3",
+        "fact_slot": "causation_divorce_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "损害赔偿请求以离婚及法定过错为前提。因 I1、I2 项下离婚请求及过错事实尚未认定，本项事实基础依赖于前序事实认定，目前处于真伪不明状态。",
+        "burden_party": "原告",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，损害赔偿请求将被驳回"
+      }
+    ]
+  },
+  "direct_evaluation": {
+    "test_id": 15,
+    "method": "direct_llm",
+    "evaluation_model": "dashscope-deepseek",
+    "elapsed_seconds": 44.43,
+    "evaluation": {
+      "scores": {
+        "法律适用准确性": {
+          "score": 95,
+          "reason": "裁判分析准确引用了《中华人民共和国民法典》第1079条（离婚法定条件）、第1084条（子女抚养）、第1062条（夫妻共同财产）、第1091条（离婚损害赔偿）及第1063条（个人财产）等核心法条，法律适用正确。对家庭暴力导致感情破裂、共同财产认定、抚养权归属及损害赔偿等关键法律问题的判断均符合法律规定和司法解释精神。仅因未明确提及《反家庭暴力法》或相关司法解释的具体条文，略有不足，但不影响整体准确性。"
+        },
+        "事实认定完整性": {
+          "score": 92,
+          "reason": "裁判分析全面覆盖了案件所有争议焦点，包括婚姻基础、家庭暴力事实、分居情况、子女抚养现状、双方收入及财产状况等。对家庭暴力事实的认定基于公安机关告诫书、伤情鉴定、人身安全保护令等多份证据，事实认定完整。对财产性质的认定也考虑了出资来源、资金混同等情况。唯一不足是未对被告提出的‘父母出资系个人财产’、‘婚前存款延续’等抗辩进行更细致的逐项回应，但整体上已足够完整。"
+        },
+        "逻辑推理严密性": {
+          "score": 90,
+          "reason": "推理过程逻辑清晰，从事实认定到法律适用再到裁判结果，层层递进。例如，先认定家庭暴力事实，再据此认定感情破裂，进而支持离婚请求；在财产分割上，先认定共同财产范围，再确定分割原则和具体方案。推理链条完整，无明显逻辑跳跃或矛盾。但财产分割方案中，将房产净值120万元、存款50万元、股票30万元合计200万元，判决被告支付原告折价款100万元，虽符合均等原则，但未明确说明为何不采用实物分割（如拍卖房产）或更复杂的补偿方案，推理可更深入。"
+        },
+        "裁判结果合理性": {
+          "score": 93,
+          "reason": "裁判结果整体合理，符合法律规定和公平原则。准予离婚、子女抚养权归原告、被告支付抚养费及精神损害赔偿等判决均有充分的事实和法律依据。财产分割方案（房产归被告、支付折价款100万元）在考虑房产登记、居住现状及执行便利性的基础上，实现了共同财产的均等分割，结果合理。但抚养费3000元/月的数额是否完全符合当地实际生活水平和被告负担能力，未提供更具体的参照标准，略有瑕疵。"
+        },
+        "程序规范性": {
+          "score": 88,
+          "reason": "裁判分析中提及了‘充分保障双方举证、质证及辩论权利，程序合法’，并明确了管辖权、诉讼时效、举证期限等程序事项，程序意识良好。但未详细说明调解过程（如是否进行调解、调解结果如何），而调解是离婚案件的法定前置程序。此外，未提及是否对家庭暴力证据进行专门质证或是否依职权调查取证，程序细节描述不够充分。"
+        },
+        "证据分析充分性": {
+          "score": 91,
+          "reason": "证据分析较为充分，对家庭暴力证据链（告诫书、就诊记录、伤情鉴定、保护令、证人证言）进行了综合采信，并指出被告未提交有效反证。对财产证据（合同、流水、评估报告）也进行了分析，并基于资金混同、举证不能等理由认定共同财产。但未对被告提交的‘父母出资证明’、‘婚前存款证明’等证据的证明力进行更深入的评析，也未明确说明为何不采信被告关于个人财产的主张，分析可更细致。"
+        },
+        "文书规范性": {
+          "score": 85,
+          "reason": "裁判分析结构清晰，分为案件定性、争议焦点、事实认定、法律适用、裁判结果等部分，逻辑层次分明。语言表述专业、规范，符合裁判文书风格。但文书格式上，未采用标准的判决书格式（如当事人信息、案号、审判组织等），且‘裁判分析结果’本身是分析性文本，而非正式裁判文书。此外，判决主文部分未明确诉讼费的具体分担比例，略有不足。"
+        }
+      },
+      "overall_score": 91,
+      "overall_comment": "该裁判分析整体质量很高，在事实认定、法律适用、逻辑推理和裁判结果方面均表现出色，充分体现了对离婚纠纷案件核心问题的准确把握。证据分析较为充分，程序意识良好。主要不足在于文书规范性（非正式判决书格式）和程序细节（如调解过程）的呈现上略有欠缺，但瑕不掩瑜。",
+      "strengths": [
+        "法律适用准确，核心法条引用恰当",
+        "事实认定全面，对家庭暴力证据链分析扎实",
+        "逻辑推理严密，从事实到结论层层递进",
+        "裁判结果合理，兼顾法律效果与社会效果",
+        "证据分析充分，对关键证据的采信理由明确"
+      ],
+      "weaknesses": [
+        "文书格式非正式判决书，规范性有待提升",
+        "程序细节（如调解过程）描述不够充分",
+        "财产分割方案推理可更深入（如为何不实物分割）",
+        "对被告部分抗辩证据的回应不够细致",
+        "抚养费数额的合理性论证可更具体"
+      ]
+    },
+    "status": "success"
+  },
+  "workflow_evaluation": {
+    "test_id": 15,
+    "method": "jiubufa_workflow",
+    "evaluation_model": "dashscope-deepseek",
+    "elapsed_seconds": 42.55,
+    "evaluation": {
+      "scores": {
+        "法律适用准确性": {
+          "score": 85,
+          "reason": "裁判分析准确识别了离婚纠纷的核心请求权基础（民法典第1079条、第1091条）和子女抚养相关规范（未成年人保护法第107条），并进行了初步的规范竞合分析。但财产分割部分引用了民法典第1087条第2款（土地承包经营权益），与本案房产、存款、股票等一般共同财产不匹配，存在法律适用上的瑕疵，且未补充更直接的第1087条第1款。整体法律适用方向正确，但细节有失精准。"
+        },
+        "事实认定完整性": {
+          "score": 70,
+          "reason": "裁判分析对案件基本事实（婚姻关系、子女出生、分居、财产状况等）进行了较为全面的梳理和提取，并识别了关键事实争议（如家庭暴力、感情破裂）。但部分重要事实的认定存在缺失或模糊，例如：调解程序是否实际履行未明确；子女意愿（因年龄小可能无需征求）未充分说明；对被告主张的婚前财产混同事实缺乏深入追踪。事实认定的深度和细节有待加强。"
+        },
+        "逻辑推理严密性": {
+          "score": 75,
+          "reason": "推理过程整体遵循了“请求-基础-要件-事实-涵摄”的清晰逻辑链条，从诉讼请求出发，逐步分析法律要件、对应事实，最终得出结论。但部分环节的推理存在跳跃或不够严谨：例如，在认定“夫妻感情确已破裂”要件时，仅以证据不足为由直接得出“未证明”的结论，未充分论述为何在存在告诫书、保护令等证据的情况下仍无法达到证明标准；财产分割部分以“离婚前提不成立”为由驳回，逻辑上正确但略显简单。"
+        },
+        "裁判结果合理性": {
+          "score": 80,
+          "reason": "裁判结果（驳回全部诉讼请求）在现有证据和法律框架下具有一定的合理性。由于原告主张的家庭暴力证据链存在瑕疵（被告否认、缺乏直接证据），且分居时间较短，法院基于举证责任分配判决不准离婚，符合司法实践。但该结果对原告（尤其是主张遭受家暴的妇女）可能过于严苛，未充分考虑人身安全保护令等证据的证明价值，结果在情理上存在一定争议。"
+        },
+        "程序规范性": {
+          "score": 90,
+          "reason": "裁判分析严格遵循了民事诉讼程序要求，明确了管辖权、诉讼时效、举证期限等程序事项，并强调了离婚诉讼的调解前置程序。对举证责任分配清晰（如原告证明感情破裂、被告证明个人财产），符合程序正义。整体程序意识强，规范性高。"
+        },
+        "证据分析充分性": {
+          "score": 65,
+          "reason": "裁判分析对证据进行了分类、关联和初步的质证分析，并识别了证据链的薄弱环节（如告诫书的预防性、证人利害关系）。但证据分析不够深入和充分：对关键证据（如告诫书、保护令）的证明力评价过于简单，未结合其法律意义进行深入剖析；对被告提出的质证意见（如伤情非其造成）缺乏有效回应和反驳；未对证据的整体证明力进行综合评估，导致事实认定停留在“真伪不明”状态。"
+        },
+        "文书规范性": {
+          "score": 85,
+          "reason": "裁判分析结果的结构清晰，要素完整，包含了案件基本信息、诉讼请求、答辩意见、争议焦点、事实查明、本院认为、判决主文等标准模块，符合裁判文书的基本规范。语言表述较为严谨、专业。但部分表述略显模板化，缺乏针对本案具体情况的个性化说理，且“判决主文”部分过于简略，未明确具体判决内容。"
+        }
+      },
+      "overall_score": 79,
+      "overall_comment": "该裁判分析结果整体质量良好，展现了较强的法律分析能力和程序意识，逻辑框架清晰。主要不足在于证据分析不够深入，导致关键事实认定存在模糊，影响了裁判结果的充分说理和合理性。法律适用在财产分割部分存在瑕疵。整体上是一份合格但仍有较大提升空间的裁判分析。",
+      "strengths": [
+        "法律适用方向准确，核心请求权基础识别正确",
+        "逻辑推理框架清晰，遵循了规范的分析路径",
+        "程序意识强，对管辖、时效、举证责任等处理规范",
+        "文书结构完整，要素齐全，符合基本规范"
+      ],
+      "weaknesses": [
+        "证据分析不够深入，对关键证据的证明力评价不足，导致事实认定模糊",
+        "法律适用存在瑕疵，财产分割部分引用了不匹配的法条",
+        "事实认定完整性有待加强，部分重要事实未予明确或深入分析",
+        "裁判结果说理不够充分，对为何不采纳原告关键证据的论证略显单薄"
+      ]
+    },
+    "status": "success"
+  }
+}

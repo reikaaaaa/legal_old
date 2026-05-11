@@ -1,0 +1,67 @@
+{
+  "case_id": "case-2024-mc-0001",
+  "status": "blocked",
+  "fallback_gate": {
+    "risk_triggered": true,
+    "risk_level": "critical",
+    "reason": [
+      "工作流推进过程中累计 4 个步骤异常，可能影响推理质量。",
+      "输入完整度评分 10 过低（<40），不宜输出裁判倾向。"
+    ],
+    "recommended_action": "supplement_and_retry",
+    "available_choices": [
+      {
+        "choice": "supplement",
+        "description": "补充关键材料后重新执行"
+      },
+      {
+        "choice": "partial_output_only",
+        "description": "仅输出已有的要件/争点/缺口（不含裁判倾向）"
+      }
+    ],
+    "default_choice": "supplement",
+    "hard_block": false
+  },
+  "step1": null,
+  "step2": {
+    "request_basis_candidates": [],
+    "competition_analysis": null
+  },
+  "step3": null,
+  "step4": {
+    "element_matrix": []
+  },
+  "step5": {
+    "claim_fact_mapping": []
+  },
+  "step6": {
+    "issues": [],
+    "review_order": []
+  },
+  "step7": null,
+  "step8": null,
+  "step9": null,
+  "strong_judgment": null,
+  "weak_judgment": null,
+  "partial_output": null,
+  "timings_ms": {
+    "step1_claim_fixing": 6478,
+    "step2_request_basis": 0,
+    "step3_defense_basis": 7260,
+    "step4_element_analysis": 2,
+    "step5_claim_fact_search": 0,
+    "step6_issue_organize": 0,
+    "step7_proof": 6105,
+    "step8_fact_finding": 6169,
+    "total": 33708
+  },
+  "errors": [
+    "step1 执行异常：LLM 调用失败（已重试 3 次）：Error code: 401 - {'error': {'message': 'Incorrect API key provided. For details, see: https://help.aliyun.com/zh/model-studio/error-code#apikey-error', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}, 'request_id': '70ec8355-71fa-9dc2-bef3-324dbdf1420d'}",
+    "step3 执行异常：LLM 调用失败（已重试 3 次）：Error code: 401 - {'error': {'message': 'Incorrect API key provided. For details, see: https://help.aliyun.com/zh/model-studio/error-code#apikey-error', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}, 'request_id': '591c6778-fe82-975a-ad4d-b5345ae982f8'}",
+    "step7 执行异常：LLM 调用失败（已重试 3 次）：Error code: 401 - {'error': {'message': 'Incorrect API key provided. For details, see: https://help.aliyun.com/zh/model-studio/error-code#apikey-error', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}, 'request_id': '71b8fe96-cb91-9c87-9c5d-c18e668989a5'}",
+    "step8 执行异常：LLM 调用失败（已重试 3 次）：Error code: 401 - {'error': {'message': 'Incorrect API key provided. For details, see: https://help.aliyun.com/zh/model-studio/error-code#apikey-error', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}, 'request_id': '8e9fa449-b9ba-9848-9203-2c837d252f32'}"
+  ],
+  "warnings": [
+    "sufficiency LLM 评分失败：LLM 调用失败（已重试 3 次）：Error code: 401 - {'error': {'message': 'Incorrect API key provided. For details, see: https://help.aliyun.com/zh/model-studio/error-code#apikey-error', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}, 'request_id': '26cf0a69-188d-94af-8ac1-6be6594d9213'}"
+  ]
+}

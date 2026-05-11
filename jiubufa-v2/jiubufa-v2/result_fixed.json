@@ -1,0 +1,1178 @@
+{
+  "case_id": "case-2024-mc-0001",
+  "status": "ok",
+  "fallback_gate": {
+    "risk_triggered": true,
+    "risk_level": "medium",
+    "reason": [
+      "输入完整度评分 79 处于中风险区间。"
+    ],
+    "recommended_action": "proceed_with_risk_notes",
+    "available_choices": [
+      {
+        "choice": "supplement",
+        "description": "停止裁判输出，按缺口清单补充材料后回退"
+      },
+      {
+        "choice": "proceed_with_risk_notes",
+        "description": "继续输出强裁判结果并附风险提示"
+      },
+      {
+        "choice": "continue_weak_judgment",
+        "description": "改用弱裁判通道（更保守）"
+      }
+    ],
+    "default_choice": "proceed_with_risk_notes",
+    "hard_block": false
+  },
+  "step1": {
+    "case_cause_inferred": [
+      "买卖合同纠纷"
+    ],
+    "legal_domain_inferred": [
+      "合同"
+    ],
+    "fixed_claims": [
+      {
+        "claim_id": "C1",
+        "claim_text_normalized": "支付货款人民币 500,000 元",
+        "claim_type": [
+          "payment_claim"
+        ],
+        "object_type": "金钱",
+        "amount": 500000.0,
+        "claimant": "甲公司",
+        "respondent": "乙公司",
+        "is_clear": true,
+        "is_executable": true,
+        "issues": [],
+        "clarification_questions": [],
+        "priority_type": "primary",
+        "competition_note": "主债权请求，与 C2 利息请求构成主从关系"
+      },
+      {
+        "claim_id": "C2",
+        "claim_text_normalized": "支付逾期利息（以未付货款为基数，自 2024 年 3 月 1 日起按 LPR 计算至实际付清之日）",
+        "claim_type": [
+          "payment_claim"
+        ],
+        "object_type": "金钱",
+        "amount": null,
+        "claimant": "甲公司",
+        "respondent": "乙公司",
+        "is_clear": true,
+        "is_executable": true,
+        "issues": [],
+        "clarification_questions": [],
+        "priority_type": "parallel",
+        "competition_note": "附属债权请求，依赖于 C1 主债权成立，属于违约责任形式的金钱给付"
+      }
+    ],
+    "overall_clarification": [
+      "被告在答辩中主张货物存在质量瑕疵并要求扣减价款，需释明该主张是作为抗辩理由还是已正式提起反诉，以便确定审理范围。",
+      "需确认原告主张的逾期利息起算日 2024 年 3 月 1 日是否有合同依据或法律依据支持（合同约定付款时间为 2024 年 2 月 28 日）。"
+    ]
+  },
+  "step2": {
+    "request_basis_candidates": [
+      {
+        "claim_id": "C1",
+        "rule_unit_ref": {
+          "rule_unit_id": "民法典_626_001",
+          "law_name": "中华人民共和国民法典",
+          "article_no": "第六百二十六条",
+          "rule_unit_text": "买受人应当按照约定的数额和支付方式支付价款。",
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "payment_claim"
+          ],
+          "defense_type": [],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ]
+        },
+        "norm_type": [
+          "request_basis",
+          "liability_rule"
+        ],
+        "claim_type": [
+          "payment_claim"
+        ],
+        "legal_effect_tags": [
+          "liability_arises",
+          "claim_supported"
+        ],
+        "selection_reason": "该规则位于民法典买卖合同章，直接规定买受人支付价款的义务，属于买卖合同的特别规则，优于合同编通则的一般金钱债务规则，能够直接支持支付货款的诉讼请求。",
+        "priority": "primary",
+        "risk_note": "若查明合同为分期付款且未付金额达全部价款五分之一，可能涉及民法典第 634 条加速到期规则的适用竞合。"
+      },
+      {
+        "claim_id": "C1",
+        "rule_unit_ref": {
+          "rule_unit_id": "民法典_579_001",
+          "law_name": "中华人民共和国民法典",
+          "article_no": "第五百七十九条",
+          "rule_unit_text": "当事人一方未支付价款、报酬、租金、利息，或者不履行其他金钱债务的，对方可以请求其支付。",
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "payment_claim",
+            "performance_claim"
+          ],
+          "defense_type": [],
+          "legal_effect_tags": [
+            "claim_supported",
+            "liability_arises"
+          ]
+        },
+        "norm_type": [
+          "request_basis",
+          "liability_rule"
+        ],
+        "claim_type": [
+          "payment_claim"
+        ],
+        "legal_effect_tags": [
+          "claim_supported",
+          "liability_arises"
+        ],
+        "selection_reason": "该规则规定金钱债务未履行的请求权，作为合同编通则的一般规则，补充支持货款支付请求，明确赋予债权人请求支付的权利。",
+        "priority": "supplementary",
+        "risk_note": null
+      },
+      {
+        "claim_id": "C2",
+        "rule_unit_ref": {
+          "rule_unit_id": "民法典_579_001",
+          "law_name": "中华人民共和国民法典",
+          "article_no": "第五百七十九条",
+          "rule_unit_text": "当事人一方未支付价款、报酬、租金、利息，或者不履行其他金钱债务的，对方可以请求其支付。",
+          "norm_type": [
+            "request_basis",
+            "liability_rule"
+          ],
+          "claim_type": [
+            "payment_claim",
+            "performance_claim"
+          ],
+          "defense_type": [],
+          "legal_effect_tags": [
+            "claim_supported",
+            "liability_arises"
+          ]
+        },
+        "norm_type": [
+          "request_basis",
+          "liability_rule"
+        ],
+        "claim_type": [
+          "payment_claim"
+        ],
+        "legal_effect_tags": [
+          "claim_supported",
+          "liability_arises"
+        ],
+        "selection_reason": "该规则明确列举“利息”为可请求支付的金钱债务范围，直接支持逾期利息请求。在候选规则中，该条是唯一明确提及利息支付请求权的规范，优于仅规定价款支付的规则。",
+        "priority": "primary",
+        "risk_note": "利息计算标准（LPR）需结合相关司法解释进一步确定，本条仅确立请求权基础，不直接规定计算方式。"
+      }
+    ],
+    "competition_analysis": null
+  },
+  "step3": {
+    "defense_basis_candidates": [
+      {
+        "defense_id": "D1",
+        "target_claim_id": "C1",
+        "response_type": "抗辩权",
+        "defense_type": [
+          "simultaneous_performance_defense"
+        ],
+        "rule_unit_ref": null,
+        "legal_effect_tags": [
+          "performance_suspended"
+        ],
+        "selection_reason": "被告主张同时履行抗辩权，基于原告交付的 10 台设备中有 3 台存在严重质量瑕疵且未完全履行交付符合约定货物之义务，被告依法享有拒绝支付货款的权利。但候选规则单元中未找到民法典第 525 条（同时履行抗辩权）的规范，无法匹配具体规则单元。",
+        "clarification_needed": false,
+        "risk_note": "候选规则单元中未找到民法典第 525 条（同时履行抗辩权）的规范，需补充该规则单元以完整支持抗辩基础。当前候选规则单元主要涉及时效、不当得利、海商法等特殊领域，与本案买卖合同同时履行抗辩权不匹配。"
+      }
+    ]
+  },
+  "step4": {
+    "element_matrix": [
+      {
+        "element_id": "E1_626_001",
+        "rule_unit_id": "民法典_626_001",
+        "element_name": "买卖合同关系成立并有效",
+        "element_type": "legal_relation_element",
+        "element_logic": "AND",
+        "is_hidden_element": true,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "contract_relation_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同文本",
+          "订单记录",
+          "交货凭证"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C1",
+        "note": null
+      },
+      {
+        "element_id": "E2_626_001",
+        "rule_unit_id": "民法典_626_001",
+        "element_name": "买受人身份",
+        "element_type": "subject_element",
+        "element_logic": "AND",
+        "is_hidden_element": false,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "buyer_identity_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同文本",
+          "主体资格证明"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C1",
+        "note": null
+      },
+      {
+        "element_id": "E3_626_001",
+        "rule_unit_id": "民法典_626_001",
+        "element_name": "约定了价款数额和支付方式",
+        "element_type": "act_element",
+        "element_logic": "AND",
+        "is_hidden_element": false,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "payment_terms_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同文本",
+          "报价单",
+          "对账单"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C1",
+        "note": null
+      },
+      {
+        "element_id": "E1_579_001_C1",
+        "rule_unit_id": "民法典_579_001",
+        "element_name": "合同关系成立并有效",
+        "element_type": "legal_relation_element",
+        "element_logic": "AND",
+        "is_hidden_element": true,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "debt_relation_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同文本",
+          "订单记录",
+          "借据",
+          "租赁协议"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C1",
+        "note": null
+      },
+      {
+        "element_id": "E2_579_001_C1",
+        "rule_unit_id": "民法典_579_001",
+        "element_name": "金钱债务已届清偿期",
+        "element_type": "time_element",
+        "element_logic": "AND",
+        "is_hidden_element": true,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "debt_due_date_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同约定履行期",
+          "催告函",
+          "对账单"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C1",
+        "note": null
+      },
+      {
+        "element_id": "E3_579_001_C1",
+        "rule_unit_id": "民法典_579_001",
+        "element_name": "未履行支付义务",
+        "element_type": "breach_element",
+        "element_logic": "AND",
+        "is_hidden_element": false,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "non_payment_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "银行流水",
+          "欠款确认书",
+          "聊天记录",
+          "催收记录"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C1",
+        "note": null
+      },
+      {
+        "element_id": "E1_579_001_C2",
+        "rule_unit_id": "民法典_579_001",
+        "element_name": "合同关系成立并有效",
+        "element_type": "legal_relation_element",
+        "element_logic": "AND",
+        "is_hidden_element": true,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "debt_relation_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同文本",
+          "订单记录",
+          "借据",
+          "租赁协议"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C2",
+        "note": null
+      },
+      {
+        "element_id": "E2_579_001_C2",
+        "rule_unit_id": "民法典_579_001",
+        "element_name": "金钱债务已届清偿期",
+        "element_type": "time_element",
+        "element_logic": "AND",
+        "is_hidden_element": true,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "debt_due_date_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "合同约定履行期",
+          "催告函",
+          "对账单"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C2",
+        "note": null
+      },
+      {
+        "element_id": "E3_579_001_C2",
+        "rule_unit_id": "民法典_579_001",
+        "element_name": "未履行支付义务",
+        "element_type": "breach_element",
+        "element_logic": "AND",
+        "is_hidden_element": false,
+        "negative_element": false,
+        "exception_element": false,
+        "fact_slot": "non_payment_fact",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "suggested_evidence_types": [
+          "银行流水",
+          "欠款确认书",
+          "聊天记录",
+          "催收记录"
+        ],
+        "used_for": "request_basis",
+        "target_id": "C2",
+        "note": null
+      }
+    ]
+  },
+  "step5": {
+    "claim_fact_mapping": [
+      {
+        "element_id": "E1_626_001",
+        "fact_slot": "contract_relation_fact",
+        "required_fact": "当事人之间签订买卖合同且合同有效的事实",
+        "asserted_fact_ids": [
+          "f1"
+        ],
+        "assertion_status": "asserted",
+        "burden_party": "原告",
+        "clarification_question": null,
+        "risk_note": null
+      },
+      {
+        "element_id": "E2_626_001",
+        "fact_slot": "buyer_identity_fact",
+        "required_fact": "被告具有买受人身份的事实",
+        "asserted_fact_ids": [
+          "f1"
+        ],
+        "assertion_status": "asserted",
+        "burden_party": "原告",
+        "clarification_question": null,
+        "risk_note": null
+      },
+      {
+        "element_id": "E3_626_001",
+        "fact_slot": "payment_terms_fact",
+        "required_fact": "双方约定了价款数额和支付方式的事实",
+        "asserted_fact_ids": [
+          "f1"
+        ],
+        "assertion_status": "asserted",
+        "burden_party": "原告",
+        "clarification_question": null,
+        "risk_note": null
+      },
+      {
+        "element_id": "E1_579_001_C1",
+        "fact_slot": "debt_relation_fact",
+        "required_fact": "基于合同产生的金钱债务关系成立并有效的事实",
+        "asserted_fact_ids": [
+          "f1",
+          "f2"
+        ],
+        "assertion_status": "asserted",
+        "burden_party": "原告",
+        "clarification_question": null,
+        "risk_note": null
+      },
+      {
+        "element_id": "E2_579_001_C1",
+        "fact_slot": "debt_due_date_fact",
+        "required_fact": "金钱债务已届清偿期的事实",
+        "asserted_fact_ids": [
+          "f1",
+          "f3"
+        ],
+        "assertion_status": "asserted",
+        "burden_party": "原告",
+        "clarification_question": null,
+        "risk_note": null
+      },
+      {
+        "element_id": "E3_579_001_C1",
+        "fact_slot": "non_payment_fact",
+        "required_fact": "被告未履行支付义务的事实",
+        "asserted_fact_ids": [
+          "f3"
+        ],
+        "assertion_status": "asserted",
+        "burden_party": "原告",
+        "clarification_question": null,
+        "risk_note": "被告提出质量瑕疵及同时履行抗辩权，可能影响付款义务的履行认定"
+      },
+      {
+        "element_id": "E1_579_001_C2",
+        "fact_slot": "debt_relation_fact",
+        "required_fact": "基于合同产生的金钱债务关系成立并有效的事实",
+        "asserted_fact_ids": [],
+        "assertion_status": "missing",
+        "burden_party": "原告",
+        "clarification_question": "原告未提供支撑诉讼请求 C2 的合同订立或债务产生事实，请补充 C2 对应的具体事实主张",
+        "risk_note": null
+      },
+      {
+        "element_id": "E2_579_001_C2",
+        "fact_slot": "debt_due_date_fact",
+        "required_fact": "金钱债务已届清偿期的事实",
+        "asserted_fact_ids": [],
+        "assertion_status": "missing",
+        "burden_party": "原告",
+        "clarification_question": "原告未提供支撑诉讼请求 C2 的债务履行期限事实，请补充 C2 对应的具体事实主张",
+        "risk_note": null
+      },
+      {
+        "element_id": "E3_579_001_C2",
+        "fact_slot": "non_payment_fact",
+        "required_fact": "被告未履行支付义务的事实",
+        "asserted_fact_ids": [],
+        "assertion_status": "missing",
+        "burden_party": "原告",
+        "clarification_question": "原告未提供支撑诉讼请求 C2 的被告未付款事实，请补充 C2 对应的具体事实主张",
+        "risk_note": null
+      }
+    ]
+  },
+  "step6": {
+    "issues": [
+      {
+        "issue_id": "I1",
+        "issue_type": "fact_issue",
+        "issue_text": "买卖合同关系是否成立并有效",
+        "linked_element_ids": [
+          "E1_626_001",
+          "E1_579_001_C1"
+        ],
+        "linked_claim_id": "C1",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e1"
+        ],
+        "priority": "low"
+      },
+      {
+        "issue_id": "I2",
+        "issue_type": "fact_issue",
+        "issue_text": "原告交付的设备中是否有 3 台存在质量瑕疵",
+        "linked_element_ids": [
+          "E3_579_001_C1"
+        ],
+        "linked_claim_id": "C1",
+        "linked_defense_id": "d1",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e2",
+          "e3",
+          "e5",
+          "e6"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I3",
+        "issue_type": "legal_issue",
+        "issue_text": "被告主张的同时履行抗辩权是否成立",
+        "linked_element_ids": [],
+        "linked_claim_id": "C1",
+        "linked_defense_id": "d1",
+        "burden_party": "被告",
+        "linked_evidence_ids": [
+          "e5",
+          "e6"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I4",
+        "issue_type": "fact_issue",
+        "issue_text": "被告是否构成未履行支付义务的违约行为",
+        "linked_element_ids": [
+          "E3_579_001_C1"
+        ],
+        "linked_claim_id": "C1",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e4"
+        ],
+        "priority": "medium"
+      }
+    ],
+    "review_order": [
+      "I1",
+      "I2",
+      "I3",
+      "I4"
+    ]
+  },
+  "step7": {
+    "proof_plan": [
+      {
+        "issue_id": "I1",
+        "element_id": "E1_626_001",
+        "fact_to_prove": "买卖合同关系成立并有效",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e1"
+        ],
+        "suggested_evidence_types": [
+          "合同文本",
+          "订单记录",
+          "交货凭证"
+        ],
+        "proof_gap": "合同原件已提交且对方无异议，但需结合交货凭证佐证实际履行情况以巩固合同效力认定",
+        "effect_if_unknown": "由原告承担举证不能的不利后果"
+      },
+      {
+        "issue_id": "I2",
+        "element_id": "E3_579_001_C1",
+        "fact_to_prove": "原告交付的设备中是否有 3 台存在质量瑕疵",
+        "burden_party": "被告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e2",
+          "e3",
+          "e5",
+          "e6"
+        ],
+        "suggested_evidence_types": [
+          "鉴定意见",
+          "现场勘验笔录",
+          "维修记录"
+        ],
+        "proof_gap": "第三方检测报告资质及取样过程遭原告质疑，需进一步证明瑕疵在交付时即已存在而非后续使用造成",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      },
+      {
+        "issue_id": "I4",
+        "element_id": "E3_579_001_C1",
+        "fact_to_prove": "被告是否构成未履行支付义务的违约行为",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e4"
+        ],
+        "suggested_evidence_types": [
+          "银行流水",
+          "欠款确认书",
+          "催收记录"
+        ],
+        "proof_gap": "仅有催款函及邮寄回执，缺乏直接证明被告账户未收到款项的银行流水或对账单",
+        "effect_if_unknown": "由原告承担举证不能的不利后果"
+      }
+    ]
+  },
+  "step8": {
+    "fact_findings": [
+      {
+        "fact_finding_id": "F1",
+        "element_id": "E1_626_001",
+        "fact_slot": "contract_relation_fact",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e1"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e1《工业设备买卖合同》系书证，来源合法，与待证事实具有关联性。质证意见 x1 显示被告对 e1 的合法性、关联性、真实性及证明力均无异议。该证据能直接证明买卖合同关系成立并有效，达到高度盖然性证明标准。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      },
+      {
+        "fact_finding_id": "F2",
+        "element_id": "E3_579_001_C1",
+        "fact_slot": "quality_defect_fact",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e5"
+        ],
+        "rejected_evidence_ids": [
+          "e6"
+        ],
+        "reasoning": "证据 e5《设备质量异议通知书》予以采信，证明被告提出过异议。但核心证据 e6《第三方检测报告》遭原告质证异议（x3），鉴定机构资质及取样过程存疑，且无法证明瑕疵在交付时即已存在而非后续使用造成。证明力不足，无法形成完整证据链，事实真伪不明。",
+        "burden_party": "被告",
+        "effect_if_unknown": "由被告承担举证不能的不利后果"
+      },
+      {
+        "fact_finding_id": "F3",
+        "element_id": "E3_579_001_C1",
+        "fact_slot": "non_payment_fact",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e1",
+          "e2",
+          "e3",
+          "e4"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e1 证明合同关系，e2 证明交货（被告 x2 认可送货事实），e3 证明发票开具，e4 证明催款。被告抗辩质量瑕疵而非已付款，结合原告提供的催款函及无付款凭证，足以认定被告未履行支付义务，达到高度盖然性标准。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      }
+    ]
+  },
+  "step9": {
+    "subsumption_results": [
+      {
+        "claim_id": "C1",
+        "request_basis_rule_unit_id": "民法典_626_001",
+        "request_elements_result": [
+          {
+            "element_id": "E1_626_001",
+            "element_name": "买卖合同关系成立并有效",
+            "finding_status": "proved",
+            "note": "依据事实认定 F1，证据 e1《工业设备买卖合同》证明合同关系成立并有效"
+          },
+          {
+            "element_id": "E2_626_001",
+            "element_name": "买受人身份",
+            "finding_status": "proved",
+            "note": "合同关系有效成立隐含当事人身份明确，依据证据 e1 及 F1 认定"
+          },
+          {
+            "element_id": "E3_626_001",
+            "element_name": "约定了价款数额和支付方式",
+            "finding_status": "proved",
+            "note": "合同关系有效成立隐含价款约定，结合 F3 认定未付货款事实反推约定存在"
+          }
+        ],
+        "defense_results": [
+          {
+            "defense_id": "D1",
+            "defense_type": [
+              "simultaneous_performance_defense"
+            ],
+            "elements_status": [
+              {
+                "element_id": "E3_579_001_C1",
+                "element_name": "质量瑕疵事实（抗辩基础）",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F2，证据 e6 检测报告证明力不足，事实真伪不明，被告承担举证不能后果"
+              }
+            ],
+            "accepted": false,
+            "effect": null
+          }
+        ],
+        "legal_effect_tags": [
+          "liability_arises",
+          "claim_supported"
+        ],
+        "disposition_type": "支持支付货款",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，原告甲公司与被告乙公司之间的买卖合同关系依法成立并有效，双方均应恪守履行。原告已履行交货义务，被告作为买受人应当按照约定支付价款。关于被告提出的质量瑕疵同时履行抗辩，因被告提供的检测报告证明力不足，无法证明瑕疵在交付时存在，故该抗辩理由不能成立。原告请求支付货款 500,000 元，事实清楚，证据充分，本院予以支持。",
+        "cited_rules": [
+          "民法典_626_001"
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "request_basis_rule_unit_id": "民法典_579_001",
+        "request_elements_result": [
+          {
+            "element_id": "E1_579_001_C2",
+            "element_name": "合同关系成立并有效",
+            "finding_status": "proved",
+            "note": "同 C1 认定，依据 F1"
+          },
+          {
+            "element_id": "E2_579_001_C2",
+            "element_name": "金钱债务已届清偿期",
+            "finding_status": "proved",
+            "note": "依据原告主张及 C1 货款未付事实，债务已届清偿期"
+          },
+          {
+            "element_id": "E3_579_001_C2",
+            "element_name": "未履行支付义务",
+            "finding_status": "proved",
+            "note": "依据事实认定 F3，被告未支付货款构成违约"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises",
+          "claim_supported"
+        ],
+        "disposition_type": "支持支付利息",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，被告未按期支付货款，构成违约，应当赔偿原告因此遭受的损失。原告主张以未付货款为基数，自 2024 年 3 月 1 日起按 LPR 计算逾期利息，符合法律规定，本院予以支持。",
+        "cited_rules": [
+          "民法典_579_001"
+        ]
+      }
+    ]
+  },
+  "strong_judgment": {
+    "mode": "strong_judgment",
+    "sufficiency_score": {
+      "claim_clarity": 19,
+      "legal_relation_stability": 14,
+      "request_basis_stability": 12,
+      "defense_path_completeness": 7,
+      "element_fact_coverage": 10,
+      "evidence_coverage": 11,
+      "fact_finding_reliability": 6
+    },
+    "risk_level": "medium",
+    "subsumption_results": [
+      {
+        "claim_id": "C1",
+        "request_basis_rule_unit_id": "民法典_626_001",
+        "request_elements_result": [
+          {
+            "element_id": "E1_626_001",
+            "element_name": "买卖合同关系成立并有效",
+            "finding_status": "proved",
+            "note": "依据事实认定 F1，证据 e1《工业设备买卖合同》证明合同关系成立并有效"
+          },
+          {
+            "element_id": "E2_626_001",
+            "element_name": "买受人身份",
+            "finding_status": "proved",
+            "note": "合同关系有效成立隐含当事人身份明确，依据证据 e1 及 F1 认定"
+          },
+          {
+            "element_id": "E3_626_001",
+            "element_name": "约定了价款数额和支付方式",
+            "finding_status": "proved",
+            "note": "合同关系有效成立隐含价款约定，结合 F3 认定未付货款事实反推约定存在"
+          }
+        ],
+        "defense_results": [
+          {
+            "defense_id": "D1",
+            "defense_type": [
+              "simultaneous_performance_defense"
+            ],
+            "elements_status": [
+              {
+                "element_id": "E3_579_001_C1",
+                "element_name": "质量瑕疵事实（抗辩基础）",
+                "finding_status": "not_proved",
+                "note": "依据事实认定 F2，证据 e6 检测报告证明力不足，事实真伪不明，被告承担举证不能后果"
+              }
+            ],
+            "accepted": false,
+            "effect": null
+          }
+        ],
+        "legal_effect_tags": [
+          "liability_arises",
+          "claim_supported"
+        ],
+        "disposition_type": "支持支付货款",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，原告甲公司与被告乙公司之间的买卖合同关系依法成立并有效，双方均应恪守履行。原告已履行交货义务，被告作为买受人应当按照约定支付价款。关于被告提出的质量瑕疵同时履行抗辩，因被告提供的检测报告证明力不足，无法证明瑕疵在交付时存在，故该抗辩理由不能成立。原告请求支付货款 500,000 元，事实清楚，证据充分，本院予以支持。",
+        "cited_rules": [
+          "民法典_626_001"
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "request_basis_rule_unit_id": "民法典_579_001",
+        "request_elements_result": [
+          {
+            "element_id": "E1_579_001_C2",
+            "element_name": "合同关系成立并有效",
+            "finding_status": "proved",
+            "note": "同 C1 认定，依据 F1"
+          },
+          {
+            "element_id": "E2_579_001_C2",
+            "element_name": "金钱债务已届清偿期",
+            "finding_status": "proved",
+            "note": "依据原告主张及 C1 货款未付事实，债务已届清偿期"
+          },
+          {
+            "element_id": "E3_579_001_C2",
+            "element_name": "未履行支付义务",
+            "finding_status": "proved",
+            "note": "依据事实认定 F3，被告未支付货款构成违约"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises",
+          "claim_supported"
+        ],
+        "disposition_type": "支持支付利息",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，被告未按期支付货款，构成违约，应当赔偿原告因此遭受的损失。原告主张以未付货款为基数，自 2024 年 3 月 1 日起按 LPR 计算逾期利息，符合法律规定，本院予以支持。",
+        "cited_rules": [
+          "民法典_579_001"
+        ]
+      }
+    ],
+    "document_skeleton": {
+      "原告诉讼请求": [
+        {
+          "claim_id": "C1",
+          "claim_text_normalized": "支付货款人民币 500,000 元",
+          "claim_type": [
+            "payment_claim"
+          ],
+          "object_type": "金钱",
+          "amount": 500000.0,
+          "claimant": "甲公司",
+          "respondent": "乙公司",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": "主债权请求，与 C2 利息请求构成主从关系"
+        },
+        {
+          "claim_id": "C2",
+          "claim_text_normalized": "支付逾期利息（以未付货款为基数，自 2024 年 3 月 1 日起按 LPR 计算至实际付清之日）",
+          "claim_type": [
+            "payment_claim"
+          ],
+          "object_type": "金钱",
+          "amount": null,
+          "claimant": "甲公司",
+          "respondent": "乙公司",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "parallel",
+          "competition_note": "附属债权请求，依赖于 C1 主债权成立，属于违约责任形式的金钱给付"
+        }
+      ],
+      "被告辩称": [
+        {
+          "defense_id": "d1",
+          "defense_text_original": "被告乙公司辩称：原告交付的 10 台设备中有 3 台存在严重质量瑕疵，无法正常使用，被告已经书面通知原告要求更换，但原告至今未予处理。在原告未完全履行交付符合约定货物之义务前，被告依法享有同时履行抗辩权，可以拒绝支付货款。",
+          "defense_text_normalized": null,
+          "defense_target_claim_id": "c1",
+          "response_type": "抗辩权",
+          "defense_type_candidate": [
+            "同时履行抗辩权",
+            "质量瑕疵抗辩"
+          ],
+          "new_fact_asserted": true,
+          "linked_evidence_ids": [
+            "e5",
+            "e6"
+          ],
+          "possible_defense_basis": [
+            "同时履行抗辩权（《民法典》第 525 条）"
+          ],
+          "clarification_needed": false
+        }
+      ],
+      "争议焦点": [
+        {
+          "issue_id": "I1",
+          "issue_type": "fact_issue",
+          "issue_text": "买卖合同关系是否成立并有效",
+          "linked_element_ids": [
+            "E1_626_001",
+            "E1_579_001_C1"
+          ],
+          "linked_claim_id": "C1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e1"
+          ],
+          "priority": "low"
+        },
+        {
+          "issue_id": "I2",
+          "issue_type": "fact_issue",
+          "issue_text": "原告交付的设备中是否有 3 台存在质量瑕疵",
+          "linked_element_ids": [
+            "E3_579_001_C1"
+          ],
+          "linked_claim_id": "C1",
+          "linked_defense_id": "d1",
+          "burden_party": "被告",
+          "linked_evidence_ids": [
+            "e2",
+            "e3",
+            "e5",
+            "e6"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I3",
+          "issue_type": "legal_issue",
+          "issue_text": "被告主张的同时履行抗辩权是否成立",
+          "linked_element_ids": [],
+          "linked_claim_id": "C1",
+          "linked_defense_id": "d1",
+          "burden_party": "被告",
+          "linked_evidence_ids": [
+            "e5",
+            "e6"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I4",
+          "issue_type": "fact_issue",
+          "issue_text": "被告是否构成未履行支付义务的违约行为",
+          "linked_element_ids": [
+            "E3_579_001_C1"
+          ],
+          "linked_claim_id": "C1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e4"
+          ],
+          "priority": "medium"
+        }
+      ],
+      "本院查明": [
+        {
+          "fact_finding_id": "F1",
+          "element_id": "E1_626_001",
+          "fact_slot": "contract_relation_fact",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e1"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e1《工业设备买卖合同》系书证，来源合法，与待证事实具有关联性。质证意见 x1 显示被告对 e1 的合法性、关联性、真实性及证明力均无异议。该证据能直接证明买卖合同关系成立并有效，达到高度盖然性证明标准。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F2",
+          "element_id": "E3_579_001_C1",
+          "fact_slot": "quality_defect_fact",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e5"
+          ],
+          "rejected_evidence_ids": [
+            "e6"
+          ],
+          "reasoning": "证据 e5《设备质量异议通知书》予以采信，证明被告提出过异议。但核心证据 e6《第三方检测报告》遭原告质证异议（x3），鉴定机构资质及取样过程存疑，且无法证明瑕疵在交付时即已存在而非后续使用造成。证明力不足，无法形成完整证据链，事实真伪不明。",
+          "burden_party": "被告",
+          "effect_if_unknown": "由被告承担举证不能的不利后果"
+        },
+        {
+          "fact_finding_id": "F3",
+          "element_id": "E3_579_001_C1",
+          "fact_slot": "non_payment_fact",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e1",
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e1 证明合同关系，e2 证明交货（被告 x2 认可送货事实），e3 证明发票开具，e4 证明催款。被告抗辩质量瑕疵而非已付款，结合原告提供的催款函及无付款凭证，足以认定被告未履行支付义务，达到高度盖然性标准。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        }
+      ],
+      "本院认为": [
+        {
+          "claim_id": "C1",
+          "request_basis_rule_unit_id": "民法典_626_001",
+          "request_elements_result": [
+            {
+              "element_id": "E1_626_001",
+              "element_name": "买卖合同关系成立并有效",
+              "finding_status": "proved",
+              "note": "依据事实认定 F1，证据 e1《工业设备买卖合同》证明合同关系成立并有效"
+            },
+            {
+              "element_id": "E2_626_001",
+              "element_name": "买受人身份",
+              "finding_status": "proved",
+              "note": "合同关系有效成立隐含当事人身份明确，依据证据 e1 及 F1 认定"
+            },
+            {
+              "element_id": "E3_626_001",
+              "element_name": "约定了价款数额和支付方式",
+              "finding_status": "proved",
+              "note": "合同关系有效成立隐含价款约定，结合 F3 认定未付货款事实反推约定存在"
+            }
+          ],
+          "defense_results": [
+            {
+              "defense_id": "D1",
+              "defense_type": [
+                "simultaneous_performance_defense"
+              ],
+              "elements_status": [
+                {
+                  "element_id": "E3_579_001_C1",
+                  "element_name": "质量瑕疵事实（抗辩基础）",
+                  "finding_status": "not_proved",
+                  "note": "依据事实认定 F2，证据 e6 检测报告证明力不足，事实真伪不明，被告承担举证不能后果"
+                }
+              ],
+              "accepted": false,
+              "effect": null
+            }
+          ],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "支持支付货款",
+          "judgment_result": "supported",
+          "reasoning_summary": "本院认为，原告甲公司与被告乙公司之间的买卖合同关系依法成立并有效，双方均应恪守履行。原告已履行交货义务，被告作为买受人应当按照约定支付价款。关于被告提出的质量瑕疵同时履行抗辩，因被告提供的检测报告证明力不足，无法证明瑕疵在交付时存在，故该抗辩理由不能成立。原告请求支付货款 500,000 元，事实清楚，证据充分，本院予以支持。",
+          "cited_rules": [
+            "民法典_626_001"
+          ]
+        },
+        {
+          "claim_id": "C2",
+          "request_basis_rule_unit_id": "民法典_579_001",
+          "request_elements_result": [
+            {
+              "element_id": "E1_579_001_C2",
+              "element_name": "合同关系成立并有效",
+              "finding_status": "proved",
+              "note": "同 C1 认定，依据 F1"
+            },
+            {
+              "element_id": "E2_579_001_C2",
+              "element_name": "金钱债务已届清偿期",
+              "finding_status": "proved",
+              "note": "依据原告主张及 C1 货款未付事实，债务已届清偿期"
+            },
+            {
+              "element_id": "E3_579_001_C2",
+              "element_name": "未履行支付义务",
+              "finding_status": "proved",
+              "note": "依据事实认定 F3，被告未支付货款构成违约"
+            }
+          ],
+          "defense_results": [],
+          "legal_effect_tags": [
+            "liability_arises",
+            "claim_supported"
+          ],
+          "disposition_type": "支持支付利息",
+          "judgment_result": "supported",
+          "reasoning_summary": "本院认为，被告未按期支付货款，构成违约，应当赔偿原告因此遭受的损失。原告主张以未付货款为基数，自 2024 年 3 月 1 日起按 LPR 计算逾期利息，符合法律规定，本院予以支持。",
+          "cited_rules": [
+            "民法典_579_001"
+          ]
+        }
+      ],
+      "判决主文": [
+        "支持原告关于 C1 的诉讼请求。",
+        "支持原告关于 C2 的诉讼请求。"
+      ],
+      "引用法条": [
+        "民法典_579_001",
+        "民法典_626_001"
+      ]
+    },
+    "consistency_check": {
+      "诉求-固定一致": false,
+      "固定-涵摄一致": true,
+      "缺漏的诉求（涵摄阶段未覆盖）": [],
+      "多出的诉求（涵摄阶段凭空出现）": [],
+      "争点已使用": true,
+      "事实已认定": true,
+      "法条已引用": true
+    }
+  },
+  "weak_judgment": null,
+  "partial_output": null,
+  "timings_ms": {
+    "step1_claim_fixing": 106073,
+    "step2_request_basis": 110391,
+    "step3_defense_basis": 112437,
+    "step4_element_analysis": 291161,
+    "step5_claim_fact_search": 95640,
+    "step6_issue_organize": 98339,
+    "step7_proof": 5007993,
+    "step8_fact_finding": 154776,
+    "step9_subsumption": 120867,
+    "total": 6145140
+  },
+  "errors": [],
+  "warnings": [
+    "评分处于中风险区间，已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。"
+  ]
+}

@@ -1,0 +1,946 @@
+{
+  "direct_scores": [
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 90,
+      "逻辑推理严密性": 92,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 85,
+      "文书规范性": 90,
+      "overall_score": 90
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 94,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 93,
+      "裁判结果合理性": 96,
+      "程序规范性": 90,
+      "证据分析充分性": 94,
+      "文书规范性": 88,
+      "overall_score": 92.6
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 94,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 93,
+      "裁判结果合理性": 94,
+      "程序规范性": 90,
+      "证据分析充分性": 96,
+      "文书规范性": 88,
+      "overall_score": 92.6
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 94,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 93,
+      "裁判结果合理性": 94,
+      "程序规范性": 90,
+      "证据分析充分性": 96,
+      "文书规范性": 88,
+      "overall_score": 92.57
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 90,
+      "逻辑推理严密性": 88,
+      "裁判结果合理性": 92,
+      "程序规范性": 85,
+      "证据分析充分性": 90,
+      "文书规范性": 80,
+      "overall_score": 88.6
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 85,
+      "证据分析充分性": 96,
+      "文书规范性": 88,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 85,
+      "证据分析充分性": 88,
+      "文书规范性": 82,
+      "overall_score": 89
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 93,
+      "裁判结果合理性": 96,
+      "程序规范性": 90,
+      "证据分析充分性": 94,
+      "文书规范性": 88,
+      "overall_score": 92.57
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 94,
+      "文书规范性": 85,
+      "overall_score": 91
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 90,
+      "逻辑推理严密性": 92,
+      "裁判结果合理性": 93,
+      "程序规范性": 85,
+      "证据分析充分性": 88,
+      "文书规范性": 90,
+      "overall_score": 90
+    },
+    {
+      "法律适用准确性": 95,
+      "事实认定完整性": 92,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 93,
+      "程序规范性": 88,
+      "证据分析充分性": 91,
+      "文书规范性": 85,
+      "overall_score": 91
+    }
+  ],
+  "workflow_scores": [
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 90,
+      "逻辑推理严密性": 88,
+      "裁判结果合理性": 92,
+      "程序规范性": 85,
+      "证据分析充分性": 90,
+      "文书规范性": 82,
+      "overall_score": 87
+    },
+    {
+      "法律适用准确性": 70,
+      "事实认定完整性": 85,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 80,
+      "程序规范性": 90,
+      "证据分析充分性": 82,
+      "文书规范性": 78,
+      "overall_score": 80
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 65,
+      "程序规范性": 90,
+      "证据分析充分性": 60,
+      "文书规范性": 80,
+      "overall_score": 75
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 60,
+      "程序规范性": 90,
+      "证据分析充分性": 65,
+      "文书规范性": 80,
+      "overall_score": 75
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 78,
+      "逻辑推理严密性": 82,
+      "裁判结果合理性": 80,
+      "程序规范性": 75,
+      "证据分析充分性": 70,
+      "文书规范性": 88,
+      "overall_score": 80
+    },
+    {
+      "法律适用准确性": 75,
+      "事实认定完整性": 60,
+      "逻辑推理严密性": 70,
+      "裁判结果合理性": 65,
+      "程序规范性": 85,
+      "证据分析充分性": 55,
+      "文书规范性": 80,
+      "overall_score": 70
+    },
+    {
+      "法律适用准确性": 75,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 65,
+      "裁判结果合理性": 60,
+      "程序规范性": 85,
+      "证据分析充分性": 72,
+      "文书规范性": 80,
+      "overall_score": 72
+    },
+    {
+      "法律适用准确性": 75,
+      "事实认定完整性": 90,
+      "逻辑推理严密性": 80,
+      "裁判结果合理性": 85,
+      "程序规范性": 95,
+      "证据分析充分性": 85,
+      "文书规范性": 70,
+      "overall_score": 83
+    },
+    {
+      "法律适用准确性": 75,
+      "事实认定完整性": 80,
+      "逻辑推理严密性": 70,
+      "裁判结果合理性": 65,
+      "程序规范性": 90,
+      "证据分析充分性": 85,
+      "文书规范性": 85,
+      "overall_score": 79
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 75,
+      "逻辑推理严密性": 90,
+      "裁判结果合理性": 80,
+      "程序规范性": 70,
+      "证据分析充分性": 85,
+      "文书规范性": 90,
+      "overall_score": 82
+    },
+    {
+      "法律适用准确性": 65,
+      "事实认定完整性": 75,
+      "逻辑推理严密性": 60,
+      "裁判结果合理性": 70,
+      "程序规范性": 85,
+      "证据分析充分性": 70,
+      "文书规范性": 80,
+      "overall_score": 72
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 90,
+      "逻辑推理严密性": 88,
+      "裁判结果合理性": 92,
+      "程序规范性": 80,
+      "证据分析充分性": 86,
+      "文书规范性": 82,
+      "overall_score": 86
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 80,
+      "逻辑推理严密性": 82,
+      "裁判结果合理性": 88,
+      "程序规范性": 90,
+      "证据分析充分性": 75,
+      "文书规范性": 78,
+      "overall_score": 82
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 65,
+      "程序规范性": 80,
+      "证据分析充分性": 60,
+      "文书规范性": 90,
+      "overall_score": 75
+    },
+    {
+      "法律适用准确性": 85,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 80,
+      "程序规范性": 90,
+      "证据分析充分性": 65,
+      "文书规范性": 85,
+      "overall_score": 79
+    },
+    {
+      "法律适用准确性": 65,
+      "事实认定完整性": 80,
+      "逻辑推理严密性": 70,
+      "裁判结果合理性": 75,
+      "程序规范性": 60,
+      "证据分析充分性": 85,
+      "文书规范性": 70,
+      "overall_score": 72
+    },
+    {
+      "法律适用准确性": 65,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 60,
+      "程序规范性": 80,
+      "证据分析充分性": 75,
+      "文书规范性": 85,
+      "overall_score": 73
+    },
+    {
+      "法律适用准确性": 70,
+      "事实认定完整性": 75,
+      "逻辑推理严密性": 80,
+      "裁判结果合理性": 75,
+      "程序规范性": 85,
+      "证据分析充分性": 82,
+      "文书规范性": 78,
+      "overall_score": 78
+    },
+    {
+      "法律适用准确性": 75,
+      "事实认定完整性": 85,
+      "逻辑推理严密性": 80,
+      "裁判结果合理性": 85,
+      "程序规范性": 70,
+      "证据分析充分性": 80,
+      "文书规范性": 75,
+      "overall_score": 79
+    },
+    {
+      "法律适用准确性": 65,
+      "事实认定完整性": 70,
+      "逻辑推理严密性": 75,
+      "裁判结果合理性": 60,
+      "程序规范性": 80,
+      "证据分析充分性": 65,
+      "文书规范性": 70,
+      "overall_score": 69
+    }
+  ],
+  "direct_info": [
+    {
+      "status": "success",
+      "elapsed_seconds": 109.65,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', '裁判分析': {'事实认定与证据采信': {'婚姻关系': '双方于2018年10月18日登记结婚，婚姻关系合法有效，双方均无异议，予以确认。', '家庭暴力事实': '原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）、人身安全保护令裁定书及邻居证人证言形成完整证据链。被告虽抗辩系“双方互有肢体冲突”，但未能提供反证，且公安机关告诫书与法院保护令已对暴力危险作出初步司法认定。依法认定被告在婚姻存续期间多次实施家庭暴力，原告主张成立。', '分居事实': '原告自2024年2月起携子搬离并实际抚养子女，被告予以承认，分居事实清楚。', '财产性质认定': '涉案房产、银行存款、股票账户资金均取得于婚姻关系存续期间。被告主张父母出资15万元及婚前存款15万元属个人财产，但未能提供“明确只赠与一方”的书面约定，且婚前存款婚后与共同收入混同难以区分。依据《民法典》及相关司法解释，依法推定为夫妻共同财产。'}, '争议焦点与裁判说理': {'焦点一_是否准予离婚': {'裁判结论': '准予离婚', ",
+      "test_id": 1
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 114.67,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judgment_analysis': {'overall_conclusion': '准予离婚；婚生子由原告直接抚养，被告按月支付抚养费；夫妻共同财产依法平均分割；被告因实施家庭暴力向原告支付精神损害赔偿金。', 'fact_finding_and_evidence_evaluation': {'confirmed_facts': ['双方于2018年10月18日登记结婚，2020年3月15日生育一子李某某，婚姻关系合法有效。', '被告在婚姻存续期间多次对原告实施家庭暴力，公安机关已出具告诫书，法院已依法签发人身安全保护令，原告伤情经司法鉴定为轻微伤。', '双方自2024年2月起分居，婚生子随原告生活至今，原告实际承担主要抚养义务。', '涉案房产、银行存款、股票账户资金均系婚姻关系存续期间取得，依法属夫妻共同财产。被告主张的父母出资及婚前存款因缺乏明确赠与一方的约定或存在资金混同，依法不予认定为个人财产。'], 'evidence_evaluation': '原告提交的公安机关告诫书、医院就诊记录、",
+      "test_id": 2
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 128.48,
+      "content_preview": "{'裁判分析报告': {'案件基本信息': {'案号': 'case-2024-marriage-0001', '案由': '离婚纠纷', '审理法院': '某某市某某区人民法院', '审级': '一审', '裁判日期': '2024-06-15'}, '事实认定': {'婚姻关系': '原被告于2018年10月18日登记结婚，婚姻关系合法有效。', '子女情况': '2020年3月15日生育一子李某某，现年4周岁。', '感情破裂事实': '被告于2023年6月至2024年3月期间多次对原告实施家庭暴力，公安机关已出具告诫书，法院已签发人身安全保护令，原告伤情经鉴定为轻微伤。双方自2024年2月起分居。', '财产状况': '涉案房产系婚后购买，登记于被告名下，现值200万元，剩余贷款80万元，净值120万元；被告名下银行存款50万元、股票市值30万元，均系婚姻关系存续期间取得。', '收入状况': '原告月收入约8000元，被告月收入约15000元。'}, '证据采信意见': {'家暴证据链': '公安机关告诫书(e3)、伤情鉴定意见书(e5)、人身安全保护令裁定书(e6)及就诊记",
+      "test_id": 3
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 130.0,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'dispute_focus': ['夫妻感情是否确已破裂及是否准予离婚', '婚生子抚养权归属及抚养费数额认定', '涉案房产、存款、股票是否属于夫妻共同财产及分割方案', '家庭暴力事实是否成立及精神损害赔偿请求是否支持'], 'fact_finding_and_evidence_evaluation': {'marriage_status': '双方于2018年登记结婚，婚姻关系合法有效。被告实施家庭暴力且双方已分居，夫妻感情确已破裂，无和好可能。', 'domestic_violence': '原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）、人身安全保护令裁定书及邻居证人证言相互印证，形成完整证据链。被告虽否认但未能提供有效反证，仅以“互有肢体冲突”抗辩不足以推翻公文书证及鉴定意见的证明力。家暴事实依法予以认定。', 'child_custody': '婚生子现年4岁，自2024年2月起一直随原告生活，已形成稳定的生活与成长环境。被告虽收入较高，",
+      "test_id": 4
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 106.4,
+      "content_preview": "{'裁判分析报告': {'案件基本信息': {'案号': 'case-2024-marriage-0001', '案由': '离婚纠纷', '审理程序': '一审', '当事人': {'原告': '张某（女方）', '被告': '李某（男方）'}}, '争议焦点归纳': ['夫妻感情是否确已破裂，是否符合法定离婚条件', '婚生子抚养权归属及抚养费数额的确定', '涉案房产、存款、股票是否属于夫妻共同财产及具体分割方案', '被告是否构成家庭暴力及原告主张的精神损害赔偿是否成立'], '事实认定与证据采信': {'婚姻关系与感情状况': '双方于2018年登记结婚，婚后育有一子。自2024年2月起因矛盾分居至今，被告对分居事实予以认可。结合家暴情节，双方互信基础已丧失，调解无效，夫妻感情确已破裂。', '家庭暴力事实认定': '原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）及法院已生效的人身安全保护令裁定书，证据来源合法、内容客观真实、相互印证，形成完整证据链。被告虽抗辩系“双方肢体冲突”，但未能提供反证推翻公权力机关文书及鉴定意见，依法认定被告存在家庭暴力行为。',",
+      "test_id": 5
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 99.02,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'dispute_focus': ['夫妻感情是否确已破裂及是否准予离婚', '婚生子抚养权归属及抚养费数额的确定', '涉案房产、存款、股票是否属于夫妻共同财产及具体分割方案', '家庭暴力事实是否成立及精神损害赔偿请求是否应予支持'], 'fact_finding_and_evidence_adoption': {'marriage_status': '原被告于2018年10月登记结婚，婚姻关系合法有效，双方均无异议，本院予以确认。', 'domestic_violence': '原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）、人身安全保护令裁定书及证人证言形成完整证据链。被告虽辩称系双方互有肢体冲突，但未能提供反证推翻公权力机关文书及专业鉴定结论。依据《最高人民法院关于适用〈中华人民共和国民法典〉婚姻家庭编的解释（一）》相关规定，本院认定被告实施家庭暴力事实成立。', 'separation_status': '原告自2024年2月起携子搬离共同住",
+      "test_id": 6
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 111.19,
+      "content_preview": "{'裁判分析报告': {'案件基本信息': {'案号': 'case-2024-marriage-0001', '案由': '离婚纠纷', '审理程序': '一审', '裁判倾向': '支持原告主要诉讼请求'}, '事实认定与证据采信': {'无争议事实': ['双方于2018年10月18日登记结婚，婚姻关系合法有效。', '2020年3月15日生育一子李某某，现年4周岁。', '涉案房产购于2019年6月，登记在被告名下，现值约200万元，尚欠贷款80万元。', '被告名下银行存款合计50万元，股票市值约30万元。', '原告月收入约8000元，被告月收入约15000元。', '双方自2024年2月起分居，婚生子随原告生活。'], '争议事实及法院认定': {'家庭暴力事实': {'认定结果': '成立', '证据采信分析': '原告提交的公安机关告诫书、人身安全保护令裁定书、医院就诊记录、伤情鉴定意见书及证人证言已形成完整证据链。被告虽对证明目的提出异议，但未能提供反证推翻公安机关及法院已作出的初步认定。根据《反家庭暴力法》及民事诉讼高度盖然性证明标准，依法认定被告存在家庭暴力行为",
+      "test_id": 7
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 103.68,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judgment_analysis': {'fact_finding': {'marriage_and_child': '双方于2018年10月18日登记结婚，2020年3月15日生育一子李某某，事实清楚，双方无异议，本院予以确认。', 'domestic_violence': '2023年6月至2024年3月期间，被告多次对原告实施殴打、辱骂等行为。公安机关出具告诫书、法院签发人身安全保护令、医院就诊记录、轻微伤鉴定意见及邻居证言相互印证，形成完整证据链，足以认定被告存在家庭暴力事实。被告虽辩称系互殴或普通矛盾，但未提交有效反证，其抗辩不予采信。', 'separation': '自2024年2月起双方分居，婚生子随原告生活至今，事实清楚。', 'property_status': '涉案房产购于婚后，首付款中双方父母出资部分无明确约定仅赠与一方，依法推定为对夫妻双方的赠与；银行存款50万元及股票账户市值30万元均系婚姻关系存续期间的工资收入及投资收益，依法认定为夫妻共同财产。被告主张部分存款为婚前个人财",
+      "test_id": 8
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 133.89,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'overall_conclusion': '准予离婚；婚生子由原告直接抚养，被告按月支付抚养费；依法分割夫妻共同财产，被告向原告支付相应折价款；支持原告精神损害赔偿请求。', 'claim_adjudication': [{'claim_id': 'c1', 'claim_text': '判决离婚', 'court_decision': '支持', 'reasoning': '被告多次对原告实施家庭暴力，公安机关已出具告诫书，人民法院已依法签发人身安全保护令，结合医院就诊记录、轻微伤鉴定意见及双方分居事实，足以认定夫妻感情确已破裂。经调解无效，符合法定离婚条件。', 'legal_basis': ['《中华人民共和国民法典》第一千零七十九条']}, {'claim_id': 'c2', 'claim_text': '子女抚养权归原告，被告每月支付抚养费3000元', 'court_decision': '支持', 'reasoning': '婚生子现年4岁，自2024年",
+      "test_id": 9
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 133.37,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'fact_finding': {'confirmed_facts': ['原被告于2018年10月登记结婚，2020年3月生育一子李某某。', '2024年2月起双方分居，婚生子随原告生活至今。', '涉案房产购于婚后，登记在被告名下，现值约200万元，尚欠贷款80万元。', '被告名下银行存款50万元、股票市值30万元均形成于婚姻关系存续期间。'], 'disputed_facts_and_court_determination': [{'dispute': '家庭暴力是否成立', 'court_finding': '成立', 'reasoning': '原告提交的公安机关告诫书、人身安全保护令裁定书、医院就诊记录、轻微伤鉴定意见及证人证言已形成完整证据链。被告虽抗辩系互殴，但未能提供反证推翻公文书证及鉴定意见的证明力。依据《反家庭暴力法》及民事诉讼证据规则，足以认定被告实施家庭暴力。'}, {'dispute': '财产性质认定（父母出资、婚前存款、股票收益）', ",
+      "test_id": 10
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 130.8,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'overall_assessment': '本案系典型的离婚纠纷，核心争议焦点为：1.夫妻感情是否确已破裂；2.婚生子抚养权归属及抚养费标准；3.夫妻共同财产的认定与分割；4.家庭暴力损害赔偿是否成立。综合全案证据及法律规定，原告主张事实清楚、证据充分，被告抗辩理由多缺乏事实与法律依据，本院依法予以支持。', 'claim_adjudication': [{'claim_id': 'c1', 'issue': '是否准予离婚', 'fact_finding': '原告提交的公安机关告诫书、医院就诊记录、轻微伤鉴定意见及法院已生效的人身安全保护令，已形成完整证据链，足以认定被告在婚姻存续期间多次实施家庭暴力。被告辩称系‘双方口角肢体冲突’但未能提供反证，不予采信。双方自2024年2月起分居，且家暴行为严重伤害夫妻感情，调解无效。', 'legal_reasoning': '依据《民法典》第一千零七十九条，实施家庭暴力调解无效的，应当准予离婚。本案符合法定离婚条件。', '",
+      "test_id": 11
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 96.65,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', '裁判分析': {'事实认定': '经审理查明：原被告于2018年10月登记结婚，2020年3月生育一子。2023年6月至2024年3月期间，被告多次对原告实施殴打，公安机关已出具告诫书，原告伤情经鉴定为轻微伤，法院已核发人身安全保护令。2024年2月起双方分居，婚生子随原告生活。涉案房产购于婚后，登记于被告名下，现值200万元，尚欠贷款80万元；婚后共同存款50万元；婚后股票账户市值30万元。被告主张部分财产属个人财产，但未能提供充分证据证明父母出资系明确赠与一方或婚前存款未发生混同。', '争议焦点': ['夫妻感情是否确已破裂，是否准予离婚', '婚生子抚养权归属及抚养费数额', '涉案房产、存款、股票是否属于夫妻共同财产及分割比例', '原告主张的精神损害赔偿是否成立'], '证据采信': '原告提交的结婚证、出生证明、公安机关告诫书、就诊记录、伤情鉴定、人身安全保护令裁定书、证人证言及财产凭证等证据来源合法、内容真实、与本案具有关联性，形成完整证据链，本院予以采信。被告对家庭暴力事实的否认缺乏反证，",
+      "test_id": 12
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 99.64,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'case_name': '张某诉李某离婚纠纷案', 'judge_analysis': {'fact_finding_and_evidence_evaluation': {'marriage_and_child': '双方于2018年10月18日登记结婚，2020年3月15日生育一子李某某。该事实有结婚证、出生医学证明佐证，双方均无异议，本院予以确认。', 'domestic_violence': '原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）、人身安全保护令裁定书及邻居证言形成完整证据链。被告虽辩称系双方互殴，但未能提供反证推翻公文书证及鉴定意见。结合法院已签发人身安全保护令的事实，足以认定被告在婚姻存续期间多次实施家庭暴力，该事实成立。', 'separation': '原告自2024年2月起携子搬离共同住所，双方分居至今。有租赁合同及居委会证明佐证，被告予以承认，本院予以确认。', 'property_status': '涉案房产购于婚后，登记在被告名下。双方父母出资部分在无明确书",
+      "test_id": 13
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 108.15,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'case_name': '张某诉李某离婚纠纷案', 'court': '某某市某某区人民法院', 'judge_analysis': {'fact_finding_and_evidence_evaluation': {'confirmed_facts': ['双方于2018年10月18日登记结婚，2020年3月15日生育一子李某某。', '2023年6月至2024年3月期间，被告多次对原告实施家庭暴力，公安机关已出具告诫书，原告伤情经鉴定为轻微伤，法院已依法签发人身安全保护令。', '双方自2024年2月起分居，婚生子随原告共同生活至今。', '涉案房产购买于婚内，现市场价值约200万元，尚欠贷款80万元；被告名下婚内存款合计50万元；被告名下婚内股票市值约30万元。', '原告月收入约8000元，被告月收入约15000元，双方均具备抚养子女的经济基础。'], 'evidence_adoption_reasoning': '原告提交的结婚证、出生证明双方无异议，予以确认。关于家庭暴力，原告提交的公安机关告诫",
+      "test_id": 14
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 120.5,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', '裁判分析': {'案件定性': '离婚纠纷（含子女抚养、财产分割及离婚损害赔偿）', '争议焦点': ['夫妻感情是否确已破裂，是否符合法定离婚条件', '婚生子抚养权应归何方，抚养费数额如何确定', '涉案房产、银行存款及股票账户资金的性质认定及分割方案', '被告行为是否构成家庭暴力，原告主张的精神损害赔偿是否成立'], '事实认定与证据采信': {'家庭暴力事实': '采信原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）、人身安全保护令裁定书及邻居证人证言。上述证据来源合法、内容客观真实、相互印证，形成完整证据链，足以认定被告在婚姻存续期间多次对原告实施家庭暴力。被告虽抗辩系双方互殴，但未提交有效反证，其抗辩不予采纳。', '感情破裂事实': '基于家庭暴力事实及双方自2024年2月起分居至今的客观情况，结合庭审中双方对立情绪明显、调解无效，依法认定夫妻感情确已破裂，无和好可能。', '财产性质认定': '涉案房产系婚后购买，虽登记在被告名下且首付款含双方父母出资，但无证据证明父母出资",
+      "test_id": 15
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 105.57,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'fact_finding_and_evidence_evaluation': {'marriage_and_child': '双方于2018年10月18日登记结婚，2020年3月15日生育一子李某某。该事实有结婚证、出生医学证明佐证，双方均无异议，本院予以确认。', 'domestic_violence': '家暴事实成立。原告提交的公安机关告诫书（e3）、医院就诊记录及伤情照片（e4）、轻微伤鉴定意见（e5）及人身安全保护令裁定书（e6）形成完整证据链，相互印证。被告虽辩称系双方互有肢体冲突，但未能提供反证推翻公文书证及鉴定意见的证明力。结合证人证言（e7），足以认定被告在婚姻存续期间多次对原告实施家庭暴力。', 'separation': '分居事实成立。自2024年2月起原告携子搬离共同住所，双方分居至今，有租赁合同及居委会证明（e8）佐证，被告予以承认。', 'property_status': '涉案房产、银行存款50万元、股票市值30万元均系婚姻关系存续期间",
+      "test_id": 16
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 132.45,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judge_analysis': {'争议焦点': ['夫妻感情是否确已破裂及是否准予离婚', '婚生子抚养权归属及抚养费数额标准', '夫妻共同财产的范围认定与分割比例', '家庭暴力事实是否成立及离婚损害赔偿请求是否支持'], '事实认定与证据采信': {'婚姻及子女事实': '双方于2018年登记结婚，2020年生育一子，事实清楚，证据（结婚证、出生医学证明）经质证无异议，予以确认。', '家庭暴力事实': '原告提交的公安机关告诫书、医院就诊记录、伤情鉴定意见书（轻微伤）及法院已生效的人身安全保护令裁定书形成完整证据链，证明力高度盖然。被告虽辩称系互殴且已道歉，但未能提供反证推翻公文书证及鉴定意见，其抗辩不予采信。依法认定被告存在家庭暴力行为。', '财产状况': '涉案房产购于婚后，虽登记在被告名下且双方父母有出资，但无书面约定明确仅赠与一方，依司法解释应推定为对夫妻双方的赠与，属夫妻共同财产。房产现值200万元，扣除剩余贷款80万元，净值为120万元。被告名下存款50万元及股票市值30万元均系婚",
+      "test_id": 17
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 87.0,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'case_name': '张某诉李某离婚纠纷案', 'judge_analysis': {'overall_conclusion': '夫妻感情确已破裂，准予离婚。原告关于子女抚养、财产分割及离婚损害赔偿的诉讼请求基本成立，依法予以支持。', 'fact_confirmation': ['原被告于2018年10月登记结婚，2020年3月生育一子，婚姻关系合法有效。', '被告在婚姻存续期间多次对原告实施殴打，公安机关已出具告诫书，法院已签发人身安全保护令，伤情鉴定为轻微伤，家庭暴力事实成立。', '双方自2024年2月起分居，婚生子一直随原告共同生活。', '涉案房产购于婚后，登记在被告名下，尚有贷款80万元，现值200万元；被告名下存款50万元、股票市值30万元均形成于婚姻关系存续期间。', '原告月收入8000元，被告月收入15000元，双方均具备抚养能力。'], 'evidence_assessment': {'domestic_violence_evidence': '原告提交的公安机关告诫书、医院",
+      "test_id": 18
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 98.84,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', '裁判分析': {'一、事实认定与证据采信': {'婚姻关系与子女情况': '原告提交的结婚证(e1)、出生医学证明(e2)经被告质证无异议，本院依法确认双方于2018年10月18日登记结婚，2020年3月15日生育一子李某某。', '家庭暴力事实': '原告提交的公安机关告诫书(e3)、医院就诊记录(e4)、伤情鉴定意见书(e5)、人身安全保护令裁定书(e6)及邻居证言(e7)形成完整证据链。被告虽辩称系“互有肢体冲突”，但未能提供反证推翻公安机关告诫书及伤情鉴定结论。结合保护令已生效的事实，本院依法认定被告在婚姻存续期间多次对原告实施家庭暴力，致原告轻微伤，家庭暴力事实成立。', '分居事实': '原告提交的房屋租赁合同及居委会证明(e8)经被告质证无异议，本院依法确认双方自2024年2月起分居，婚生子随原告共同生活至今。', '夫妻共同财产认定': '涉案房产(e9-e11)、银行存款(e12)、股票账户(e13)均系婚姻关系存续期间取得。被告主张父母出资15万元(e18)及婚前存款15万元(e19)属",
+      "test_id": 19
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 119.56,
+      "content_preview": "{'case_id': 'case-2024-marriage-0001', 'judgment_analysis': {'overall_conclusion': '准予离婚；婚生子由原告直接抚养，被告按月支付抚养费；依法分割夫妻共同财产；支持原告精神损害赔偿请求。', 'fact_finding': {'marriage_and_child': '双方于2018年10月登记结婚，2020年3月生育一子李某某（现年4岁），婚姻关系及亲子关系合法有效。', 'domestic_violence_and_separation': '2023年6月至2024年3月期间，被告多次对原告实施殴打等家庭暴力行为，致原告轻微伤。原告已于2024年2月携子搬离并分居至今，分居期间子女由原告实际抚养。', 'property_status': '涉案房产购于婚后，登记在被告名下，现值约200万元，尚余贷款80万元；被告名下银行存款50万元、股票市值30万元均系婚姻关系存续期间取得。被告主张的部分个人财产因资金混同或缺乏明确约定，不予认定。', 'income_and_capability': '原告月",
+      "test_id": 20
+    }
+  ],
+  "workflow_info": [
+    {
+      "status": "success",
+      "elapsed_seconds": 1067.94,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "total_time_ms": 1067940,
+      "risk_level": "low",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 1
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1306.07,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "total_time_ms": 1306066,
+      "risk_level": "low",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 2
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1048.52,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1048351,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 3
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 995.18,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 995176,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 4
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1395.31,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1395312,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 5
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1022.05,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1022050,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 6
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1339.98,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1339979,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 7
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1146.17,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "total_time_ms": 1146172,
+      "risk_level": "low",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 8
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1174.18,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "total_time_ms": 1174181,
+      "risk_level": "low",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 9
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1356.33,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1356332,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 10
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1313.88,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1313883,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 11
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1263.09,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "total_time_ms": 1263091,
+      "risk_level": "low",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 12
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1185.52,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1185516,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 13
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1083.81,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1083808,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 14
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1151.29,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1151292,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 15
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1469.28,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1469281,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 16
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1120.07,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1120070,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 17
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1086.96,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1086497,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 18
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1335.3,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1335293,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 19
+    },
+    {
+      "status": "success",
+      "elapsed_seconds": 1182.02,
+      "workflow_status": "ok",
+      "has_strong_judgment": true,
+      "has_weak_judgment": false,
+      "has_partial_output": false,
+      "errors_count": 0,
+      "warnings_count": 1,
+      "total_time_ms": 1182013,
+      "risk_level": "medium",
+      "sufficiency_score": null,
+      "sufficiency_level": null,
+      "test_id": 20
+    }
+  ],
+  "direct_statistics": {
+    "逻辑推理严密性": {
+      "mean": 90.7,
+      "min": 88,
+      "max": 93,
+      "std": 1.38,
+      "count": 20
+    },
+    "证据分析充分性": {
+      "mean": 92.0,
+      "min": 85,
+      "max": 96,
+      "std": 2.86,
+      "count": 20
+    },
+    "文书规范性": {
+      "mean": 85.85,
+      "min": 80,
+      "max": 90,
+      "std": 2.39,
+      "count": 20
+    },
+    "程序规范性": {
+      "mean": 87.8,
+      "min": 85,
+      "max": 90,
+      "std": 1.6,
+      "count": 20
+    },
+    "法律适用准确性": {
+      "mean": 95.0,
+      "min": 95,
+      "max": 95,
+      "std": 0.0,
+      "count": 20
+    },
+    "overall_score": {
+      "mean": 91.0,
+      "min": 88.6,
+      "max": 92.6,
+      "std": 1.04,
+      "count": 20
+    },
+    "裁判结果合理性": {
+      "mean": 93.35,
+      "min": 92,
+      "max": 96,
+      "std": 0.96,
+      "count": 20
+    },
+    "事实认定完整性": {
+      "mean": 91.7,
+      "min": 90,
+      "max": 92,
+      "std": 0.71,
+      "count": 20
+    }
+  },
+  "workflow_statistics": {
+    "逻辑推理严密性": {
+      "mean": 76.5,
+      "min": 60,
+      "max": 90,
+      "std": 7.39,
+      "count": 20
+    },
+    "证据分析充分性": {
+      "mean": 74.6,
+      "min": 55,
+      "max": 90,
+      "std": 10.19,
+      "count": 20
+    },
+    "文书规范性": {
+      "mean": 80.3,
+      "min": 70,
+      "max": 90,
+      "std": 5.84,
+      "count": 20
+    },
+    "程序规范性": {
+      "mean": 82.75,
+      "min": 60,
+      "max": 95,
+      "std": 8.44,
+      "count": 20
+    },
+    "法律适用准确性": {
+      "mean": 77.0,
+      "min": 65,
+      "max": 85,
+      "std": 7.97,
+      "count": 20
+    },
+    "overall_score": {
+      "mean": 77.4,
+      "min": 69,
+      "max": 87,
+      "std": 5.05,
+      "count": 20
+    },
+    "裁判结果合理性": {
+      "mean": 74.1,
+      "min": 60,
+      "max": 92,
+      "std": 10.85,
+      "count": 20
+    },
+    "事实认定完整性": {
+      "mean": 76.65,
+      "min": 60,
+      "max": 90,
+      "std": 8.08,
+      "count": 20
+    }
+  }
+}
