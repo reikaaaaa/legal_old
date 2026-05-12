@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九步法审案系统</title>
+<style>
+:root{--bg:#f8f5f0;--card:#fff;--ink:#1a1d24;--ink2:#5a5e6a;--red:#9b2a23;--gold:#a8843f;--green:#4a6b53;--blue:#2c5282;--line:#e2dcd0;--warn:#e6a817;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.06);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:400 15px/1.6 -apple-system,"Noto Serif SC","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{font-size:22px;font-weight:700;letter-spacing:.05em}
+header .badge{font-size:12px;padding:4px 10px;border-radius:12px;font-weight:600}
+.badge-on{background:#e6f4ea;color:var(--green)}.badge-off{background:#fce8e6;color:var(--red)}.badge-busy{background:#fef7e0;color:var(--warn)}
+main{max-width:1100px;margin:0 auto;padding:28px 24px}
+.stage{display:none}.stage.active{display:block}
+.progress{display:flex;gap:0;margin-bottom:32px;counter-reset:step}
+.progress li{flex:1;text-align:center;list-style:none;position:relative;font-size:13px;color:var(--ink2);padding-top:28px}
+.progress li::before{counter-increment:step;content:counter(step);position:absolute;top:0;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--ink2)}
+.progress li.done::before{background:var(--green);color:#fff;content:"✓"}
+.progress li.active{color:var(--ink);font-weight:600}
+.progress li.active::before{background:var(--ink);color:#fff}
+.progress li.done{color:var(--green)}
+.progress li::after{content:"";position:absolute;top:12px;left:calc(50% + 18px);width:calc(100% - 36px);height:2px;background:var(--line)}
+.progress li:last-child::after{display:none}
+.progress li.done::after{background:var(--green)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;border:1px solid var(--line)}
+.card h2{font-size:18px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.card h3{font-size:15px;font-weight:600;margin:12px 0 8px;color:var(--ink)}
+textarea,input[type="text"],input[type="number"],select{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:6px;font:14px/1.5 inherit;background:var(--bg);transition:border-color .2s}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(168,132,63,.15)}
+textarea{min-height:180px;resize:vertical}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1;min-width:160px}
+label{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border:none;border-radius:6px;font:600 14px inherit;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:#2c3140}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#8a6d32}
+.btn-outline{background:transparent;border:1px solid var(--line);color:var(--ink)}.btn-outline:hover{background:var(--bg)}
+.btn-ghost{background:transparent;color:var(--ink2)}.btn-ghost:hover{color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:6px 14px;font-size:13px}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600}
+.tag-red{background:#fce8e6;color:var(--red)}.tag-green{background:#e6f4ea;color:var(--green)}.tag-yellow{background:#fef7e0;color:var(--warn)}.tag-blue{background:#e8f0fe;color:var(--blue)}
+.gauge{text-align:center;padding:16px}.gauge-ring{position:relative;width:100px;height:100px;margin:0 auto}
+.gauge-ring svg{transform:rotate(-90deg)}.gauge-ring .val{position:absolute;inset:0;display:grid;place-items:center;font-size:28px;font-weight:900}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.stat{background:var(--bg);padding:14px;border-radius:6px;text-align:center}.stat .n{font-size:24px;font-weight:700}.stat .l{font-size:12px;color:var(--ink2);margin-top:2px}
+.accordion{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:8px}
+.accordion summary{padding:14px 18px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:10px;background:var(--bg);user-select:none}
+.accordion summary:hover{background:#f0ece5}
+.accordion .body{padding:18px;border-top:1px solid var(--line)}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.checklist-item:last-child{border-bottom:none}
+.checklist-item .status-icon{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.s-ok{background:#e6f4ea;color:var(--green)}.s-partial{background:#fef7e0;color:var(--warn)}.s-missing{background:#fce8e6;color:var(--red)}
+.error-bar{background:#fce8e6;color:var(--red);padding:12px 16px;border-radius:6px;font-size:14px;margin-bottom:12px;border-left:3px solid var(--red)}
+.warn-bar{background:#fef7e0;color:#8a6d32;padding:12px 16px;border-radius:6px;font-size:14px;margin-bottom:12px;border-left:3px solid var(--warn)}
+.info-bar{background:#e8f0fe;color:var(--blue);padding:12px 16px;border-radius:6px;font-size:14px;margin-bottom:12px;border-left:3px solid var(--blue)}
+.sidebar{display:grid;grid-template-columns:1fr 280px;gap:20px}
+.sidebar aside{position:sticky;top:100px;align-self:start}
+.sidebar aside .card{max-height:70vh;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink2);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+tr:hover{background:var(--bg)}
+.loading{text-align:center;padding:40px;color:var(--ink2)}.loading::after{content:"";display:inline-block;width:20px;height:20px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite;margin-left:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);max-width:600px;width:90%;max-height:80vh;overflow-y:auto;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+.modal h2{font-size:20px;margin-bottom:20px}
+.modal .close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink2)}
+.document-skeleton{font-family:"Noto Serif SC",serif;line-height:2}
+.document-skeleton h3{font-size:17px;color:var(--red);text-align:center;margin:16px 0;font-weight:700}
+.document-skeleton p{margin:8px 0;text-indent:2em}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--line)}
+.timeline-item{position:relative;margin-bottom:16px;padding-left:16px}
+.timeline-item::before{content:"";position:absolute;left:-20px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.timeline-item .time{font-size:12px;color:var(--ink2)}
+.field-preview{margin-bottom:10px}
+.field-preview .key{font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}
+.field-preview .val{font-size:14px;padding:6px 10px;background:var(--bg);border-radius:4px;margin-top:2px}
+pre{background:var(--bg);padding:12px;border-radius:6px;font-size:13px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚖ 九步法审案系统</h1>
+  <span id="sysStatus" class="badge badge-busy">连接中…</span>
+</header>
+
+<main>
+  <!-- Progress indicator -->
+  <ol class="progress" id="progress">
+    <li class="active" data-stage="1">材料提交与审核</li>
+    <li data-stage="2">九步法确认</li>
+    <li data-stage="3">结果展示</li>
+  </ol>
+
+  <!-- ============ STAGE 1: Material ============ -->
+  <div class="stage active" id="stage1">
+    <div class="card">
+      <h2>案件材料输入</h2>
+      <textarea id="rawMaterial" placeholder="请在此输入您的案件材料，包括：案件事实、诉讼请求、证据材料、当事人信息等。&#10;&#10;支持口语化输入，系统将自动识别案件类型并规范化处理。&#10;&#10;示例：&#10;我是做小生意的，有个客户李某从我这买了混凝土，欠我8万块钱一直不给..."></textarea>
+      <div class="row" style="margin-top:12px">
+        <div><label>用户身份</label><select id="userRole"><option>原告</option><option>被告</option><option>第三人</option><option>代理人</option><option>其他</option></select></div>
+        <div><label>案件类型</label><select id="caseType"><option value="">系统自动识别</option><option>合同纠纷</option><option>婚姻家庭</option><option>侵权纠纷</option><option>劳动争议</option><option>民间借贷</option><option>其他民事案件</option></select></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px">
+        <button class="btn btn-primary" id="btnSubmit" onclick="submitMaterial()">提交审核</button>
+        <button class="btn btn-outline" onclick="loadSample()">加载示例</button>
+      </div>
+    </div>
+
+    <div id="reviewResult" style="display:none">
+      <!-- Populated after review -->
+    </div>
+  </div>
+
+  <!-- ============ STAGE 2: Jiubufa Confirm ============ -->
+  <div class="stage" id="stage2">
+    <div id="stage2Warn"></div>
+    <div class="card">
+      <h2>九步法输入预览</h2>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:16px">以下为材料规范层生成的标准化案件数据，确认无误后提交九步法分析。</p>
+      <div id="normalizedPreview"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+        <div style="flex:0 0 200px"><label>分析模型</label><select id="modelSelect"></select></div>
+        <button class="btn btn-gold" id="btnJiubufa" onclick="runJiubufa()">开始九步法分析</button>
+        <span id="stage2Status" style="font-size:13px;color:var(--ink2)"></span>
+      </div>
+    </div>
+    <div id="jiubufaProgress" style="display:none" class="card loading">九步法分析进行中，请稍候…</div>
+  </div>
+
+  <!-- ============ STAGE 3: Results ============ -->
+  <div class="stage" id="stage3">
+    <div id="resultContent"></div>
+  </div>
+
+  <!-- Supplement Modal -->
+  <div class="modal-overlay" id="supplementModal">
+    <div class="modal">
+      <button class="close" onclick="closeSupplement()">&times;</button>
+      <h2>📋 材料补充提示</h2>
+      <div id="supplementBody"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const API = 'http://127.0.0.1:8000';
+let materialResult = null;      // MaterialFullResult
+let workflowResult = null;      // WorkflowResult
+let currentStage = 1;
+
+// ── Init ────────────────────────────
+(async function init(){
+  try{ const r=await fetch(API+'/api/health'); const d=await r.json();
+    document.getElementById('sysStatus').textContent='系统就绪 · '+d.kb_size+'条法规';
+    document.getElementById('sysStatus').className='badge badge-on';
+    const sel=document.getElementById('modelSelect');
+    for(const [k,v] of Object.entries(d.models||{})){ const o=document.createElement('option'); o.value=k; o.textContent=k+' ('+v+')'; if(k===d.default_model)o.selected=true; sel.appendChild(o); }
+  }catch(e){ document.getElementById('sysStatus').textContent='服务离线'; document.getElementById('sysStatus').className='badge badge-off'; }
+})();
+
+// ── Stage navigation ────────────────
+function goStage(n){
+  document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
+  document.getElementById('stage'+n).classList.add('active');
+  document.querySelectorAll('.progress li').forEach((li,i)=>{
+    li.className = i+1 < n ? 'done' : i+1 === n ? 'active' : '';
+  });
+  currentStage = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Sample ──────────────────────────
+function loadSample(){
+  document.getElementById('rawMaterial').value = '我是做小生意的，有个客户李某从我这买了混凝土，欠我8万块钱一直不给。当时也没签什么正式合同，就是微信上说的，他说要买混凝土，我就给他送了。送了三次货，分别是去年9月20号、9月25号、9月27号。一开始他用个人微信给我转过一部分钱，后来就不给了。我有微信聊天记录，他说"你放心，我会付的"，但是一直拖着。我现在想起诉他，让他把8万货款付了。';
+}
+
+// ── Stage 1: Submit Material ────────
+async function submitMaterial(){
+  const raw = document.getElementById('rawMaterial').value.trim();
+  if(!raw) return alert('请输入案件材料');
+  const btn = document.getElementById('btnSubmit');
+  btn.textContent='审核中…'; btn.disabled=true;
+  try{
+    const res = await fetch(API+'/material/full',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({raw_material: raw})
+    });
+    const data = await res.json();
+    materialResult = data;
+    renderReview(data);
+    if(data.review?.can_proceed){ goStage(2); renderNormalized(data.normalized); }
+    else{ showSupplement(data.review); goStage(2); renderNormalized(data.normalized); }
+  }catch(e){ alert('材料审核失败: '+e.message); }
+  finally{ btn.textContent='提交审核'; btn.disabled=false; }
+}
+
+// ── Render Review ───────────────────
+function renderReview(data){
+  const r = data.review || {};
+  const ck = r.case_type_check || {};
+  const checklist = ck.checklist || [];
+  const coreOk = checklist.filter(i=>i.is_core&&i.status==='已提供').length;
+  const coreTotal = checklist.filter(i=>i.is_core).length || 1;
+  const pct = Math.round(coreOk/coreTotal*100);
+  const cls = pct>=80?'tag-green':pct>=40?'tag-yellow':'tag-red';
+
+  let scHtml = '';
+  (r.step_checks||[]).forEach(s=>{
+    const icon = {充足:'✅',部分不足:'⚠️',严重缺失:'❌'}[s.status]||'?';
+    scHtml += `<div class="accordion"><summary>${icon} Step${s.step_index} ${s.step_name} <span class="tag tag-${s.status==='充足'?'green':s.status==='严重缺失'?'red':'yellow'}">${s.status}</span></summary>
+      <div class="body">${s.has_required.length?('<p style="color:green">✓ '+s.has_required.join('；')+'</p>'):''}
+      ${s.missing_items.length?('<p style="color:var(--red)">✗ '+s.missing_items.join('；')+'</p>'):''}
+      ${s.special_note?('<p style="color:var(--blue);margin-top:6px">💡 '+s.special_note+'</p>'):''}
+      ${s.suggestion?('<p style="color:var(--ink2);margin-top:4px">→ '+s.suggestion+'</p>'):''}</div></div>`;
+  });
+
+  let clHtml = '';
+  checklist.forEach(i=>{
+    const icon = {已提供:'s-ok ✓',部分提供:'s-partial ~',缺失:'s-missing ✗'}[i.status]||'s-missing ?';
+    clHtml += `<div class="checklist-item"><span class="status-icon ${icon.split(' ')[0]}">${icon.split(' ')[1]}</span><div><strong>${i.name}</strong>${i.is_core?' <span class="tag tag-red" style="font-size:10px">核心</span>':''}<br><span style="font-size:12px;color:var(--ink2)">${i.description}${i.suggestion?' → '+i.suggestion:''}</span></div></div>`;
+  });
+
+  document.getElementById('reviewResult').innerHTML = `
+    <div class="card">
+      <h2>材料审核结果</h2>
+      <div class="row" style="margin-bottom:16px">
+        <div class="stat"><div class="n">${r.case_module||'—'}</div><div class="l">识别案由</div></div>
+        <div class="stat"><div class="n"><span class="${cls}">${pct}%</span></div><div class="l">核心材料提供率</div></div>
+        <div class="stat"><div class="n">${r.can_proceed?'✅ 通过':'❌ 未通过'}</div><div class="l">审核判定</div></div>
+        <div class="stat"><div class="n">${r.confidence||'—'}</div><div class="l">置信度</div></div>
+      </div>
+      ${r.can_proceed?'':'<div class="warn-bar">⚠ 材料审核未通过，部分核心材料缺失。您可以选择补充材料或继续分析（结果可能受影响）。</div>'}
+      <h3>案由专项材料核对</h3><div>${clHtml}</div>
+      ${ck.special_rules_note?('<p style="font-size:13px;color:var(--blue);margin-top:8px">💡 '+ck.special_rules_note+'</p>'):''}
+      <h3>九步法逐步骤诊断</h3>${scHtml}
+      ${r.upload_instructions?('<h3>补充指引</h3><p style="font-size:14px;white-space:pre-wrap">'+r.upload_instructions+'</p>'):''}
+    </div>`;
+  document.getElementById('reviewResult').style.display='block';
+}
+
+// ── Supplement Modal ─────────────────
+function showSupplement(review){
+  const core = review.missing_core_materials||[];
+  const opt = review.missing_optional_materials||[];
+  document.getElementById('supplementBody').innerHTML = `
+    ${core.length?('<h3 style="color:var(--red)">核心缺失 ('+core.length+'项)</h3><ul style="margin:8px 0 16px 20px">'+core.map(m=>'<li>'+m+'</li>').join('')+'</ul>'):''}
+    ${opt.length?('<h3 style="color:var(--warn)">可选缺失 ('+opt.length+'项)</h3><ul style="margin:8px 0 16px 20px">'+opt.slice(0,5).map(m=>'<li>'+m+'</li>').join('')+'</ul>'):''}
+    ${review.upload_instructions?('<h3>补充指引</h3><p style="font-size:14px;white-space:pre-wrap;margin-bottom:12px">'+review.upload_instructions+'</p>'):''}
+    <label>补充材料内容</label>
+    <textarea id="supplementText" placeholder="请在此输入您要补充的材料…" style="min-height:100px;margin-top:4px"></textarea>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="btn btn-gold" onclick="doSupplement()">补充并重新审核</button>
+      <button class="btn btn-ghost" onclick="closeSupplement()">暂不补充，继续分析</button>
+    </div>`;
+  document.getElementById('supplementModal').classList.add('show');
+}
+function closeSupplement(){
+  document.getElementById('supplementModal').classList.remove('show');
+  // Show warning in stage 2
+  document.getElementById('stage2Warn').innerHTML = '<div class="warn-bar">⚠ 材料存在缺失，分析结果可能受材料不足影响。<button class="btn btn-sm btn-outline" onclick="document.getElementById(\'supplementModal\').classList.add(\'show\')" style="margin-left:12px">补充材料</button></div>';
+}
+async function doSupplement(){
+  const supp = document.getElementById('supplementText').value.trim();
+  if(!supp) return alert('请输入补充材料');
+  const orig = document.getElementById('rawMaterial').value.trim();
+  const btn = event.target; btn.textContent='审核中…'; btn.disabled=true;
+  try{
+    const res = await fetch(API+'/material/supplement',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({original:orig, supplement:supp})
+    });
+    const data = await res.json();
+    materialResult = data;
+    renderReview(data);
+    document.getElementById('supplementModal').classList.remove('show');
+    if(data.review?.can_proceed){ document.getElementById('stage2Warn').innerHTML=''; }
+    renderNormalized(data.normalized);
+  }catch(e){ alert('补充审核失败: '+e.message); }
+  finally{ btn.textContent='补充并重新审核'; btn.disabled=false; }
+}
+
+// ── Stage 2: Render Normalized ───────
+function renderNormalized(n){
+  if(!n){ document.getElementById('normalizedPreview').innerHTML='<div class="info-bar">材料审核未通过，规范化数据不可用。请补充材料后重试。</div>'; return; }
+  const bi = n.case_basic_info||{};
+  let html = '';
+  html += '<div class="row"><div class="field-preview"><span class="key">案件名称</span><div class="val">'+(bi.case_name||'—')+'</div></div><div class="field-preview"><span class="key">案由</span><div class="val">'+(bi.case_cause_text||'—')+'</div></div><div class="field-preview"><span class="key">法院</span><div class="val">'+(bi.court||'—')+'</div></div><div class="field-preview"><span class="key">审理阶段</span><div class="val">'+(bi.procedure_stage||'—')+'</div></div></div>';
+
+  html += '<h3>当事人 ('+(n.party_info||[]).length+')</h3>';
+  (n.party_info||[]).forEach(p=>{ html += '<span class="tag tag-blue" style="margin:2px">'+p.party_name+' ('+p.party_role+')</span>'; });
+
+  html += '<h3>诉讼请求 ('+(n.claims||[]).length+')</h3>';
+  (n.claims||[]).forEach(c=>{ html += '<div class="field-preview"><span class="key">'+c.claim_id+'</span><div class="val">'+c.claim_text_normalized+(c.amount?' <strong>¥'+c.amount.toLocaleString()+'</strong>':'')+'</div></div>'; });
+
+  html += '<h3>事实主张 ('+(n.claim_facts||[]).length+')</h3>';
+  (n.claim_facts||[]).forEach(f=>{ html += '<div class="field-preview"><span class="key">'+f.fact_id+' '+(f.fact_time||'')+'</span><div class="val">'+f.fact_text_original+'</div></div>'; });
+
+  if((n.defense_opinions||[]).length){
+    html += '<h3>答辩意见</h3>';
+    n.defense_opinions.forEach(d=>{ html += '<span class="tag tag-yellow" style="margin:2px">'+d.defense_id+': '+(d.response_type||'?')+'</span>'; });
+  }
+
+  html += '<h3>证据清单 ('+(n.evidence_list||[]).length+')</h3><table><tr><th>名称</th><th>类型</th><th>来源</th><th>证明目的</th></tr>';
+  (n.evidence_list||[]).forEach(e=>{ html += '<tr><td>'+e.evidence_name+'</td><td>'+e.evidence_type+'</td><td>'+(e.submitted_by||'—')+'</td><td>'+(e.proof_purpose_normalized||e.proof_purpose_original||'—')+'</td></tr>'; });
+  html += '</table>';
+
+  if((n.evidence_meta||[]).length){
+    html += '<h3>证据审核 ('+n.evidence_meta.length+')</h3>';
+    n.evidence_meta.forEach(em=>{
+      html += '<div class="field-preview"><span class="key">'+em.evidence_id+' '+(em.standalone_capable?'✅可单独定案':'⚠不能单独定案')+'</span><div class="val">'+em.subtype+' · '+em.authenticity_note+(em.standalone_limitation?' · '+em.standalone_limitation:'')+'</div></div>';
+    });
+  }
+
+  if(bi.case_summary) html += '<h3>案件摘要</h3><p style="font-size:14px;color:var(--ink2)">'+bi.case_summary+'</p>';
+
+  document.getElementById('normalizedPreview').innerHTML = html;
+}
+
+// ── Stage 2: Run Jiubufa ─────────────
+async function runJiubufa(){
+  if(!materialResult?.normalized){ return alert('请先完成材料规范化'); }
+  const n = materialResult.normalized;
+  // Build CaseInput from NormalizedCaseInput (structure is identical)
+  const caseInput = {
+    case_basic_info: n.case_basic_info,
+    party_info: n.party_info,
+    claims: n.claims,
+    claim_facts: n.claim_facts,
+    defense_opinions: n.defense_opinions,
+    counterclaims: n.counterclaims||[],
+    evidence_list: n.evidence_list,
+    cross_examinations: n.cross_examinations||[],
+    court_records: n.court_records||[],
+    legal_arguments: n.legal_arguments||[],
+    procedural_info: n.procedural_info||null,
+    existing_judgment_or_mediation: n.existing_judgment_or_mediation||null,
+    fallback_user_choice: null
+  };
+
+  const btn = document.getElementById('btnJiubufa');
+  btn.textContent='分析中…'; btn.disabled=true;
+  document.getElementById('jiubufaProgress').style.display='block';
+  document.getElementById('jiubufaProgress').innerHTML='<div class="loading">九步法分析进行中，预计需要15-20分钟，请耐心等待…</div>';
+  goStage(2);
+
+  try{
+    const model = document.getElementById('modelSelect').value;
+    const res = await fetch(API+'/api/workflow/run',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({case_input: caseInput, model_name: model})
+    });
+    const data = await res.json();
+    workflowResult = data;
+    goStage(3);
+    renderResults(data);
+  }catch(e){
+    alert('九步法分析失败: '+e.message);
+    document.getElementById('jiubufaProgress').style.display='none';
+  }finally{
+    btn.textContent='开始九步法分析'; btn.disabled=false;
+    document.getElementById('jiubufaProgress').style.display='none';
+  }
+}
+
+// ── Stage 3: Render Results ──────────
+function renderResults(data){
+  const steps = [
+    {key:'step1', name:'固定权利请求', na:'诉求固定'},
+    {key:'step2', name:'请求权基础规范', na:'请求权基础'},
+    {key:'step3', name:'抗辩权基础规范', na:'抗辩权基础'},
+    {key:'step4', name:'基础规范构成要件分析', na:'要件分析'},
+    {key:'step5', name:'诉讼主张检索', na:'待证事实'},
+    {key:'step6', name:'争点整理', na:'争点整理'},
+    {key:'step7', name:'要件事实证明', na:'举证质证'},
+    {key:'step8', name:'事实认定', na:'事实认定'},
+    {key:'step9', name:'要件归入并裁判', na:'要件涵摄'}
+  ];
+
+  const strong = data.strong_judgment;
+  const weak = data.weak_judgment;
+  const partial = data.partial_output;
+  const score = strong?.sufficiency_score || weak?.sufficiency_score || partial?.sufficiency_score || {};
+  const total = score.total || Object.values(score).reduce((a,b)=>a+(typeof b==='number'?b:0), 0);
+  const level = total>=80?'低风险':total>=60?'中风险':total>=40?'弱(需用户选择)':'阻断';
+  const levelCls = total>=80?'tag-green':total>=60?'tag-yellow':'tag-red';
+  const mode = strong?.mode || weak?.mode || partial?.mode || '—';
+  const modeLabel = {strong_judgment:'强裁判',weak_judgment:'弱裁判',partial_output_only:'部分输出'}[mode]||mode;
+
+  // Errors & warnings
+  let alerts = '';
+  if(data.errors?.length) alerts += '<div class="error-bar">❌ '+data.errors.join('；')+'</div>';
+  if(data.warnings?.length) alerts += '<div class="warn-bar">⚠ '+data.warnings.join('；')+'</div>';
+
+  // Summary section
+  const subs = strong?.subsumption_results || data.step9?.subsumption_results || [];
+  const weakSubs = weak?.weak_subsumption_results || [];
+  const supported = subs.filter(s=>s.judgment_result==='supported').length;
+  const partialSup = subs.filter(s=>s.judgment_result==='partially_supported').length;
+  const rejected = subs.filter(s=>s.judgment_result==='rejected').length;
+
+  let summaryHTML = alerts + `
+    <div class="card">
+      <h2>📜 综合结论</h2>
+      <div class="stat-grid">
+        <div class="stat"><div class="n"><span class="${levelCls}">${level}</span></div><div class="l">风险等级</div></div>
+        <div class="stat"><div class="n">${modeLabel}</div><div class="l">裁判模式</div></div>
+        <div class="stat"><div class="n">${total}/100</div><div class="l">材料充足度评分</div></div>
+        <div class="stat"><div class="n">${subs.length||weakSubs.length||0}</div><div class="l">裁判结论项</div></div>
+      </div>`;
+
+  if(subs.length){
+    summaryHTML += '<div style="margin-top:16px"><h3>判决概要</h3>';
+    subs.forEach(s=>{
+      const label = {supported:'✅ 支持',partially_supported:'⚠ 部分支持',rejected:'❌ 驳回',procedural_dismissal:'↩ 程序性驳回'}[s.judgment_result]||s.judgment_result;
+      summaryHTML += '<p>'+label+' '+s.claim_id+'：'+s.reasoning_summary+'</p>';
+    });
+    summaryHTML += '</div>';
+  }
+
+  if(weak?.missing_inputs?.length){
+    summaryHTML += '<div class="warn-bar" style="margin-top:12px">⚠ 材料不足提示：'+weak.missing_inputs.join('；')+'</div>';
+    if(weak.assumptions_used?.length) summaryHTML += '<div class="info-bar">💡 分析基于以下假设：'+weak.assumptions_used.join('；')+'</div>';
+    if(weak.upgrade_to_strong_judgment_requirements?.length) summaryHTML += '<div class="info-bar">📋 升级为强裁判需补充：'+weak.upgrade_to_strong_judgment_requirements.join('；')+'</div>';
+  }
+  summaryHTML += '</div>';
+
+  // Step cards
+  let stepsHTML = '<div class="card"><h2>📊 九步法详细分析</h2>';
+  steps.forEach((s,i)=>{
+    const output = data[s.key];
+    const hasError = (data.errors||[]).some(e=>e.includes(s.key));
+    const icon = output?'✅':hasError?'❌':'○';
+    const statusTag = output? 'tag-green' : hasError? 'tag-red' : '';
+    stepsHTML += `<div class="accordion"><summary>${icon} 第${i+1}步：${s.name} ${statusTag?'<span class="tag '+statusTag+'">'+(output?'已完成':'异常')+'</span>':''}</summary><div class="body">`;
+
+    if(!output){
+      stepsHTML += '<p style="color:var(--ink2)">此步骤未产出结果。</p>';
+    }else{
+      // Show relevant details based on step
+      if(i===0) stepsHTML += renderStep1(output);
+      else if(i===1) stepsHTML += renderStep2(output);
+      else if(i===2) stepsHTML += renderStep3(output);
+      else if(i===3) stepsHTML += renderStep4(output);
+      else if(i===4) stepsHTML += renderStep5(output);
+      else if(i===5) stepsHTML += renderStep6(output);
+      else if(i===6) stepsHTML += renderStep7(output);
+      else if(i===7) stepsHTML += renderStep8(output);
+      else if(i===8) stepsHTML += renderStep9(output);
+      stepsHTML += '<details style="margin-top:10px"><summary style="cursor:pointer;font-size:12px;color:var(--ink2)">查看原始JSON</summary><pre>'+JSON.stringify(output,null,2).slice(0,2000)+'</pre></details>';
+    }
+    stepsHTML += '</div></div>';
+  });
+  stepsHTML += '</div>';
+
+  // Document skeleton & consistency
+  let docHTML = '';
+  if(strong?.document_skeleton){
+    const sk = strong.document_skeleton;
+    docHTML = '<div class="card"><h2>📝 裁判文书框架</h2><div class="document-skeleton">';
+    if(sk['原告诉讼请求']) docHTML += '<h3>原告诉讼请求</h3>'+renderList(sk['原告诉讼请求']);
+    if(sk['被告辩称']) docHTML += '<h3>被告辩称</h3>'+renderList(sk['被告辩称']);
+    if(sk['争议焦点']) docHTML += '<h3>争议焦点</h3>'+renderList(sk['争议焦点']);
+    if(sk['本院查明']) docHTML += '<h3>本院查明</h3>'+renderList(sk['本院查明']);
+    if(sk['判决主文']) docHTML += '<h3>判决主文</h3><div style="font-weight:700;color:var(--red)">'+sk['判决主文'].map(t=>'<p>'+t+'</p>').join('')+'</div>';
+    if(sk['引用法条']) docHTML += '<h3>引用法条</h3><p>'+sk['引用法条'].join('；')+'</p>';
+    docHTML += '</div></div>';
+  }
+
+  // Consistency check
+  if(strong?.consistency_check){
+    const cc = strong.consistency_check;
+    docHTML += '<div class="card"><h2>🔍 一致性校验（八个一致）</h2><table>';
+    docHTML += '<tr><td>诉求-固定一致</td><td>'+(cc['诉求-固定一致']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>固定-涵摄一致</td><td>'+(cc['固定-涵摄一致']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>缺漏的诉求</td><td>'+(cc['缺漏的诉求（涵摄阶段未覆盖）']||[]).join(', ')||'无'+'</td></tr>';
+    docHTML += '<tr><td>多出的诉求</td><td>'+(cc['多出的诉求（涵摄阶段凭空出现）']||[]).join(', ')||'无'+'</td></tr>';
+    docHTML += '<tr><td>争点已使用</td><td>'+(cc['争点已使用']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>事实已认定</td><td>'+(cc['事实已认定']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>法条已引用</td><td>'+(cc['法条已引用']?'✅':'❌')+'</td></tr>';
+    docHTML += '</table></div>';
+  }
+
+  // Timing
+  let timeHTML = '';
+  if(data.timings_ms){
+    const t = data.timings_ms;
+    timeHTML = '<div class="card"><h2>⏱ 运行耗时</h2><table>';
+    if(t.total) timeHTML += '<tr><td>总耗时</td><td>'+(t.total/1000).toFixed(1)+'s</td></tr>';
+    Object.entries(t).filter(([k])=>k!=='total').forEach(([k,v])=>{ timeHTML += '<tr><td>'+k+'</td><td>'+(v/1000).toFixed(1)+'s</td></tr>'; });
+    timeHTML += '</table></div>';
+  }
+
+  // Evidence
+  let evHTML = '';
+  const evList = materialResult?.normalized?.evidence_list || [];
+  if(evList.length){
+    evHTML = '<div class="card"><h2>📎 证据分析</h2><table><tr><th>名称</th><th>类型</th><th>证明目的</th><th>采信</th></tr>';
+    evList.forEach(e=>{ evHTML += '<tr><td>'+e.evidence_name+'</td><td>'+e.evidence_type+'</td><td>'+(e.proof_purpose_normalized||'—')+'</td><td>'+(e.adopted_status||'—')+'</td></tr>'; });
+    evHTML += '</table></div>';
+  }
+
+  document.getElementById('resultContent').innerHTML = summaryHTML + docHTML + stepsHTML + evHTML + timeHTML;
+}
+
+// ── Step render helpers ──────────────
+function renderStep1(o){ return '<p>识别案由: '+(o.case_cause_inferred||[]).join(', ')+'</p><p>固定诉请: '+(o.fixed_claims||[]).length+'项</p>'+(o.overall_clarification||[]).map(c=>'<p style="color:var(--blue)">→ '+c+'</p>').join(''); }
+function renderStep2(o){ return '<p>请求权基础候选: '+(o.request_basis_candidates||[]).length+'项</p>'+(o.request_basis_candidates||[]).map(r=>'<p>📖 '+r.rule_unit_ref+' <span class="tag tag-blue">'+r.priority+'</span> '+r.selection_reason+'</p>').join(''); }
+function renderStep3(o){ return '<p>抗辩权基础候选: '+(o.defense_basis_candidates||[]).length+'项</p>'+(o.defense_basis_candidates||[]).map(d=>'<p>🛡 '+d.response_type+' → '+d.defense_type.join(', ')+' '+(d.rule_unit_ref||'')+'</p>').join(''); }
+function renderStep4(o){ return '<p>要件矩阵: '+(o.element_matrix||[]).length+'行</p><table><tr><th>要件</th><th>类型</th><th>举证方</th><th>用途</th></tr>'+(o.element_matrix||[]).slice(0,10).map(e=>'<tr><td>'+e.element_name+'</td><td>'+e.element_type+'</td><td>'+e.burden_party+'</td><td>'+e.used_for+'</td></tr>').join('')+'</table>'; }
+function renderStep5(o){ return '<p>主张映射: '+(o.claim_fact_mapping||[]).length+'项</p>'+(o.claim_fact_mapping||[]).map(m=>'<p>'+m.element_id+': <span class="tag tag-'+(m.assertion_status==='asserted'?'green':'red')+'">'+m.assertion_status+'</span> '+(m.clarification_question||'')+'</p>').join(''); }
+function renderStep6(o){ return '<p>争点: '+(o.issues||[]).length+'个</p>'+(o.issues||[]).map(i=>'<p>🔴 '+i.issue_text+' <span class="tag">'+i.issue_type+'</span> priority='+i.priority+'</p>').join(''); }
+function renderStep7(o){ return '<p>证明计划: '+(o.proof_plan||[]).length+'行</p>'+(o.proof_plan||[]).map(p=>'<p>'+p.fact_to_prove+' — 举证方:'+p.burden_party+(p.proof_gap?' <span style="color:var(--red)">缺口:'+p.proof_gap+'</span>':'')+'</p>').join(''); }
+function renderStep8(o){ return '<p>事实认定: '+(o.fact_findings||[]).length+'项</p>'+(o.fact_findings||[]).map(f=>'<p>'+f.fact_finding_id+': <span class="tag tag-'+(f.finding_status==='proved'?'green':f.finding_status==='not_proved'?'red':'yellow')+'">'+f.finding_status+'</span> '+f.reasoning+'</p>').join(''); }
+function renderStep9(o){ return '<p>涵摄结果: '+(o.subsumption_results||[]).length+'项</p>'+(o.subsumption_results||[]).map(s=>'<p>'+s.claim_id+': <strong>'+s.judgment_result+'</strong> — '+s.reasoning_summary+'</p><p style="font-size:12px">引用法条: '+(s.cited_rules||[]).join(', ')+'</p>').join(''); }
+function renderList(items){ if(!items?.length) return '<p>—</p>'; return items.map(i=>'<p>'+(typeof i==='string'?i:JSON.stringify(i))+'</p>').join(''); }
+</script>
+</body>
+</html>

@@ -44,10 +44,7 @@ def resolve_kb_path() -> Path:
 # 模型 API（DashScope 兼容 OpenAI 模式）
 # ---------------------------------------------------------------------------
 
-DASHSCOPE_API_KEY = os.environ.get(
-    "DASHSCOPE_API_KEY",
-    "sk-69b24c1abe964a0389c794d35bba9fd3",  # 明文写入，按用户要求
-)
+DASHSCOPE_API_KEY = "sk-69b24c1abe964a0389c794d35bba9fd3"
 DASHSCOPE_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 

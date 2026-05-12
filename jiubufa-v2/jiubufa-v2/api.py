@@ -14,14 +14,17 @@ FastAPI 服务层。
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 from config import DEFAULT_MODEL_ID, MODEL_REGISTRY
 from kb import get_default_kb
+from material_router import material_router
 from orchestrator import run_workflow
 from schemas import CaseInput, WorkflowResult
 
@@ -46,6 +49,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 注册材料规范层路由
+app.include_router(material_router)
 
 # ---------------------------------------------------------------------------
 # 健康检查
@@ -154,3 +159,17 @@ def workflow_score_only(req: RunWorkflowRequest) -> Dict[str, Any]:
         "warnings": result.warnings,
         "timings_ms": result.timings_ms,
     }
+
+
+# ---------------------------------------------------------------------------
+# 前端页面
+# ---------------------------------------------------------------------------
+
+
+@app.get("/app", response_class=HTMLResponse)
+async def frontend():
+    """返回前端应用页面"""
+    html_path = Path(__file__).parent / "front_test" / "app.html"
+    if html_path.exists():
+        return html_path.read_text(encoding="utf-8")
+    return "<h1>前端文件未找到</h1>"
