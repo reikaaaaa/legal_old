@@ -32,6 +32,7 @@ from fallback import (
     generate_weak_judgment,
     score_sufficiency,
 )
+from kb import get_default_kb
 from llm import LLMClient, get_default_client
 from schemas import (
     CaseInput,
@@ -300,6 +301,23 @@ def _run_strong_branch(
     return _make_result(state, status="ok", strong=strong, started_at=started_at)
 
 
+def _resolve_rule_ref(rule_unit_id: str) -> Dict[str, str]:
+    """通过 KB 把 rule_unit_id 解析为 {law_name, article_no, text}。"""
+    try:
+        kb = get_default_kb()
+        ru = kb.get(rule_unit_id)
+        if ru:
+            return {
+                "rule_unit_id": rule_unit_id,
+                "law_name": ru.law_name or "",
+                "article_no": ru.article_no or "",
+                "rule_unit_text": ru.rule_unit_text or "",
+            }
+    except Exception:
+        pass
+    return {"rule_unit_id": rule_unit_id, "law_name": "", "article_no": "", "rule_unit_text": ""}
+
+
 def _build_document_skeleton(
     state: WorkflowState, subs: List[SubsumptionResult]
 ) -> Dict[str, Any]:
@@ -314,9 +332,9 @@ def _build_document_skeleton(
     )
 
     judgment_main_text: List[str] = []
-    cited_rules_total: List[str] = []
+    cited_ids: List[str] = []
     for s in subs:
-        cited_rules_total.extend(s.cited_rules)
+        cited_ids.extend(s.cited_rules)
         if s.judgment_result == "supported":
             judgment_main_text.append(f"支持原告关于 {s.claim_id} 的诉讼请求。")
         elif s.judgment_result == "partially_supported":
@@ -326,6 +344,10 @@ def _build_document_skeleton(
         elif s.judgment_result == "procedural_dismissal":
             judgment_main_text.append(f"驳回原告关于 {s.claim_id} 的起诉。")
 
+    # 去重 ID → 通过 KB 解析为完整法条信息
+    unique_ids = sorted(set(cited_ids))
+    cited_rules_resolved = [_resolve_rule_ref(rid) for rid in unique_ids]
+
     return {
         "原告诉讼请求": fixed_claims,
         "被告辩称": defenses,
@@ -333,7 +355,7 @@ def _build_document_skeleton(
         "本院查明": fact_findings,
         "本院认为": [s.model_dump() for s in subs],
         "判决主文": judgment_main_text,
-        "引用法条": sorted(set(cited_rules_total)),
+        "引用法条": cited_rules_resolved,
     }
 
 

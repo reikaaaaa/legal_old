@@ -126,18 +126,56 @@ def parse_json_safely(text: str) -> Any:
     if not text:
         raise ValueError("LLM 返回为空")
     candidate = _extract_json(text)
+    if not candidate or candidate == "{}":
+        raise ValueError(f"LLM JSON 解析失败，候选文本为空")
+    errors = []
+    # 策略1: 直接解析
     try:
         return json.loads(candidate)
-    except json.JSONDecodeError:
-        # 去掉尾随逗号后重试
+    except json.JSONDecodeError as e:
+        errors.append(str(e))
+    # 策略2: 去掉尾随逗号
+    try:
         cleaned = re.sub(r",\s*([\]}])", r"\1", candidate)
-        try:
-            return json.loads(cleaned)
-        except json.JSONDecodeError:
-            # 尝试修复常见错误
-            cleaned = re.sub(r",\s*,", ",", cleaned)
-            cleaned = re.sub(r"\[\s*,", "[", cleaned)
-            return json.loads(cleaned)
+        return json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        errors.append(str(e))
+    # 策略3: 修复连续逗号、空数组逗号
+    try:
+        cleaned = re.sub(r",\s*([\]}])", r"\1", candidate)
+        cleaned = re.sub(r",\s*,", ",", cleaned)
+        cleaned = re.sub(r"\[\s*,", "[", cleaned)
+        cleaned = re.sub(r"\{\s*,", "{", cleaned)
+        return json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        errors.append(str(e))
+    # 策略4: 修复未闭合的字符串（在换行处补引号）
+    try:
+        cleaned = re.sub(r',\s*([\]}])', r'\1', candidate)
+        cleaned = re.sub(r',\s*,', ',', cleaned)
+        cleaned = re.sub(r'\[\s*,', '[', cleaned)
+        cleaned = re.sub(r':\s*"([^"]*?)\n', r': "\1",\n', cleaned)
+        return json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        errors.append(str(e))
+    # 策略5: 尝试截取第一个有效 JSON 对象
+    try:
+        depth = 0
+        start = -1
+        for i, ch in enumerate(candidate):
+            if ch == '{':
+                if depth == 0:
+                    start = i
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0 and start >= 0:
+                    segment = candidate[start:i+1]
+                    cleaned = re.sub(r",\s*([\]}])", r"\1", segment)
+                    return json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        errors.append(str(e))
+    raise ValueError(f"LLM JSON 解析失败（已尝试5种策略）：{'；'.join(errors[-3:])}")
 
 
 # ============================================================================
@@ -163,24 +201,51 @@ def _call_dashscope(
     ]
 
     last_error = None
+    current_thinking = enable_thinking
+    current_model = model
     for attempt in range(1, max_retries + 1):
         try:
             t0 = time.time()
             response = Generation.call(
                 api_key=DASHSCOPE_API_KEY,
-                model=model,
+                model=current_model,
                 messages=messages,
                 result_format="message",
-                enable_thinking=enable_thinking,
+                enable_thinking=current_thinking,
             )
 
             if response.status_code == 200:
                 elapsed = time.time() - t0
-                choice = response.output.choices[0].message
-                content = choice.content or ""
+                try:
+                    if not response.output or not response.output.choices:
+                        last_error = RuntimeError("DashScope 返回空 output/choices")
+                        logger.warning("DashScope empty response (attempt %d/%d)", attempt, max_retries)
+                        if attempt < max_retries:
+                            wait = RETRY_BASE_DELAY * (2 ** (attempt - 1))
+                            time.sleep(wait)
+                        continue
+                    choice = response.output.choices[0].message
+                    content = choice.content or ""
+                    if not content.strip():
+                        last_error = RuntimeError("DashScope 返回空 content")
+                        logger.warning("DashScope empty content (attempt %d/%d)", attempt, max_retries)
+                        if attempt < max_retries:
+                            wait = RETRY_BASE_DELAY * (2 ** (attempt - 1))
+                            time.sleep(wait)
+                        continue
+                except (AttributeError, IndexError) as exc:
+                    last_error = exc
+                    logger.warning("DashScope response parse error (attempt %d/%d): %s", attempt, max_retries, exc)
+                    if attempt < max_retries:
+                        wait = RETRY_BASE_DELAY * (2 ** (attempt - 1))
+                        time.sleep(wait)
+                    continue
 
                 # 打印思考过程（如有）
-                reasoning = getattr(choice, "reasoning_content", "")
+                try:
+                    reasoning = getattr(choice, "reasoning_content", "") or ""
+                except Exception:
+                    reasoning = ""
                 if reasoning:
                     logger.info(
                         "DashScope[%s] thinking (%d chars, %.1fs): %s...",
@@ -189,7 +254,7 @@ def _call_dashscope(
 
                 logger.info(
                     "DashScope[%s] ok in %.1fs, output=%d chars",
-                    model, elapsed, len(content),
+                    current_model, elapsed, len(content),
                 )
                 return content
             else:
@@ -200,6 +265,17 @@ def _call_dashscope(
                     "DashScope call failed (attempt %d/%d): %s",
                     attempt, max_retries, last_error,
                 )
+                # 模型超时：逐级降级
+                if attempt < max_retries:
+                    msg_lower = (response.message or "").lower()
+                    if "timed out" in msg_lower or "timeout" in msg_lower:
+                        if current_thinking:
+                            logger.warning("检测到模型超时，下轮重试将关闭 thinking 模式")
+                            current_thinking = False
+                        elif current_model == "qwen3-max":
+                            logger.warning("已关闭 thinking 仍超时，下轮切换为 qwen-plus")
+                            current_model = "qwen-plus"
+                            current_thinking = False
 
         except Exception as exc:
             last_error = exc
@@ -207,6 +283,18 @@ def _call_dashscope(
                 "DashScope call exception (attempt %d/%d): %s",
                 attempt, max_retries, exc,
             )
+
+        # 检测超时错误，逐级降级：先关 thinking，再换更快模型
+        if attempt < max_retries:
+            err_msg = str(last_error).lower()
+            if "timed out" in err_msg or "timeout" in err_msg:
+                if current_thinking:
+                    logger.warning("检测到模型超时，下轮重试将关闭 thinking 模式")
+                    current_thinking = False
+                elif current_model == "qwen3-max":
+                    logger.warning("已关闭 thinking 仍超时，下轮切换为 qwen-plus")
+                    current_model = "qwen-plus"
+                    current_thinking = False  # 确保 thinking 关闭
 
         if attempt < max_retries:
             wait = RETRY_BASE_DELAY * (2 ** (attempt - 1))
@@ -333,30 +421,46 @@ class MaterialPipeline:
         )
 
         data = parse_json_safely(content)
+        if not isinstance(data, dict):
+            raise ValueError(f"LLM 返回了非 JSON 对象: {type(data).__name__}")
 
-        # 解析为 Pydantic 对象
-        result = MaterialReviewResult(
-            case_module=_find_in_set(data.get("case_module"), _VALID_CASE_MODULES, "无法确定"),
-            case_type_check=_parse_case_type_check(data.get("case_type_check", {})),
-            step_checks=[
-                StepRequirementCheck(
-                    step_index=s.get("step_index", i + 1),
-                    step_name=s.get("step_name", ""),
-                    status=_normalize_step_status(s.get("status", "部分不足")),
-                    has_required=s.get("has_required", []),
-                    missing_items=s.get("missing_items", []),
-                    suggestion=s.get("suggestion", ""),
-                    special_note=s.get("special_note", ""),
-                )
-                for i, s in enumerate(data.get("step_checks", []))
-            ],
-            overall_status=_find_in_set(data.get("overall_status"), _VALID_OVERALL_STATUS, "材料不完整"),
-            can_proceed=data.get("can_proceed", False),
-            missing_core_materials=data.get("missing_core_materials", []),
-            missing_optional_materials=data.get("missing_optional_materials", []),
-            upload_instructions=data.get("upload_instructions", ""),
-            confidence=_find_in_set(data.get("confidence"), _VALID_CONFIDENCE, "中"),
-        )
+        # 解析为 Pydantic 对象（带容错）
+        try:
+            result = MaterialReviewResult(
+                case_module=_find_in_set(data.get("case_module"), _VALID_CASE_MODULES, "无法确定"),
+                case_type_check=_parse_case_type_check(data.get("case_type_check", {}) if isinstance(data.get("case_type_check"), dict) else {}),
+                step_checks=[
+                    StepRequirementCheck(
+                        step_index=int(s.get("step_index", i + 1)) if isinstance(s, dict) else i + 1,
+                        step_name=str(s.get("step_name", "")) if isinstance(s, dict) else "",
+                        status=_normalize_step_status(s.get("status", "部分不足") if isinstance(s, dict) else "部分不足"),
+                        has_required=s.get("has_required", []) if isinstance(s, dict) else [],
+                        missing_items=s.get("missing_items", []) if isinstance(s, dict) else [],
+                        suggestion=str(s.get("suggestion", "")) if isinstance(s, dict) else "",
+                        special_note=str(s.get("special_note", "")) if isinstance(s, dict) else "",
+                    )
+                    for i, s in enumerate(data.get("step_checks", []) if isinstance(data.get("step_checks"), list) else [])
+                ],
+                overall_status=_find_in_set(data.get("overall_status"), _VALID_OVERALL_STATUS, "材料不完整"),
+                can_proceed=bool(data.get("can_proceed", False)),
+                missing_core_materials=data.get("missing_core_materials", []) if isinstance(data.get("missing_core_materials"), list) else [],
+                missing_optional_materials=data.get("missing_optional_materials", []) if isinstance(data.get("missing_optional_materials"), list) else [],
+                upload_instructions=str(data.get("upload_instructions", "")),
+                confidence=_find_in_set(data.get("confidence"), _VALID_CONFIDENCE, "中"),
+            )
+        except Exception as exc:
+            logger.warning("MaterialReviewResult 构造失败，使用保守默认值: %s", exc)
+            result = MaterialReviewResult(
+                case_module="无法确定",
+                case_type_check=_parse_case_type_check({}),
+                step_checks=[],
+                overall_status="材料不完整",
+                can_proceed=False,
+                missing_core_materials=["LLM 输出格式异常，无法解析审核结果"],
+                missing_optional_materials=[],
+                upload_instructions=f"系统内部解析异常: {exc}。请稍后重试或重新提交材料。",
+                confidence="低",
+            )
 
         logger.info(
             "阶段一完成: case_module=%s can_proceed=%s core_rate=%.0f%%",
@@ -396,7 +500,19 @@ class MaterialPipeline:
         )
 
         data = parse_json_safely(content)
-        result = _parse_normalized_case_input(data)
+        if not isinstance(data, dict):
+            raise ValueError(f"LLM 返回了非 JSON 对象: {type(data).__name__}")
+        try:
+            result = _parse_normalized_case_input(data)
+        except Exception as exc:
+            logger.warning("NormalizedCaseInput 构造失败，使用最小默认值: %s", exc)
+            result = NormalizedCaseInput(
+                case_basic_info=CaseBasicInfo(
+                    case_name=f"[解析异常-{str(exc)[:50]}]",
+                    case_cause_text=case_module,
+                ),
+                original_input=raw_material,
+            )
         logger.info(
             "阶段二完成: parties=%d claims=%d facts=%d evidence=%d",
             len(result.party_info),
@@ -423,10 +539,21 @@ class MaterialPipeline:
         review = self.review(raw_material)
 
         if not review.can_proceed:
-            logger.warning("材料审核未通过，跳过规范化。缺失核心材料: %s", review.missing_core_materials)
-            return MaterialFullResult(review=review, normalized=None)
-
-        normalized = self.normalize(raw_material, review.case_module)
+            logger.warning(
+                "材料审核未通过(can_proceed=False)，仍执行规范化(best-effort)。缺失核心材料: %s",
+                review.missing_core_materials,
+            )
+        # 始终执行规范化，即使审核未通过也做 best-effort 提取。
+        # 前端通过 review.can_proceed 和缺失清单来提示用户风险，
+        # 不再阻断用户进入九步法分析。
+        try:
+            normalized = self.normalize(raw_material, review.case_module)
+        except Exception as exc:
+            logger.exception("规范化失败，使用空壳数据")
+            normalized = NormalizedCaseInput(
+                case_basic_info=CaseBasicInfo(case_cause_text=review.case_module),
+                original_input=raw_material,
+            )
         return MaterialFullResult(review=review, normalized=normalized)
 
 
@@ -487,7 +614,11 @@ def _normalize_step_status(raw: str) -> str:
 
 
 def _parse_case_type_check(data: dict) -> CaseTypeMaterialCheck:
+    if not isinstance(data, dict):
+        data = {}
     items = data.get("checklist", [])
+    if not isinstance(items, list):
+        items = []
     return CaseTypeMaterialCheck(
         case_module=data.get("case_module", ""),
         checklist=[
