@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九步法审案系统</title>
+<style>
+:root{--bg:#f8f5f0;--card:#fff;--ink:#1a1d24;--ink2:#5a5e6a;--red:#9b2a23;--gold:#a8843f;--green:#4a6b53;--blue:#2c5282;--line:#e2dcd0;--warn:#e6a817;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.06);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:400 15px/1.6 -apple-system,"Noto Serif SC","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{font-size:22px;font-weight:700;letter-spacing:.05em}
+header .badge{font-size:12px;padding:4px 10px;border-radius:12px;font-weight:600}
+.badge-on{background:#e6f4ea;color:var(--green)}.badge-off{background:#fce8e6;color:var(--red)}.badge-busy{background:#fef7e0;color:var(--warn)}.badge-demo{background:#e8f0fe;color:var(--blue)}
+main{max-width:1100px;margin:0 auto;padding:28px 24px}
+.stage{display:none}.stage.active{display:block}
+.progress{display:flex;gap:0;margin-bottom:32px;counter-reset:step}
+.progress li{flex:1;text-align:center;list-style:none;position:relative;font-size:13px;color:var(--ink2);padding-top:28px}
+.progress li::before{counter-increment:step;content:counter(step);position:absolute;top:0;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--ink2)}
+.progress li.done::before{background:var(--green);color:#fff;content:"✓"}
+.progress li.active{color:var(--ink);font-weight:600}
+.progress li.active::before{background:var(--ink);color:#fff}
+.progress li.done{color:var(--green);cursor:pointer}.progress li.done:hover{color:#2d5a3d;text-decoration:underline}.progress li.active{cursor:default}
+.progress li::after{content:"";position:absolute;top:12px;left:calc(50% + 18px);width:calc(100% - 36px);height:2px;background:var(--line)}
+.progress li:last-child::after{display:none}
+.progress li.done::after{background:var(--green)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;border:1px solid var(--line)}
+.card h2{font-size:18px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.card h3{font-size:15px;font-weight:600;margin:12px 0 8px;color:var(--ink)}
+textarea,input[type="text"],input[type="number"],select{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:6px;font:14px/1.5 inherit;background:var(--bg);transition:border-color .2s}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(168,132,63,.15)}
+textarea{min-height:180px;resize:vertical}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1;min-width:160px}
+label{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border:none;border-radius:6px;font:600 14px inherit;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:#2c3140}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#8a6d32}
+.btn-outline{background:transparent;border:1px solid var(--line);color:var(--ink)}.btn-outline:hover{background:var(--bg)}
+.btn-ghost{background:transparent;color:var(--ink2)}.btn-ghost:hover{color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:6px 14px;font-size:13px}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600}
+.tag-red{background:#fce8e6;color:var(--red)}.tag-green{background:#e6f4ea;color:var(--green)}.tag-yellow{background:#fef7e0;color:var(--warn)}.tag-blue{background:#e8f0fe;color:var(--blue)}
+.gauge{text-align:center;padding:16px}.gauge-ring{position:relative;width:100px;height:100px;margin:0 auto}
+.gauge-ring svg{transform:rotate(-90deg)}.gauge-ring .val{position:absolute;inset:0;display:grid;place-items:center;font-size:28px;font-weight:900}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.stat{background:var(--bg);padding:14px;border-radius:6px;text-align:center}.stat .n{font-size:24px;font-weight:700}.stat .l{font-size:12px;color:var(--ink2);margin-top:2px}
+.accordion{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:8px}
+.accordion summary{padding:14px 18px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:10px;background:var(--bg);user-select:none}
+.accordion summary:hover{background:#f0ece5}
+.accordion .body{padding:18px;border-top:1px solid var(--line)}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.checklist-item:last-child{border-bottom:none}
+.checklist-item .status-icon{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.s-ok{background:#e6f4ea;color:var(--green)}.s-partial{background:#fef7e0;color:var(--warn)}.s-missing{background:#fce8e6;color:var(--red)}
+.error-bar{background:#fce8e6;color:var(--red);padding:12px 16px;border-radius:6px;font-size:14px;margin-bottom:12px;border-left:3px solid var(--red)}
+.warn-bar{background:#fef7e0;color:#8a6d32;padding:12px 16px;border-radius:6px;font-size:14px;margin-bottom:12px;border-left:3px solid var(--warn)}
+.info-bar{background:#e8f0fe;color:var(--blue);padding:12px 16px;border-radius:6px;font-size:14px;margin-bottom:12px;border-left:3px solid var(--blue)}
+.sidebar{display:grid;grid-template-columns:1fr 280px;gap:20px}
+.sidebar aside{position:sticky;top:100px;align-self:start}
+.sidebar aside .card{max-height:70vh;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink2);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+tr:hover{background:var(--bg)}
+.loading{text-align:center;padding:40px;color:var(--ink2)}.loading::after{content:"";display:inline-block;width:20px;height:20px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite;margin-left:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);max-width:600px;width:90%;max-height:80vh;overflow-y:auto;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+.modal h2{font-size:20px;margin-bottom:20px}
+.modal .close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink2)}
+.document-skeleton{font-family:"Noto Serif SC",serif;line-height:2}
+.document-skeleton h3{font-size:17px;color:var(--red);text-align:center;margin:16px 0;font-weight:700}
+.document-skeleton p{margin:8px 0;text-indent:2em}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--line)}
+.timeline-item{position:relative;margin-bottom:16px;padding-left:16px}
+.timeline-item::before{content:"";position:absolute;left:-20px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.timeline-item .time{font-size:12px;color:var(--ink2)}
+.field-preview{margin-bottom:10px}
+.field-preview .key{font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}
+.field-preview .val{font-size:14px;padding:6px 10px;background:var(--bg);border-radius:4px;margin-top:2px}
+pre{background:var(--bg);padding:12px;border-radius:6px;font-size:13px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚖ 九步法审案系统</h1>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span id="demoStatus" style="display:none;font-size:13px;color:var(--blue);max-width:360px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>
+    <span id="sysStatus" class="badge badge-busy">连接中…</span>
+  </div>
+</header>
+
+<main>
+  <!-- Progress indicator -->
+  <ol class="progress" id="progress">
+    <li class="active" data-stage="1">材料提交与审核</li>
+    <li data-stage="2">九步法确认</li>
+    <li data-stage="3">结果展示</li>
+  </ol>
+
+  <!-- ============ STAGE 1: Material ============ -->
+  <div class="stage active" id="stage1">
+    <div class="card">
+      <h2>案件材料输入</h2>
+      <textarea id="rawMaterial" placeholder="请在此输入您的案件材料，包括：案件事实、诉讼请求、证据材料、当事人信息等。&#10;&#10;支持口语化输入，系统将自动识别案件类型并规范化处理。&#10;&#10;示例：&#10;我是做小生意的，有个客户李某从我这买了混凝土，欠我8万块钱一直不给..."></textarea>
+      <div class="row" style="margin-top:12px">
+        <div><label>用户身份</label><select id="userRole"><option>原告</option><option>被告</option><option>第三人</option><option>代理人</option><option>其他</option></select></div>
+        <div><label>案件类型</label><select id="caseType"><option value="">系统自动识别</option><option>合同纠纷</option><option>婚姻家庭</option><option>侵权纠纷</option><option>劳动争议</option><option>民间借贷</option><option>其他民事案件</option></select></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px">
+        <button class="btn btn-primary" id="btnSubmit" onclick="submitMaterial()">真实分析</button>
+        <button class="btn btn-outline" onclick="loadSample()">加载示例</button>
+        <button class="btn btn-outline" id="btnDemo" onclick="runDemo()" style="border-color:var(--blue);color:var(--blue)">▶ 示例 Demo</button>
+      </div>
+      <p style="font-size:12px;color:var(--ink2);margin-top:8px">真实分析：调用后端完整流程，耗时较长（10-20分钟）&nbsp;&nbsp;|&nbsp;&nbsp;示例 Demo：展示固定案例的完整运行效果，即时展示，不调用后端</p>
+    </div>
+
+    <div id="reviewResult" style="display:none">
+      <!-- Populated after review -->
+    </div>
+  </div>
+
+  <!-- ============ STAGE 2: Jiubufa Confirm ============ -->
+  <div class="stage" id="stage2">
+    <div id="stage2Warn"></div>
+    <div class="card">
+      <h2>九步法输入预览</h2>
+      <p style="color:var(--ink2);font-size:13px;margin-bottom:16px">以下为材料规范层生成的标准化案件数据，确认无误后提交九步法分析。</p>
+      <div id="normalizedPreview"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+        <div style="flex:0 0 200px"><label>分析模型</label><select id="modelSelect"></select></div>
+        <button class="btn btn-gold" id="btnJiubufa" onclick="runJiubufa()">开始九步法分析</button>
+        <span id="stage2Status" style="font-size:13px;color:var(--ink2)"></span>
+      </div>
+    </div>
+    <div id="jiubufaProgress" style="display:none" class="card loading">九步法分析进行中，请稍候…</div>
+  </div>
+
+  <!-- ============ STAGE 3: Results ============ -->
+  <div class="stage" id="stage3">
+    <div id="resultContent"></div>
+  </div>
+
+  <!-- Supplement Modal -->
+  <div class="modal-overlay" id="supplementModal">
+    <div class="modal">
+      <button class="close" onclick="closeSupplement()">&times;</button>
+      <h2>📋 材料补充提示</h2>
+      <div id="supplementBody"></div>
+    </div>
+  </div>
+</main>
+
+<script>const DEMO_DATA = {"_meta": {"description": "Demo固定案例数据 — 软件著作权侵权", "captured_at": "2026-05-13 15:58:58", "input_preview": "西某工业软件有限公司系依法成立并有效存续的企业法人，拟提交营业执照、法定代表人身份证明等材料证明其主体资格。西某工业软件有限公司主张其系NX系列计算机软件的著作权人，拟提交案涉软件著作权登记证书、软件版本说明、首次发表证明、源代码备份等材料..."}, "input_text": "西某工业软件有限公司系依法成立并有效存续的企业法人，拟提交营业执照、法定代表人身份证明等材料证明其主体资格。西某工业软件有限公司主张其系NX系列计算机软件的著作权人，拟提交案涉软件著作权登记证书、软件版本说明、首次发表证明、源代码备份等材料证明其对案涉软件享有著作权。该系列软件是面向制造业的计算机软件，可用于3D设计、数字仿真检测及辅助制造。\n\n广州沃某模具有限公司系依法成立的企业，主要从事模具产品制造。西某工业软件有限公司发现，广州沃某模具有限公司未经许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件，未能提供正版授权许可、采购合同或合法来源证明，侵害了西某工业软件有限公司对案涉软件享有的著作权。\n\n根据西某工业软件有限公司的申请，广州知识产权法院赴广州沃某模具有限公司进行证据保全。法院工作人员向该公司在场管理人员详细说明了拟采取的保全措施以及拒不配合证据保全的法律后果。经现场统计，广州沃某模具有限公司办公室共有26台电脑。广州知识产权法院已完成对其中17台电脑的保全检查，其中9台电脑显示安装有13套NX系列计算机软件。\n\n在法院继续对其余电脑进行保全时，广州沃某模具有限公司突然采取对抗措施，包括拒不打开部分电脑、断电等方式，妨害法院证据保全工作，导致证据保全被迫终止，其余9台电脑未完成保全。西某工业软件有限公司主张，因广州沃某模具有限公司无正当理由妨害证据保全，应依法承担不利后果，请求法院推定未完成保全的9台电脑亦安装并使用案涉NX系列计算机软件，并在确定侵权规模和赔偿数额时一并考虑。\n\n西某工业软件有限公司主张按照侵权软件数量乘以正版软件价格，并结合律师费、公证费、差旅费等维权合理开支计算损失。西某工业软件有限公司拟提交正版软件销售合同、发票、官网报价截图、授权报价单及赔偿计算明细，证明其经济损失；拟提交律师费、公证费等支付凭证，证明维权合理开支。西某工业软件有限公司请求判令广州沃某模具有限公司停止侵害，删除、卸载全部侵权复制件，并赔偿经济损失及维权合理开支人民币2712827元。", "material_review": {"case_module": "其他民事案件", "case_type_check": {"case_module": "其他民事案件", "checklist": [{"name": "原告主体资格证明", "source_element": "营业执照、法定代表人身份证明", "legal_basis": "《民事诉讼法》第122条", "is_core": true, "status": "已提供", "dimension": "案由专项", "description": "证明原告系适格著作权人主体", "suggestion": "确保营业执照在有效期内，法定代表人身份证明加盖公章"}, {"name": "著作权权属证明", "source_element": "软件著作权登记证书、软件版本说明、首次发表证明、源代码备份", "legal_basis": "《著作权法》第11条、《计算机软件保护条例》第9条", "is_core": true, "status": "已提供", "dimension": "案由专项", "description": "证明原告对NX系列软件享有完整著作权", "suggestion": "登记证书需与侵权软件版本对应；源代码备份建议做时间戳存证"}, {"name": "侵权事实初步证据", "source_element": "法院证据保全裁定、现场笔录、安装截图（9台电脑13套软件记录）", "legal_basis": "《著作权法》第53条、《民事诉讼法》第84条", "is_core": true, "status": "已提供", "dimension": "案由专项", "description": "证明被告经营场所存在未经许可安装使用行为", "suggestion": "需提交法院盖章的保全笔录原件或清晰复印件，含电脑编号、软件界面截图"}, {"name": "被告主体资格证明", "source_element": "被告企业全称（广州沃某模具有限公司）", "legal_basis": "《民事诉讼法》第122条（明确被告要求）", "is_core": true, "status": "缺失", "dimension": "案由专项", "description": "需提供被告准确工商注册信息以确定诉讼主体", "suggestion": "立即通过国家企业信用信息公示系统下载被告工商查询单（含统一社会信用代码、注册地址），打印加盖公章。无此材料法院将不予立案。"}, {"name": "妨害证据保全证据", "source_element": "法院记录的断电、拒开电脑等对抗行为描述", "legal_basis": "《最高人民法院关于知识产权民事诉讼证据的若干规定》第13条", "is_core": false, "status": "已提供", "dimension": "案由专项", "description": "支撑‘推定未保全电脑亦侵权’的法律主张", "suggestion": "补充提交法院制作的妨害行为现场记录、执法录像摘要，强化推定依据"}, {"name": "损失及合理开支凭证", "source_element": "正版软件销售合同、发票、官网报价、律师费/公证费支付凭证", "legal_basis": "《著作权法》第54条", "is_core": false, "status": "已提供", "dimension": "案由专项", "description": "计算赔偿金额及维权成本的依据", "suggestion": "报价单需注明来源及查询日期；合理开支凭证需与本案直接关联并附明细"}], "core_provided_rate": 0.75, "special_rules_note": "本案实际案由为侵害计算机软件著作权纠纷（属知识产权案件），审核参照《著作权法》《最高人民法院关于知识产权民事诉讼证据的若干规定》第13条（妨害证据保全推定规则）及著作权侵权纠纷材料标准。被告妨害保全行为系关键事实，需专项证据支撑。"}, "step_checks": [{"step_index": 1, "step_name": "固定权利请求", "status": "充足", "has_required": ["停止侵害（删除卸载侵权软件）、赔偿经济损失及合理开支2712827元"], "missing_items": [], "suggestion": "诉请金额计算逻辑清晰（侵权套数×正版单价+合理开支），无矛盾", "special_note": "赔偿金额具体明确，符合《著作权法》第54条赔偿范围"}, {"step_index": 2, "step_name": "确定权利请求基础规范", "status": "充足", "has_required": ["《著作权法》第52条、第53条（复制权、发行权侵权）"], "missing_items": [], "suggestion": "法律关系指向明确：计算机软件著作权侵权", "special_note": "无合同等其他法律关系干扰，请求权基础单一"}, {"step_index": 3, "step_name": "确定抗辩权基础规范", "status": "部分不足", "has_required": [], "missing_items": ["被告答辩状或书面抗辩意见"], "suggestion": "立案阶段被告尚未回应属正常，法院送达后将补充审查", "special_note": "当前材料仅含原告单方陈述，需待被告提交答辩后区分‘否认’或‘抗辩’"}, {"step_index": 4, "step_name": "分析基础规范构成要件", "status": "充足", "has_required": ["完全性法条可分解：①原告享有著作权 ②被告实施复制安装行为 ③未经许可 ④商业使用 ⑤无免责事由 → 法律效果：停止侵害+赔偿"], "missing_items": [], "suggestion": "构成要件与原告提交证据链匹配度高", "special_note": "妨害保全行为可纳入‘无免责事由’要件分析"}, {"step_index": 5, "step_name": "诉讼主张的检索", "status": "充足", "has_required": ["权属证明覆盖要件①；保全记录覆盖要件②④；无授权声明覆盖要件③"], "missing_items": [], "suggestion": "主张事实与要件一一对应，逻辑闭环", "special_note": "未保全部分主张通过妨害保全规则补强，符合司法解释"}, {"step_index": 6, "step_name": "争点整理", "status": "充足", "has_required": ["事实争点：未保全9台电脑是否安装软件；法律争点：妨害保全是否触发推定规则；证据争点：保全笔录证明力"], "missing_items": [], "suggestion": "争点预判清晰，便于庭审聚焦", "special_note": "推定规则适用是本案核心法律争点"}, {"step_index": 7, "step_name": "要件事实证明", "status": "充足", "has_required": ["法院保全笔录（公文证据）、著作权登记证书（权属证明）"], "missing_items": [], "suggestion": "核心证据均非《民事证据规定》第90条禁止单独定案类型", "special_note": "妨害行为有法院记录佐证，不依赖原告单方陈述；无‘仅有当事人陈述’风险"}, {"step_index": 8, "step_name": "事实认定", "status": "部分不足", "has_required": ["已保全部分侵权事实有证据支撑"], "missing_items": ["法院对未保全部分的事实认定结论"], "suggestion": "立案阶段无需事实认定，材料已提供充分认定基础", "special_note": "妨害保全事实明确，为推定规则适用预留空间"}, {"step_index": 9, "step_name": "要件归入并作出裁判", "status": "充足", "has_required": ["前八步材料逻辑连贯，要件归入路径清晰"], "missing_items": [], "suggestion": "材料足以支撑法官进行要件归入分析", "special_note": "赔偿计算方式具可验证性，降低裁判不确定性"}], "overall_status": "材料不完整", "can_proceed": false, "missing_core_materials": ["被告主体资格证明（广州沃某模具有限公司工商登记查询单）"], "missing_optional_materials": [], "upload_instructions": "1. 紧急补充被告工商查询单（国家企业信用信息公示系统下载，含统一代码、注册地址）；2. 提交广州知识产权法院出具的证据保全裁定书、现场笔录（含17台电脑检查记录及妨害行为描述）原件或盖章复印件；3. 所有证据编制清单并标注页码，权属证明与侵权软件版本需对应；4. 赔偿计算明细附正版软件采购合同/官网报价链接及查询截图。注：被告信息缺失系立案硬性障碍，务必优先补正。", "confidence": "中"}, "normalized_material": {"case_basic_info": {"case_id": null, "case_name": "西某工业软件有限公司诉广州沃某模具有限公司侵害计算机软件著作权纠纷案", "case_cause_text": "侵害计算机软件著作权纠纷", "court": "广州知识产权法院", "procedure_stage": "一审", "filing_date": null, "material_sources": ["营业执照", "法定代表人身份证明", "软件著作权登记证书", "软件版本说明", "首次发表证明", "源代码备份", "正版软件销售合同", "发票", "官网报价截图", "授权报价单", "赔偿计算明细", "律师费支付凭证", "公证费支付凭证", "差旅费凭证", "法院证据保全记录"], "case_summary": "原告西某工业软件有限公司主张其系NX系列计算机软件著作权人，被告广州沃某模具有限公司未经许可在其经营场所电脑中复制、安装并商业使用该软件。广州知识产权法院证据保全中，在已检查的17台电脑中发现9台安装13套侵权软件，被告采取断电、拒不开机等行为妨害后续保全，致剩余9台电脑未完成检查。原告请求判令被告停止侵害、删除侵权软件，并赔偿经济损失及合理开支共计2712827元。"}, "party_info": [{"party_id": "p1", "party_name": "西某工业软件有限公司", "party_role": "原告", "legal_status": "法人", "relationship_to_case": "案涉软件著作权人", "identity_evidence": ["营业执照、法定代表人身份证明"], "standing_issue": false}, {"party_id": "p2", "party_name": "广州沃某模具有限公司", "party_role": "被告", "legal_status": "法人", "relationship_to_case": "被控侵权人", "identity_evidence": ["[待核实：被告主体资格证明材料]"], "standing_issue": true}], "claims": [{"claim_id": "c1", "claim_text_original": "停止侵害，删除、卸载全部侵权复制件", "claim_text_normalized": "判令被告停止侵害原告享有的NX系列计算机软件著作权，删除并卸载其经营场所电脑中安装的全部侵权软件复制件", "claimant": "p1", "respondent": "p2", "claim_type_candidate": ["停止侵害请求权"], "object_type": "行为", "amount": null, "behavior_requested": null, "is_clear": true, "is_executable": true, "conflict_with_other_claims": [], "supplement_needed": false, "priority_type": "primary"}, {"claim_id": "c2", "claim_text_original": "赔偿经济损失及维权合理开支人民币2712827元", "claim_text_normalized": "判令被告赔偿原告经济损失及为制止侵权行为所支付的合理开支共计人民币2712827元", "claimant": "p1", "respondent": "p2", "claim_type_candidate": ["损害赔偿请求权"], "object_type": "金钱", "amount": 2712827.0, "behavior_requested": null, "is_clear": true, "is_executable": true, "conflict_with_other_claims": [], "supplement_needed": false, "priority_type": "primary"}], "claim_facts": [{"fact_id": "f0", "fact_text_original": "西某工业软件有限公司系依法成立并有效存续的企业法人", "fact_text_normalized": "原告西某工业软件有限公司系依法成立并有效存续的企业法人（据原告主张）", "fact_time": null, "fact_actor": "p1", "fact_counterparty": null, "fact_type_candidate": ["主体资格事实"], "linked_claim_id": "c1", "linked_evidence_ids": ["e1"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}, {"fact_id": "f1", "fact_text_original": "西某工业软件有限公司主张其系NX系列计算机软件的著作权人", "fact_text_normalized": "原告西某工业软件有限公司系NX系列计算机软件的著作权人（据原告主张）", "fact_time": null, "fact_actor": "p1", "fact_counterparty": null, "fact_type_candidate": ["权属事实"], "linked_claim_id": "c1", "linked_evidence_ids": ["e2", "e3", "e4", "e5"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}, {"fact_id": "f2", "fact_text_original": "广州沃某模具有限公司未经许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件，未能提供正版授权许可、采购合同或合法来源证明", "fact_text_normalized": "被告广州沃某模具有限公司未经原告许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件，且未能提供正版授权许可、采购合同或合法来源证明（据原告主张）", "fact_time": null, "fact_actor": "p2", "fact_counterparty": "p1", "fact_type_candidate": ["侵权行为"], "linked_claim_id": "c1", "linked_evidence_ids": ["e6"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}, {"fact_id": "f3", "fact_text_original": "经现场统计，广州沃某模具有限公司办公室共有26台电脑。广州知识产权法院已完成对其中17台电脑的保全检查，其中9台电脑显示安装有13套NX系列计算机软件。", "fact_text_normalized": "广州知识产权法院证据保全中，对被告办公室26台电脑中的17台完成检查，发现9台电脑安装有13套NX系列计算机软件（据法院证据保全记录）", "fact_time": null, "fact_actor": "p1", "fact_counterparty": "p2", "fact_type_candidate": ["侵权事实查明"], "linked_claim_id": "c1", "linked_evidence_ids": ["e6"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}, {"fact_id": "f4", "fact_text_original": "在法院继续对其余电脑进行保全时，广州沃某模具有限公司突然采取对抗措施，包括拒不打开部分电脑、断电等方式，妨害法院证据保全工作，导致证据保全被迫终止，其余9台电脑未完成保全。", "fact_text_normalized": "被告在广州知识产权法院继续对剩余电脑进行证据保全时，采取拒不打开电脑、断电等对抗措施，妨害证据保全工作，致保全终止、剩余9台电脑未完成检查（据法院证据保全记录）", "fact_time": null, "fact_actor": "p2", "fact_counterparty": null, "fact_type_candidate": ["妨害诉讼行为"], "linked_claim_id": "c2", "linked_evidence_ids": ["e6"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}, {"fact_id": "f5", "fact_text_original": "西某工业软件有限公司主张，因广州沃某模具有限公司无正当理由妨害证据保全，应依法承担不利后果，请求法院推定未完成保全的9台电脑亦安装并使用案涉NX系列计算机软件，并在确定侵权规模和赔偿数额时一并考虑。", "fact_text_normalized": "原告主张，因被告无正当理由妨害证据保全，依法应承担不利后果，请求法院推定未完成保全的9台电脑亦安装并使用案涉软件，并在确定侵权规模和赔偿数额时予以考虑（据原告主张）", "fact_time": null, "fact_actor": "p1", "fact_counterparty": "p2", "fact_type_candidate": ["法律推定主张"], "linked_claim_id": "c2", "linked_evidence_ids": ["e6"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}, {"fact_id": "f6", "fact_text_original": "西某工业软件有限公司主张按照侵权软件数量乘以正版软件价格，并结合律师费、公证费、差旅费等维权合理开支计算损失。西某工业软件有限公司拟提交正版软件销售合同、发票、官网报价截图、授权报价单及赔偿计算明细，证明其经济损失；拟提交律师费、公证费等支付凭证，证明维权合理开支。", "fact_text_normalized": "原告主张经济损失按侵权软件数量乘以正版软件价格计算，并主张维权合理开支包括律师费、公证费、差旅费等（据原告主张）", "fact_time": null, "fact_actor": "p1", "fact_counterparty": null, "fact_type_candidate": ["损失计算依据"], "linked_claim_id": "c2", "linked_evidence_ids": ["e7", "e8"], "possible_fact_slot": [], "clarity_status": "明确", "opponent_response": "不明确"}], "defense_opinions": [], "counterclaims": [], "evidence_list": [{"evidence_id": "e1", "evidence_name": "原告营业执照及法定代表人身份证明", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明其主体资格", "proof_purpose_normalized": "证明原告主体资格适格", "linked_claim_id": null, "linked_defense_id": null, "linked_fact_ids": ["f0"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e2", "evidence_name": "案涉软件著作权登记证书", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明其对案涉软件享有著作权", "proof_purpose_normalized": "证明原告系案涉软件著作权人", "linked_claim_id": null, "linked_defense_id": null, "linked_fact_ids": ["f1"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e3", "evidence_name": "软件版本说明", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明其对案涉软件享有著作权", "proof_purpose_normalized": "佐证案涉软件权属及版本信息", "linked_claim_id": null, "linked_defense_id": null, "linked_fact_ids": ["f1"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e4", "evidence_name": "首次发表证明", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明其对案涉软件享有著作权", "proof_purpose_normalized": "佐证案涉软件著作权取得时间", "linked_claim_id": null, "linked_defense_id": null, "linked_fact_ids": ["f1"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e5", "evidence_name": "源代码备份", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明其对案涉软件享有著作权", "proof_purpose_normalized": "佐证案涉软件著作权归属", "linked_claim_id": null, "linked_defense_id": null, "linked_fact_ids": ["f1"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e6", "evidence_name": "广州知识产权法院证据保全笔录及现场记录", "submitted_by": "p1", "evidence_type": "勘验笔录", "proof_purpose_original": "证明被告侵权事实及妨害证据保全行为", "proof_purpose_normalized": "证明被告未经许可使用侵权软件的事实及妨害法院证据保全的行为", "linked_claim_id": "c1", "linked_defense_id": null, "linked_fact_ids": ["f2", "f3", "f4", "f5"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e7", "evidence_name": "正版软件销售合同、发票、官网报价截图、授权报价单、赔偿计算明细", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明其经济损失", "proof_purpose_normalized": "证明原告经济损失计算依据", "linked_claim_id": "c2", "linked_defense_id": null, "linked_fact_ids": ["f6"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}, {"evidence_id": "e8", "evidence_name": "律师费、公证费、差旅费支付凭证", "submitted_by": "p1", "evidence_type": "书证", "proof_purpose_original": "证明维权合理开支", "proof_purpose_normalized": "证明原告为制止侵权行为所支付的合理开支", "linked_claim_id": "c2", "linked_defense_id": null, "linked_fact_ids": ["f6"], "linked_element_ids": [], "opponent_cross_examination": null, "legality_status": null, "relevance_status": null, "authenticity_status": null, "probative_force": null, "adopted_status": null}], "evidence_meta": [{"evidence_id": "e1", "subtype": "企业主体资格文件", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}, {"evidence_id": "e2", "subtype": "著作权权属证书", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}, {"evidence_id": "e3", "subtype": "软件说明文件", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}, {"evidence_id": "e4", "subtype": "软件发表证明", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}, {"evidence_id": "e5", "subtype": "源代码文件", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}, {"evidence_id": "e6", "subtype": "法院证据保全勘验笔录", "completeness": "完整", "authenticity_note": "法院制作原始记录", "standalone_capable": true, "standalone_limitation": ""}, {"evidence_id": "e7", "subtype": "损失计算依据文件", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}, {"evidence_id": "e8", "subtype": "费用支付凭证", "completeness": "待核实", "authenticity_note": "待核验", "standalone_capable": false, "standalone_limitation": "无法与原件核对的复制件不能单独作为定案依据"}], "cross_examinations": [], "court_records": [], "legal_arguments": [], "procedural_info": null, "existing_judgment_or_mediation": null, "original_input": "西某工业软件有限公司系依法成立并有效存续的企业法人，拟提交营业执照、法定代表人身份证明等材料证明其主体资格。西某工业软件有限公司主张其系NX系列计算机软件的著作权人，拟提交案涉软件著作权登记证书、软件版本说明、首次发表证明、源代码备份等材料证明其对案涉软件享有著作权。该系列软件是面向制造业的计算机软件，可用于3D设计、数字仿真检测及辅助制造。\n\n广州沃某模具有限公司系依法成立的企业，主要从事模具产品制造。西某工业软件有限公司发现，广州沃某模具有限公司未经许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件，未能提供正版授权许可、采购合同或合法来源证明，侵害了西某工业软件有限公司对案涉软件享有的著作权。\n\n根据西某工业软件有限公司的申请，广州知识产权法院赴广州沃某模具有限公司进行证据保全。法院工作人员向该公司在场管理人员详细说明了拟采取的保全措施以及拒不配合证据保全的法律后果。经现场统计，广州沃某模具有限公司办公室共有26台电脑。广州知识产权法院已完成对其中17台电脑的保全检查，其中9台电脑显示安装有13套NX系列计算机软件。\n\n在法院继续对其余电脑进行保全时，广州沃某模具有限公司突然采取对抗措施，包括拒不打开部分电脑、断电等方式，妨害法院证据保全工作，导致证据保全被迫终止，其余9台电脑未完成保全。西某工业软件有限公司主张，因广州沃某模具有限公司无正当理由妨害证据保全，应依法承担不利后果，请求法院推定未完成保全的9台电脑亦安装并使用案涉NX系列计算机软件，并在确定侵权规模和赔偿数额时一并考虑。\n\n西某工业软件有限公司主张按照侵权软件数量乘以正版软件价格，并结合律师费、公证费、差旅费等维权合理开支计算损失。西某工业软件有限公司拟提交正版软件销售合同、发票、官网报价截图、授权报价单及赔偿计算明细，证明其经济损失；拟提交律师费、公证费等支付凭证，证明维权合理开支。西某工业软件有限公司请求判令广州沃某模具有限公司停止侵害，删除、卸载全部侵权复制件，并赔偿经济损失及维权合理开支人民币2712827元。"}, "workflow_result": {"case_id": null, "status": "ok", "fallback_gate": {"risk_triggered": true, "risk_level": "medium", "reason": ["输入完整度评分 71 处于中风险区间。"], "recommended_action": "proceed_with_risk_notes", "available_choices": [{"choice": "supplement", "description": "停止裁判输出，按缺口清单补充材料后回退"}, {"choice": "proceed_with_risk_notes", "description": "继续输出强裁判结果并附风险提示"}, {"choice": "continue_weak_judgment", "description": "改用弱裁判通道（更保守）"}], "default_choice": "proceed_with_risk_notes", "hard_block": false}, "step1": {"case_cause_inferred": ["侵害计算机软件著作权纠纷"], "legal_domain_inferred": ["侵权"], "fixed_claims": [{"claim_id": "C1", "claim_text_normalized": "判令被告立即停止侵害原告 NX 系列计算机软件著作权的行为，删除并卸载其经营场所电脑中安装的全部侵权软件复制件", "claim_type": ["injunction_claim"], "object_type": "行为", "amount": null, "claimant": "西某工业软件有限公司", "respondent": "广州沃某模具有限公司", "is_clear": true, "is_executable": true, "issues": [], "clarification_questions": [], "priority_type": "primary", "competition_note": "与 C2 构成请求权聚合，均为侵权责任承担方式"}, {"claim_id": "C2", "claim_text_normalized": "判令被告赔偿原告经济损失及为制止侵权行为所支付的合理开支共计人民币 2712827 元", "claim_type": ["damages_claim"], "object_type": "金钱", "amount": 2712827.0, "claimant": "西某工业软件有限公司", "respondent": "广州沃某模具有限公司", "is_clear": true, "is_executable": true, "issues": ["赔偿总额中经济损失与合理开支的具体构成比例未列明"], "clarification_questions": ["请明确 2712827 元中经济损失与维权合理开支（律师费、公证费等）的具体金额构成"], "priority_type": "primary", "competition_note": "与 C1 构成请求权聚合，均为侵权责任承担方式"}], "overall_clarification": ["需核实被告广州沃某模具有限公司的主体资格证明材料，输入材料显示该项待核实"]}, "step2": {"request_basis_candidates": [], "competition_analysis": null}, "step3": {"defense_basis_candidates": []}, "step4": {"element_matrix": []}, "step5": {"claim_fact_mapping": []}, "step6": {"issues": [{"issue_id": "I1", "issue_type": "fact_issue", "issue_text": "原告是否系案涉 NX 系列计算机软件的著作权人且主体适格", "linked_element_ids": ["f0", "f1"], "linked_claim_id": "C1", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e1", "e2", "e3", "e4", "e5"], "priority": "high"}, {"issue_id": "I2", "issue_type": "fact_issue", "issue_text": "被告是否在已保全检查的 9 台电脑中未经许可复制、安装案涉软件", "linked_element_ids": ["f2", "f3"], "linked_claim_id": "C1", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e6"], "priority": "high"}, {"issue_id": "I3", "issue_type": "fact_issue", "issue_text": "是否应因被告妨害证据保全行为推定剩余 9 台电脑亦存在侵权", "linked_element_ids": ["f4", "f5"], "linked_claim_id": "C1", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e6"], "priority": "high"}, {"issue_id": "I4", "issue_type": "fact_issue", "issue_text": "原告主张的经济损失赔偿数额 2712827 元是否有事实及法律依据", "linked_element_ids": ["f6"], "linked_claim_id": "C2", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e7"], "priority": "medium"}, {"issue_id": "I5", "issue_type": "fact_issue", "issue_text": "原告主张的维权合理开支是否真实、合理且必要", "linked_element_ids": ["f6"], "linked_claim_id": "C2", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e8"], "priority": "low"}], "review_order": ["I1", "I2", "I3", "I4", "I5"]}, "step7": {"proof_plan": [{"issue_id": "I1", "element_id": "f0", "fact_to_prove": "原告系案涉 NX 系列软件著作权人且主体适格", "burden_party": "原告", "proof_standard": "高度盖然性", "existing_evidence_ids": ["e1", "e2", "e3", "e4", "e5"], "suggested_evidence_types": [], "proof_gap": "无明显缺口，著作权登记证书具有初步证明力", "effect_if_unknown": "由原告承担举证不能的不利后果，驳回诉请"}, {"issue_id": "I2", "element_id": "f2", "fact_to_prove": "被告在已保全检查的 9 台电脑中未经许可复制、安装案涉软件", "burden_party": "原告", "proof_standard": "高度盖然性", "existing_evidence_ids": ["e6"], "suggested_evidence_types": [], "proof_gap": "需确认保全笔录中软件版本与原告权利软件版本一致性比对细节", "effect_if_unknown": "由原告承担举证不能的不利后果，该部分侵权事实不成立"}, {"issue_id": "I3", "element_id": "f4", "fact_to_prove": "因被告妨害证据保全，推定剩余 9 台电脑亦存在侵权", "burden_party": "原告", "proof_standard": "高度盖然性", "existing_evidence_ids": ["e6"], "suggested_evidence_types": ["现场录像", "法官情况说明"], "proof_gap": "需法院认定被告行为构成举证妨碍，且需结合已发现侵权比例进行推定", "effect_if_unknown": "若法院不适用举证妨碍推定，则该部分侵权事实无法认定，赔偿数额可能降低"}, {"issue_id": "I4", "element_id": "f6", "fact_to_prove": "原告主张的经济损失赔偿数额 2712827 元有事实及法律依据", "burden_party": "原告", "proof_standard": "高度盖然性", "existing_evidence_ids": ["e7"], "suggested_evidence_types": ["被告财务账册", "同行业利润报告", "软件许可费标准备案"], "proof_gap": "仅有原告单方报价及合同，缺乏被告实际获利证据或原告实际损失直接证据，可能面临酌定赔偿", "effect_if_unknown": "由原告承担举证不能的不利后果，法院可能适用法定赔偿或酌定较低数额"}, {"issue_id": "I5", "element_id": "f6", "fact_to_prove": "原告主张的维权合理开支真实、合理且必要", "burden_party": "原告", "proof_standard": "高度盖然性", "existing_evidence_ids": ["e8"], "suggested_evidence_types": ["委托代理合同", "公证委托书记录"], "proof_gap": "需核实票据对应案件关联性及金额合理性", "effect_if_unknown": "由原告承担举证不能的不利后果，不支持或部分支持合理开支"}]}, "step8": {"fact_findings": [{"fact_finding_id": "F1", "element_id": "f0", "fact_slot": "原告主体资格及著作权权属", "finding_status": "proved", "adopted_evidence_ids": ["e1", "e2", "e3", "e4", "e5"], "rejected_evidence_ids": [], "reasoning": "证据 e1 证明原告合法存续，具备诉讼主体资格。证据 e2 为著作权登记证书，系权利初步证明，e3、e4、e5 佐证版本及权属。上述证据来源合法，与待证事实关联，真实性无异议，形成完整证据链，足以认定原告系案涉软件著作权人。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F2", "element_id": "f2", "fact_slot": "被告在已保全 9 台电脑中安装使用侵权软件", "finding_status": "proved", "adopted_evidence_ids": ["e6"], "rejected_evidence_ids": [], "reasoning": "证据 e6 系法院勘验笔录，记载了现场 17 台电脑中 9 台安装 13 套 NX 软件的事实。该证据由法院制作，合法性、真实性、关联性均强，证明力高。被告未提供合法授权证明，足以认定该部分侵权事实。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F3", "element_id": "f4", "fact_slot": "被告妨害证据保全及剩余电脑侵权推定", "finding_status": "proved", "adopted_evidence_ids": ["e6"], "rejected_evidence_ids": [], "reasoning": "证据 e6 记载被告采取断电、拒不开机等行为妨害保全，致 9 台电脑未检查。该行为构成举证妨碍。根据证据规则，法院可推定原告主张的剩余电脑存在侵权事实成立。该事实认定基于法院笔录，三性无疑。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F4", "element_id": "f6", "fact_slot": "经济损失计算依据及数额", "finding_status": "proved", "adopted_evidence_ids": ["e7"], "rejected_evidence_ids": [], "reasoning": "证据 e7 包含销售合同、发票及报价单，证明正版软件市场价格。虽为原告单方证据，但在被告未提交反证情况下，可作为赔偿计算参考。证明力足以支持损失存在及计算逻辑，具体数额由法院酌定。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F5", "element_id": "f6", "fact_slot": "维权合理开支真实性及合理性", "finding_status": "proved", "adopted_evidence_ids": ["e8"], "rejected_evidence_ids": [], "reasoning": "证据 e8 为律师费、公证费等支付凭证，票据真实，与本案维权行为关联。金额符合行业标准，具备必要性。三性符合要求，予以采信。", "burden_party": "原告", "effect_if_unknown": null}]}, "step9": {"subsumption_results": [{"claim_id": "C1", "request_basis_rule_unit_id": "著作权法_53_001", "request_elements_result": [{"element_id": "E_C1_01", "element_name": "原告享有案涉软件著作权", "finding_status": "proved", "note": "依据事实认定 F1，原告提供著作权登记证书等证据"}, {"element_id": "E_C1_02", "element_name": "被告未经许可复制、使用软件", "finding_status": "proved", "note": "依据事实认定 F2、F3，法院保全及妨害举证推定"}, {"element_id": "E_C1_03", "element_name": "无合法抗辩事由", "finding_status": "proved", "note": "被告未提供合法授权证明"}], "defense_results": [], "legal_effect_tags": ["liability_arises", "injunction_granted"], "disposition_type": "支持停止侵害", "judgment_result": "supported", "reasoning_summary": "本院认为，原告系案涉 NX 系列计算机软件著作权人，主体适格。被告未经许可在其经营场所电脑中复制、安装并商业使用案涉软件，且妨害证据保全，依法推定其侵权规模涵盖全部涉案电脑。被告行为构成对原告著作权的侵害，应承担停止侵害的民事责任。原告请求判令被告停止侵害、删除侵权复制件，事实清楚，法律依据充分，本院予以支持。", "cited_rules": ["著作权法_53_001", "计算机软件保护条例_24_001"]}, {"claim_id": "C2", "request_basis_rule_unit_id": "著作权法_54_001", "request_elements_result": [{"element_id": "E_C2_01", "element_name": "侵权行为成立", "finding_status": "proved", "note": "基于 C1 要件归入结果"}, {"element_id": "E_C2_02", "element_name": "权利人遭受经济损失及支出合理费用", "finding_status": "proved", "note": "依据事实认定 F4、F5"}, {"element_id": "E_C2_03", "element_name": "赔偿数额计算依据充分", "finding_status": "proved", "note": "依据事实认定 F4，结合被告妨害举证情节"}], "defense_results": [], "legal_effect_tags": ["liability_arises", "damages_awarded"], "disposition_type": "支持赔偿损失", "judgment_result": "supported", "reasoning_summary": "本院认为，被告侵害原告著作权，应当赔偿损失。原告提交了正版软件销售合同、发票及维权费用凭证，证明了损失及开支的存在。鉴于被告妨害证据保全，导致侵权规模难以精确查清，法院依法推定原告主张的侵权规模成立，并结合原告提供的赔偿计算依据，认定原告主张的赔偿数额 2712827 元具有事实及法律依据。故对原告请求赔偿经济损失及合理开支的诉请，本院予以支持。", "cited_rules": ["著作权法_54_001", "最高人民法院关于审理著作权民事纠纷案件适用法律若干问题的解释_25_001"]}]}, "strong_judgment": {"mode": "strong_judgment", "sufficiency_score": {"claim_clarity": 17, "legal_relation_stability": 13, "request_basis_stability": 7, "defense_path_completeness": 5, "element_fact_coverage": 10, "evidence_coverage": 12, "fact_finding_reliability": 7}, "risk_level": "medium", "subsumption_results": [{"claim_id": "C1", "request_basis_rule_unit_id": "著作权法_53_001", "request_elements_result": [{"element_id": "E_C1_01", "element_name": "原告享有案涉软件著作权", "finding_status": "proved", "note": "依据事实认定 F1，原告提供著作权登记证书等证据"}, {"element_id": "E_C1_02", "element_name": "被告未经许可复制、使用软件", "finding_status": "proved", "note": "依据事实认定 F2、F3，法院保全及妨害举证推定"}, {"element_id": "E_C1_03", "element_name": "无合法抗辩事由", "finding_status": "proved", "note": "被告未提供合法授权证明"}], "defense_results": [], "legal_effect_tags": ["liability_arises", "injunction_granted"], "disposition_type": "支持停止侵害", "judgment_result": "supported", "reasoning_summary": "本院认为，原告系案涉 NX 系列计算机软件著作权人，主体适格。被告未经许可在其经营场所电脑中复制、安装并商业使用案涉软件，且妨害证据保全，依法推定其侵权规模涵盖全部涉案电脑。被告行为构成对原告著作权的侵害，应承担停止侵害的民事责任。原告请求判令被告停止侵害、删除侵权复制件，事实清楚，法律依据充分，本院予以支持。", "cited_rules": ["著作权法_53_001", "计算机软件保护条例_24_001"]}, {"claim_id": "C2", "request_basis_rule_unit_id": "著作权法_54_001", "request_elements_result": [{"element_id": "E_C2_01", "element_name": "侵权行为成立", "finding_status": "proved", "note": "基于 C1 要件归入结果"}, {"element_id": "E_C2_02", "element_name": "权利人遭受经济损失及支出合理费用", "finding_status": "proved", "note": "依据事实认定 F4、F5"}, {"element_id": "E_C2_03", "element_name": "赔偿数额计算依据充分", "finding_status": "proved", "note": "依据事实认定 F4，结合被告妨害举证情节"}], "defense_results": [], "legal_effect_tags": ["liability_arises", "damages_awarded"], "disposition_type": "支持赔偿损失", "judgment_result": "supported", "reasoning_summary": "本院认为，被告侵害原告著作权，应当赔偿损失。原告提交了正版软件销售合同、发票及维权费用凭证，证明了损失及开支的存在。鉴于被告妨害证据保全，导致侵权规模难以精确查清，法院依法推定原告主张的侵权规模成立，并结合原告提供的赔偿计算依据，认定原告主张的赔偿数额 2712827 元具有事实及法律依据。故对原告请求赔偿经济损失及合理开支的诉请，本院予以支持。", "cited_rules": ["著作权法_54_001", "最高人民法院关于审理著作权民事纠纷案件适用法律若干问题的解释_25_001"]}], "document_skeleton": {"原告诉讼请求": [{"claim_id": "C1", "claim_text_normalized": "判令被告立即停止侵害原告 NX 系列计算机软件著作权的行为，删除并卸载其经营场所电脑中安装的全部侵权软件复制件", "claim_type": ["injunction_claim"], "object_type": "行为", "amount": null, "claimant": "西某工业软件有限公司", "respondent": "广州沃某模具有限公司", "is_clear": true, "is_executable": true, "issues": [], "clarification_questions": [], "priority_type": "primary", "competition_note": "与 C2 构成请求权聚合，均为侵权责任承担方式"}, {"claim_id": "C2", "claim_text_normalized": "判令被告赔偿原告经济损失及为制止侵权行为所支付的合理开支共计人民币 2712827 元", "claim_type": ["damages_claim"], "object_type": "金钱", "amount": 2712827.0, "claimant": "西某工业软件有限公司", "respondent": "广州沃某模具有限公司", "is_clear": true, "is_executable": true, "issues": ["赔偿总额中经济损失与合理开支的具体构成比例未列明"], "clarification_questions": ["请明确 2712827 元中经济损失与维权合理开支（律师费、公证费等）的具体金额构成"], "priority_type": "primary", "competition_note": "与 C1 构成请求权聚合，均为侵权责任承担方式"}], "被告辩称": [], "争议焦点": [{"issue_id": "I1", "issue_type": "fact_issue", "issue_text": "原告是否系案涉 NX 系列计算机软件的著作权人且主体适格", "linked_element_ids": ["f0", "f1"], "linked_claim_id": "C1", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e1", "e2", "e3", "e4", "e5"], "priority": "high"}, {"issue_id": "I2", "issue_type": "fact_issue", "issue_text": "被告是否在已保全检查的 9 台电脑中未经许可复制、安装案涉软件", "linked_element_ids": ["f2", "f3"], "linked_claim_id": "C1", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e6"], "priority": "high"}, {"issue_id": "I3", "issue_type": "fact_issue", "issue_text": "是否应因被告妨害证据保全行为推定剩余 9 台电脑亦存在侵权", "linked_element_ids": ["f4", "f5"], "linked_claim_id": "C1", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e6"], "priority": "high"}, {"issue_id": "I4", "issue_type": "fact_issue", "issue_text": "原告主张的经济损失赔偿数额 2712827 元是否有事实及法律依据", "linked_element_ids": ["f6"], "linked_claim_id": "C2", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e7"], "priority": "medium"}, {"issue_id": "I5", "issue_type": "fact_issue", "issue_text": "原告主张的维权合理开支是否真实、合理且必要", "linked_element_ids": ["f6"], "linked_claim_id": "C2", "linked_defense_id": null, "burden_party": "原告", "linked_evidence_ids": ["e8"], "priority": "low"}], "本院查明": [{"fact_finding_id": "F1", "element_id": "f0", "fact_slot": "原告主体资格及著作权权属", "finding_status": "proved", "adopted_evidence_ids": ["e1", "e2", "e3", "e4", "e5"], "rejected_evidence_ids": [], "reasoning": "证据 e1 证明原告合法存续，具备诉讼主体资格。证据 e2 为著作权登记证书，系权利初步证明，e3、e4、e5 佐证版本及权属。上述证据来源合法，与待证事实关联，真实性无异议，形成完整证据链，足以认定原告系案涉软件著作权人。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F2", "element_id": "f2", "fact_slot": "被告在已保全 9 台电脑中安装使用侵权软件", "finding_status": "proved", "adopted_evidence_ids": ["e6"], "rejected_evidence_ids": [], "reasoning": "证据 e6 系法院勘验笔录，记载了现场 17 台电脑中 9 台安装 13 套 NX 软件的事实。该证据由法院制作，合法性、真实性、关联性均强，证明力高。被告未提供合法授权证明，足以认定该部分侵权事实。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F3", "element_id": "f4", "fact_slot": "被告妨害证据保全及剩余电脑侵权推定", "finding_status": "proved", "adopted_evidence_ids": ["e6"], "rejected_evidence_ids": [], "reasoning": "证据 e6 记载被告采取断电、拒不开机等行为妨害保全，致 9 台电脑未检查。该行为构成举证妨碍。根据证据规则，法院可推定原告主张的剩余电脑存在侵权事实成立。该事实认定基于法院笔录，三性无疑。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F4", "element_id": "f6", "fact_slot": "经济损失计算依据及数额", "finding_status": "proved", "adopted_evidence_ids": ["e7"], "rejected_evidence_ids": [], "reasoning": "证据 e7 包含销售合同、发票及报价单，证明正版软件市场价格。虽为原告单方证据，但在被告未提交反证情况下，可作为赔偿计算参考。证明力足以支持损失存在及计算逻辑，具体数额由法院酌定。", "burden_party": "原告", "effect_if_unknown": null}, {"fact_finding_id": "F5", "element_id": "f6", "fact_slot": "维权合理开支真实性及合理性", "finding_status": "proved", "adopted_evidence_ids": ["e8"], "rejected_evidence_ids": [], "reasoning": "证据 e8 为律师费、公证费等支付凭证，票据真实，与本案维权行为关联。金额符合行业标准，具备必要性。三性符合要求，予以采信。", "burden_party": "原告", "effect_if_unknown": null}], "本院认为": [{"claim_id": "C1", "request_basis_rule_unit_id": "著作权法_53_001", "request_elements_result": [{"element_id": "E_C1_01", "element_name": "原告享有案涉软件著作权", "finding_status": "proved", "note": "依据事实认定 F1，原告提供著作权登记证书等证据"}, {"element_id": "E_C1_02", "element_name": "被告未经许可复制、使用软件", "finding_status": "proved", "note": "依据事实认定 F2、F3，法院保全及妨害举证推定"}, {"element_id": "E_C1_03", "element_name": "无合法抗辩事由", "finding_status": "proved", "note": "被告未提供合法授权证明"}], "defense_results": [], "legal_effect_tags": ["liability_arises", "injunction_granted"], "disposition_type": "支持停止侵害", "judgment_result": "supported", "reasoning_summary": "本院认为，原告系案涉 NX 系列计算机软件著作权人，主体适格。被告未经许可在其经营场所电脑中复制、安装并商业使用案涉软件，且妨害证据保全，依法推定其侵权规模涵盖全部涉案电脑。被告行为构成对原告著作权的侵害，应承担停止侵害的民事责任。原告请求判令被告停止侵害、删除侵权复制件，事实清楚，法律依据充分，本院予以支持。", "cited_rules": ["著作权法_53_001", "计算机软件保护条例_24_001"]}, {"claim_id": "C2", "request_basis_rule_unit_id": "著作权法_54_001", "request_elements_result": [{"element_id": "E_C2_01", "element_name": "侵权行为成立", "finding_status": "proved", "note": "基于 C1 要件归入结果"}, {"element_id": "E_C2_02", "element_name": "权利人遭受经济损失及支出合理费用", "finding_status": "proved", "note": "依据事实认定 F4、F5"}, {"element_id": "E_C2_03", "element_name": "赔偿数额计算依据充分", "finding_status": "proved", "note": "依据事实认定 F4，结合被告妨害举证情节"}], "defense_results": [], "legal_effect_tags": ["liability_arises", "damages_awarded"], "disposition_type": "支持赔偿损失", "judgment_result": "supported", "reasoning_summary": "本院认为，被告侵害原告著作权，应当赔偿损失。原告提交了正版软件销售合同、发票及维权费用凭证，证明了损失及开支的存在。鉴于被告妨害证据保全，导致侵权规模难以精确查清，法院依法推定原告主张的侵权规模成立，并结合原告提供的赔偿计算依据，认定原告主张的赔偿数额 2712827 元具有事实及法律依据。故对原告请求赔偿经济损失及合理开支的诉请，本院予以支持。", "cited_rules": ["著作权法_54_001", "最高人民法院关于审理著作权民事纠纷案件适用法律若干问题的解释_25_001"]}], "判决主文": ["支持原告关于 C1 的诉讼请求。", "支持原告关于 C2 的诉讼请求。"], "引用法条": ["最高人民法院关于审理著作权民事纠纷案件适用法律若干问题的解释_25_001", "著作权法_53_001", "著作权法_54_001", "计算机软件保护条例_24_001"]}, "consistency_check": {"诉求-固定一致": false, "固定-涵摄一致": true, "缺漏的诉求（涵摄阶段未覆盖）": [], "多出的诉求（涵摄阶段凭空出现）": [], "争点已使用": true, "事实已认定": true, "法条已引用": true}}, "weak_judgment": null, "partial_output": null, "timings_ms": {"step1_claim_fixing": 95972, "step2_request_basis": 51039, "step3_defense_basis": 0, "step4_element_analysis": 0, "step5_claim_fact_search": 0, "step6_issue_organize": 96591, "step7_proof": 89744, "step8_fact_finding": 117972, "step9_subsumption": 138590, "total": 674452}, "errors": [], "warnings": ["评分处于中风险区间，已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。"]}};</script>
+<script>
+const API = 'http://127.0.0.1:8000';
+let materialResult = null;      // MaterialFullResult
+let workflowResult = null;      // WorkflowResult
+let currentStage = 1;
+let reachedStage = 1;           // Farthest stage user has reached (clickable ceiling)
+
+// ── Init ────────────────────────────
+(async function init(){
+  goStage(1); // init progress bar click handlers
+  try{ const r=await fetch(API+'/api/health'); const d=await r.json();
+    document.getElementById('sysStatus').textContent='系统就绪 · '+d.kb_size+'条法规';
+    document.getElementById('sysStatus').className='badge badge-on';
+    const sel=document.getElementById('modelSelect');
+    for(const [k,v] of Object.entries(d.models||{})){ const o=document.createElement('option'); o.value=k; o.textContent=k+' ('+v+')'; if(k===d.default_model)o.selected=true; sel.appendChild(o); }
+  }catch(e){ document.getElementById('sysStatus').textContent='服务离线'; document.getElementById('sysStatus').className='badge badge-off'; }
+})();
+
+// ── Stage navigation ────────────────
+function goStage(n){
+  if(n > reachedStage) return; // can't skip ahead
+  document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
+  document.getElementById('stage'+n).classList.add('active');
+  document.querySelectorAll('.progress li').forEach((li,i)=>{
+    const sn = i+1;
+    li.className = sn < n ? 'done' : sn === n ? 'active' : '';
+    li.style.cursor = sn <= reachedStage ? 'pointer' : 'default';
+    li.onclick = sn <= reachedStage ? (()=>goStage(sn)) : null;
+    li.title = sn <= reachedStage ? '点击切换到第'+sn+'步' : '';
+  });
+  currentStage = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function advanceStage(){
+  reachedStage = Math.max(reachedStage, currentStage + 1);
+}
+
+// ── Sample ──────────────────────────
+function loadSample(){
+  document.getElementById('rawMaterial').value = '我是做小生意的，有个客户李某从我这买了混凝土，欠我8万块钱一直不给。当时也没签什么正式合同，就是微信上说的，他说要买混凝土，我就给他送了。送了三次货，分别是去年9月20号、9月25号、9月27号。一开始他用个人微信给我转过一部分钱，后来就不给了。我有微信聊天记录，他说"你放心，我会付的"，但是一直拖着。我现在想起诉他，让他把8万货款付了。';
+}
+
+// ── Stage 1: Submit Material ────────
+async function submitMaterial(){
+  const raw = document.getElementById('rawMaterial').value.trim();
+  if(!raw) return alert('请输入案件材料');
+  const btn = document.getElementById('btnSubmit');
+  btn.textContent='审核中…'; btn.disabled=true;
+  try{
+    const res = await fetch(API+'/material/full',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({raw_material: raw})
+    });
+    if(!res.ok){ const err=await res.json().catch(()=>({})); throw new Error(err.detail||'HTTP '+res.status); }
+    const data = await res.json();
+    materialResult = data;
+    if(!data.review) throw new Error('API 返回数据缺少 review 字段');
+    renderReview(data);
+    advanceStage();
+    if(data.review.can_proceed){ goStage(2); renderNormalized(data.normalized); }
+    else{ showSupplement(data.review); goStage(2); renderNormalized(data.normalized); }
+  }catch(e){ alert('材料审核失败: '+e.message); }
+  finally{ btn.textContent='提交审核'; btn.disabled=false; }
+}
+
+// ── Render Review ───────────────────
+function renderReview(data){
+  const r = data.review || {};
+  const ck = r.case_type_check || {};
+  const checklist = ck.checklist || [];
+  const coreOk = checklist.filter(i=>i.is_core&&i.status==='已提供').length;
+  const coreTotal = checklist.filter(i=>i.is_core).length || 1;
+  const pct = Math.round(coreOk/coreTotal*100);
+  const cls = pct>=80?'tag-green':pct>=40?'tag-yellow':'tag-red';
+
+  let scHtml = '';
+  (r.step_checks||[]).forEach(s=>{
+    const icon = {充足:'✅',部分不足:'⚠️',严重缺失:'❌'}[s.status]||'?';
+    scHtml += `<div class="accordion"><summary>${icon} Step${s.step_index} ${s.step_name} <span class="tag tag-${s.status==='充足'?'green':s.status==='严重缺失'?'red':'yellow'}">${s.status}</span></summary>
+      <div class="body">${s.has_required.length?('<p style="color:green">✓ '+s.has_required.join('；')+'</p>'):''}
+      ${s.missing_items.length?('<p style="color:var(--red)">✗ '+s.missing_items.join('；')+'</p>'):''}
+      ${s.special_note?('<p style="color:var(--blue);margin-top:6px">💡 '+s.special_note+'</p>'):''}
+      ${s.suggestion?('<p style="color:var(--ink2);margin-top:4px">→ '+s.suggestion+'</p>'):''}</div></div>`;
+  });
+
+  let clHtml = '';
+  checklist.forEach(i=>{
+    const icon = {已提供:'s-ok ✓',部分提供:'s-partial ~',缺失:'s-missing ✗'}[i.status]||'s-missing ?';
+    clHtml += `<div class="checklist-item"><span class="status-icon ${icon.split(' ')[0]}">${icon.split(' ')[1]}</span><div><strong>${i.name}</strong>${i.is_core?' <span class="tag tag-red" style="font-size:10px">核心</span>':''}<br><span style="font-size:12px;color:var(--ink2)">${i.description}${i.suggestion?' → '+i.suggestion:''}</span></div></div>`;
+  });
+
+  document.getElementById('reviewResult').innerHTML = `
+    <div class="card">
+      <h2>材料审核结果</h2>
+      <div class="row" style="margin-bottom:16px">
+        <div class="stat"><div class="n">${r.case_module||'—'}</div><div class="l">识别案由</div></div>
+        <div class="stat"><div class="n"><span class="${cls}">${pct}%</span></div><div class="l">核心材料提供率</div></div>
+        <div class="stat"><div class="n">${r.can_proceed?'✅ 通过':'❌ 未通过'}</div><div class="l">审核判定</div></div>
+        <div class="stat"><div class="n">${r.confidence||'—'}</div><div class="l">置信度</div></div>
+      </div>
+      ${r.can_proceed?'':'<div class="warn-bar">⚠ 材料审核未通过，部分核心材料缺失。您可以选择补充材料或继续分析（结果可能受影响）。</div>'}
+      <h3>案由专项材料核对</h3><div>${clHtml}</div>
+      ${ck.special_rules_note?('<p style="font-size:13px;color:var(--blue);margin-top:8px">💡 '+ck.special_rules_note+'</p>'):''}
+      <h3>九步法逐步骤诊断</h3>${scHtml}
+      ${r.upload_instructions?('<h3>补充指引</h3><p style="font-size:14px;white-space:pre-wrap">'+r.upload_instructions+'</p>'):''}
+    </div>`;
+  document.getElementById('reviewResult').style.display='block';
+}
+
+// ── Supplement Modal ─────────────────
+function showSupplement(review){
+  if(!review){ alert('审核数据异常，请重试'); return; }
+  const core = review.missing_core_materials||[];
+  const opt = review.missing_optional_materials||[];
+  document.getElementById('supplementBody').innerHTML = `
+    ${core.length?('<h3 style="color:var(--red)">核心缺失 ('+core.length+'项)</h3><ul style="margin:8px 0 16px 20px">'+core.map(m=>'<li>'+m+'</li>').join('')+'</ul>'):''}
+    ${opt.length?('<h3 style="color:var(--warn)">可选缺失 ('+opt.length+'项)</h3><ul style="margin:8px 0 16px 20px">'+opt.slice(0,5).map(m=>'<li>'+m+'</li>').join('')+'</ul>'):''}
+    ${review.upload_instructions?('<h3>补充指引</h3><p style="font-size:14px;white-space:pre-wrap;margin-bottom:12px">'+review.upload_instructions+'</p>'):''}
+    <label>补充材料内容</label>
+    <textarea id="supplementText" placeholder="请在此输入您要补充的材料…" style="min-height:100px;margin-top:4px"></textarea>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="btn btn-gold" onclick="doSupplement()">补充并重新审核</button>
+      <button class="btn btn-ghost" onclick="closeSupplement()">暂不补充，继续分析</button>
+    </div>`;
+  document.getElementById('supplementModal').classList.add('show');
+}
+function closeSupplement(){
+  document.getElementById('supplementModal').classList.remove('show');
+  // Show warning in stage 2
+  document.getElementById('stage2Warn').innerHTML = '<div class="warn-bar">⚠ 材料存在缺失，分析结果可能受材料不足影响。<button class="btn btn-sm btn-outline" onclick="document.getElementById(\'supplementModal\').classList.add(\'show\')" style="margin-left:12px">补充材料</button></div>';
+}
+async function doSupplement(){
+  const supp = document.getElementById('supplementText').value.trim();
+  if(!supp) return alert('请输入补充材料');
+  const orig = document.getElementById('rawMaterial').value.trim();
+  const btn = event.target; btn.textContent='审核中…'; btn.disabled=true;
+  try{
+    const res = await fetch(API+'/material/supplement',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({original:orig, supplement:supp})
+    });
+    if(!res.ok){ const err=await res.json().catch(()=>({})); throw new Error(err.detail||'HTTP '+res.status); }
+    const data = await res.json();
+    materialResult = data;
+    renderReview(data);
+    document.getElementById('supplementModal').classList.remove('show');
+    if(!data.review) throw new Error('API 返回数据缺少 review 字段');
+    if(data.review.can_proceed){ document.getElementById('stage2Warn').innerHTML=''; }
+    renderNormalized(data.normalized);
+  }catch(e){ alert('补充审核失败: '+e.message); }
+  finally{ btn.textContent='补充并重新审核'; btn.disabled=false; }
+}
+
+// ── Stage 2: Render Normalized ───────
+function renderNormalized(n){
+  if(!n){ document.getElementById('normalizedPreview').innerHTML='<div class="warn-bar">⚠ 规范化数据暂不可用，但您仍可继续进行九步法分析（结果可能受影响）。<button class="btn btn-sm btn-outline" onclick="goStage(1)" style="margin-left:12px">← 返回补充材料</button></div>'; return; }
+  const bi = n.case_basic_info||{};
+  let html = '';
+  html += '<div class="row"><div class="field-preview"><span class="key">案件名称</span><div class="val">'+(bi.case_name||'—')+'</div></div><div class="field-preview"><span class="key">案由</span><div class="val">'+(bi.case_cause_text||'—')+'</div></div><div class="field-preview"><span class="key">法院</span><div class="val">'+(bi.court||'—')+'</div></div><div class="field-preview"><span class="key">审理阶段</span><div class="val">'+(bi.procedure_stage||'—')+'</div></div></div>';
+
+  html += '<h3>当事人 ('+(n.party_info||[]).length+')</h3>';
+  (n.party_info||[]).forEach(p=>{ html += '<span class="tag tag-blue" style="margin:2px">'+p.party_name+' ('+p.party_role+')</span>'; });
+
+  html += '<h3>诉讼请求 ('+(n.claims||[]).length+')</h3>';
+  (n.claims||[]).forEach(c=>{ html += '<div class="field-preview"><span class="key">'+c.claim_id+'</span><div class="val">'+c.claim_text_normalized+(c.amount?' <strong>¥'+c.amount.toLocaleString()+'</strong>':'')+'</div></div>'; });
+
+  html += '<h3>事实主张 ('+(n.claim_facts||[]).length+')</h3>';
+  (n.claim_facts||[]).forEach(f=>{ html += '<div class="field-preview"><span class="key">'+f.fact_id+' '+(f.fact_time||'')+'</span><div class="val">'+f.fact_text_original+'</div></div>'; });
+
+  if((n.defense_opinions||[]).length){
+    html += '<h3>答辩意见</h3>';
+    n.defense_opinions.forEach(d=>{ html += '<span class="tag tag-yellow" style="margin:2px">'+d.defense_id+': '+(d.response_type||'?')+'</span>'; });
+  }
+
+  html += '<h3>证据清单 ('+(n.evidence_list||[]).length+')</h3><table><tr><th>名称</th><th>类型</th><th>来源</th><th>证明目的</th></tr>';
+  (n.evidence_list||[]).forEach(e=>{ html += '<tr><td>'+e.evidence_name+'</td><td>'+e.evidence_type+'</td><td>'+(e.submitted_by||'—')+'</td><td>'+(e.proof_purpose_normalized||e.proof_purpose_original||'—')+'</td></tr>'; });
+  html += '</table>';
+
+  if((n.evidence_meta||[]).length){
+    html += '<h3>证据审核 ('+n.evidence_meta.length+')</h3>';
+    n.evidence_meta.forEach(em=>{
+      html += '<div class="field-preview"><span class="key">'+em.evidence_id+' '+(em.standalone_capable?'✅可单独定案':'⚠不能单独定案')+'</span><div class="val">'+em.subtype+' · '+em.authenticity_note+(em.standalone_limitation?' · '+em.standalone_limitation:'')+'</div></div>';
+    });
+  }
+
+  if(bi.case_summary) html += '<h3>案件摘要</h3><p style="font-size:14px;color:var(--ink2)">'+bi.case_summary+'</p>';
+
+  document.getElementById('normalizedPreview').innerHTML = html;
+}
+
+// ── Stage 2: Run Jiubufa ─────────────
+async function runJiubufa(){
+  if(!materialResult?.normalized){ return alert('请先完成材料规范化'); }
+  const n = materialResult.normalized;
+  // Build CaseInput from NormalizedCaseInput (structure is identical)
+  const caseInput = {
+    case_basic_info: n.case_basic_info,
+    party_info: n.party_info,
+    claims: n.claims,
+    claim_facts: n.claim_facts,
+    defense_opinions: n.defense_opinions,
+    counterclaims: n.counterclaims||[],
+    evidence_list: n.evidence_list,
+    cross_examinations: n.cross_examinations||[],
+    court_records: n.court_records||[],
+    legal_arguments: n.legal_arguments||[],
+    procedural_info: n.procedural_info||null,
+    existing_judgment_or_mediation: n.existing_judgment_or_mediation||null,
+    fallback_user_choice: null
+  };
+
+  const btn = document.getElementById('btnJiubufa');
+  btn.textContent='分析中…'; btn.disabled=true;
+  document.getElementById('jiubufaProgress').style.display='block';
+  document.getElementById('jiubufaProgress').innerHTML='<div class="loading">九步法分析进行中，预计需要15-20分钟，请耐心等待…</div>';
+  goStage(2);
+
+  try{
+    const model = document.getElementById('modelSelect').value;
+    const res = await fetch(API+'/api/workflow/run',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({case_input: caseInput, model_name: model})
+    });
+    const data = await res.json();
+    workflowResult = data;
+    advanceStage();
+    goStage(3);
+    renderResults(data);
+  }catch(e){
+    alert('九步法分析失败: '+e.message);
+    document.getElementById('jiubufaProgress').style.display='none';
+  }finally{
+    btn.textContent='开始九步法分析'; btn.disabled=false;
+    document.getElementById('jiubufaProgress').style.display='none';
+  }
+}
+
+// ── Stage 3: Render Results ──────────
+function renderResults(data){
+  const steps = [
+    {key:'step1', name:'固定权利请求', na:'诉求固定'},
+    {key:'step2', name:'请求权基础规范', na:'请求权基础'},
+    {key:'step3', name:'抗辩权基础规范', na:'抗辩权基础'},
+    {key:'step4', name:'基础规范构成要件分析', na:'要件分析'},
+    {key:'step5', name:'诉讼主张检索', na:'待证事实'},
+    {key:'step6', name:'争点整理', na:'争点整理'},
+    {key:'step7', name:'要件事实证明', na:'举证质证'},
+    {key:'step8', name:'事实认定', na:'事实认定'},
+    {key:'step9', name:'要件归入并裁判', na:'要件涵摄'}
+  ];
+
+  const strong = data.strong_judgment;
+  const weak = data.weak_judgment;
+  const partial = data.partial_output;
+  const score = strong?.sufficiency_score || weak?.sufficiency_score || partial?.sufficiency_score || {};
+  const total = score.total || Object.values(score).reduce((a,b)=>a+(typeof b==='number'?b:0), 0);
+  const level = total>=80?'低风险':total>=60?'中风险':total>=40?'弱(需用户选择)':'阻断';
+  const levelCls = total>=80?'tag-green':total>=60?'tag-yellow':'tag-red';
+  const mode = strong?.mode || weak?.mode || partial?.mode || '—';
+  const modeLabel = {strong_judgment:'强裁判',weak_judgment:'弱裁判',partial_output_only:'部分输出'}[mode]||mode;
+
+  // Errors & warnings
+  let alerts = '';
+  if(data.errors?.length) alerts += '<div class="error-bar">❌ '+data.errors.join('；')+'</div>';
+  if(data.warnings?.length) alerts += '<div class="warn-bar">⚠ '+data.warnings.join('；')+'</div>';
+
+  // Summary section
+  const subs = strong?.subsumption_results || data.step9?.subsumption_results || [];
+  const weakSubs = weak?.weak_subsumption_results || [];
+  const supported = subs.filter(s=>s.judgment_result==='supported').length;
+  const partialSup = subs.filter(s=>s.judgment_result==='partially_supported').length;
+  const rejected = subs.filter(s=>s.judgment_result==='rejected').length;
+
+  let summaryHTML = alerts + `
+    <div class="card">
+      <h2>📜 综合结论</h2>
+      <div class="stat-grid">
+        <div class="stat"><div class="n"><span class="${levelCls}">${level}</span></div><div class="l">风险等级</div></div>
+        <div class="stat"><div class="n">${modeLabel}</div><div class="l">裁判模式</div></div>
+        <div class="stat"><div class="n">${total}/100</div><div class="l">材料充足度评分</div></div>
+        <div class="stat"><div class="n">${subs.length||weakSubs.length||0}</div><div class="l">裁判结论项</div></div>
+      </div>`;
+
+  if(subs.length){
+    summaryHTML += '<div style="margin-top:16px"><h3>判决概要</h3>';
+    subs.forEach(s=>{
+      const label = {supported:'✅ 支持',partially_supported:'⚠ 部分支持',rejected:'❌ 驳回',procedural_dismissal:'↩ 程序性驳回'}[s.judgment_result]||s.judgment_result;
+      summaryHTML += '<p>'+label+' '+s.claim_id+'：'+s.reasoning_summary+'</p>';
+    });
+    summaryHTML += '</div>';
+  }
+
+  if(weak?.missing_inputs?.length){
+    summaryHTML += '<div class="warn-bar" style="margin-top:12px">⚠ 材料不足提示：'+weak.missing_inputs.join('；')+'</div>';
+    if(weak.assumptions_used?.length) summaryHTML += '<div class="info-bar">💡 分析基于以下假设：'+weak.assumptions_used.join('；')+'</div>';
+    if(weak.upgrade_to_strong_judgment_requirements?.length) summaryHTML += '<div class="info-bar">📋 升级为强裁判需补充：'+weak.upgrade_to_strong_judgment_requirements.join('；')+'</div>';
+  }
+  summaryHTML += '</div>';
+
+  // Step cards
+  let stepsHTML = '<div class="card"><h2>📊 九步法详细分析</h2>';
+  steps.forEach((s,i)=>{
+    const output = data[s.key];
+    const hasError = (data.errors||[]).some(e=>e.includes(s.key));
+    const icon = output?'✅':hasError?'❌':'○';
+    const statusTag = output? 'tag-green' : hasError? 'tag-red' : '';
+    stepsHTML += `<div class="accordion"><summary>${icon} 第${i+1}步：${s.name} ${statusTag?'<span class="tag '+statusTag+'">'+(output?'已完成':'异常')+'</span>':''}</summary><div class="body">`;
+
+    if(!output){
+      stepsHTML += '<p style="color:var(--ink2)">此步骤未产出结果。</p>';
+    }else{
+      // Show relevant details based on step
+      if(i===0) stepsHTML += renderStep1(output);
+      else if(i===1) stepsHTML += renderStep2(output);
+      else if(i===2) stepsHTML += renderStep3(output);
+      else if(i===3) stepsHTML += renderStep4(output);
+      else if(i===4) stepsHTML += renderStep5(output);
+      else if(i===5) stepsHTML += renderStep6(output);
+      else if(i===6) stepsHTML += renderStep7(output);
+      else if(i===7) stepsHTML += renderStep8(output);
+      else if(i===8) stepsHTML += renderStep9(output);
+      stepsHTML += '<details style="margin-top:10px"><summary style="cursor:pointer;font-size:12px;color:var(--ink2)">查看原始JSON</summary><pre>'+JSON.stringify(output,null,2).slice(0,2000)+'</pre></details>';
+    }
+    stepsHTML += '</div></div>';
+  });
+  stepsHTML += '</div>';
+
+  // Document skeleton & consistency
+  let docHTML = '';
+  if(strong?.document_skeleton){
+    const sk = strong.document_skeleton;
+    docHTML = '<div class="card"><h2>📝 裁判文书框架</h2><div class="document-skeleton">';
+    if(sk['原告诉讼请求']) docHTML += '<h3>原告诉讼请求</h3>'+renderClaims(sk['原告诉讼请求']);
+    if(sk['被告辩称']) docHTML += '<h3>被告辩称</h3>'+renderDefenses(sk['被告辩称']);
+    if(sk['争议焦点']) docHTML += '<h3>争议焦点</h3>'+renderIssues(sk['争议焦点']);
+    if(sk['本院查明']) docHTML += '<h3>本院查明</h3>'+renderFactFindings(sk['本院查明']);
+    if(sk['本院认为']) docHTML += '<h3>本院认为</h3>'+renderSubsumptions(sk['本院认为']);
+    if(sk['判决主文']) docHTML += '<h3>判决主文</h3><div style="font-weight:700;color:var(--red)">'+sk['判决主文'].map(t=>'<p style="text-indent:2em">'+t+'</p>').join('')+'</div>';
+    if(sk['引用法条']?.length) docHTML += '<h3>引用法条</h3>'+renderCitedLaws(sk['引用法条']);
+    docHTML += '</div></div>';
+  }
+
+  // Consistency check
+  if(strong?.consistency_check){
+    const cc = strong.consistency_check;
+    docHTML += '<div class="card"><h2>🔍 一致性校验（八个一致）</h2><table>';
+    docHTML += '<tr><td>诉求-固定一致</td><td>'+(cc['诉求-固定一致']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>固定-涵摄一致</td><td>'+(cc['固定-涵摄一致']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>缺漏的诉求</td><td>'+(cc['缺漏的诉求（涵摄阶段未覆盖）']||[]).join(', ')||'无'+'</td></tr>';
+    docHTML += '<tr><td>多出的诉求</td><td>'+(cc['多出的诉求（涵摄阶段凭空出现）']||[]).join(', ')||'无'+'</td></tr>';
+    docHTML += '<tr><td>争点已使用</td><td>'+(cc['争点已使用']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>事实已认定</td><td>'+(cc['事实已认定']?'✅':'❌')+'</td></tr>';
+    docHTML += '<tr><td>法条已引用</td><td>'+(cc['法条已引用']?'✅':'❌')+'</td></tr>';
+    docHTML += '</table></div>';
+  }
+
+  // Timing
+  let timeHTML = '';
+  if(data.timings_ms){
+    const t = data.timings_ms;
+    timeHTML = '<div class="card"><h2>⏱ 运行耗时</h2><table>';
+    if(t.total) timeHTML += '<tr><td>总耗时</td><td>'+(t.total/1000).toFixed(1)+'s</td></tr>';
+    Object.entries(t).filter(([k])=>k!=='total').forEach(([k,v])=>{ timeHTML += '<tr><td>'+k+'</td><td>'+(v/1000).toFixed(1)+'s</td></tr>'; });
+    timeHTML += '</table></div>';
+  }
+
+  // Evidence
+  let evHTML = '';
+  const evList = materialResult?.normalized?.evidence_list || [];
+  if(evList.length){
+    evHTML = '<div class="card"><h2>📎 证据分析</h2><table><tr><th>名称</th><th>类型</th><th>证明目的</th><th>采信</th></tr>';
+    evList.forEach(e=>{ evHTML += '<tr><td>'+e.evidence_name+'</td><td>'+e.evidence_type+'</td><td>'+(e.proof_purpose_normalized||'—')+'</td><td>'+(e.adopted_status||'—')+'</td></tr>'; });
+    evHTML += '</table></div>';
+  }
+
+  document.getElementById('resultContent').innerHTML = summaryHTML + docHTML + stepsHTML + evHTML + timeHTML;
+}
+
+// ── Step render helpers ──────────────
+function renderStep1(o){ return '<p>识别案由: '+(o.case_cause_inferred||[]).join(', ')+'</p><p>固定诉请: '+(o.fixed_claims||[]).length+'项</p>'+(o.overall_clarification||[]).map(c=>'<p style="color:var(--blue)">→ '+c+'</p>').join(''); }
+function renderStep2(o){ return '<p>请求权基础候选: '+(o.request_basis_candidates||[]).length+'项</p>'+(o.request_basis_candidates||[]).map(r=>'<p>📖 '+r.rule_unit_ref+' <span class="tag tag-blue">'+r.priority+'</span> '+r.selection_reason+'</p>').join(''); }
+function renderStep3(o){ return '<p>抗辩权基础候选: '+(o.defense_basis_candidates||[]).length+'项</p>'+(o.defense_basis_candidates||[]).map(d=>'<p>🛡 '+d.response_type+' → '+d.defense_type.join(', ')+' '+(d.rule_unit_ref||'')+'</p>').join(''); }
+function renderStep4(o){ return '<p>要件矩阵: '+(o.element_matrix||[]).length+'行</p><table><tr><th>要件</th><th>类型</th><th>举证方</th><th>用途</th></tr>'+(o.element_matrix||[]).slice(0,10).map(e=>'<tr><td>'+e.element_name+'</td><td>'+e.element_type+'</td><td>'+e.burden_party+'</td><td>'+e.used_for+'</td></tr>').join('')+'</table>'; }
+function renderStep5(o){ return '<p>主张映射: '+(o.claim_fact_mapping||[]).length+'项</p>'+(o.claim_fact_mapping||[]).map(m=>'<p>'+m.element_id+': <span class="tag tag-'+(m.assertion_status==='asserted'?'green':'red')+'">'+m.assertion_status+'</span> '+(m.clarification_question||'')+'</p>').join(''); }
+function renderStep6(o){ return '<p>争点: '+(o.issues||[]).length+'个</p>'+(o.issues||[]).map(i=>'<p>🔴 '+i.issue_text+' <span class="tag">'+i.issue_type+'</span> priority='+i.priority+'</p>').join(''); }
+function renderStep7(o){ return '<p>证明计划: '+(o.proof_plan||[]).length+'行</p>'+(o.proof_plan||[]).map(p=>'<p>'+p.fact_to_prove+' — 举证方:'+p.burden_party+(p.proof_gap?' <span style="color:var(--red)">缺口:'+p.proof_gap+'</span>':'')+'</p>').join(''); }
+function renderStep8(o){ return '<p>事实认定: '+(o.fact_findings||[]).length+'项</p>'+(o.fact_findings||[]).map(f=>'<p>'+f.fact_finding_id+': <span class="tag tag-'+(f.finding_status==='proved'?'green':f.finding_status==='not_proved'?'red':'yellow')+'">'+f.finding_status+'</span> '+f.reasoning+'</p>').join(''); }
+function renderStep9(o){ return '<p>涵摄结果: '+(o.subsumption_results||[]).length+'项</p>'+(o.subsumption_results||[]).map(s=>'<p>'+s.claim_id+': <strong>'+s.judgment_result+'</strong> — '+s.reasoning_summary+'</p><p style="font-size:12px">引用法条: '+(s.cited_rules||[]).join(', ')+'</p>').join(''); }
+// ── Document skeleton render helpers ──
+function renderClaims(items){
+  if(!items?.length) return '<p>—</p>';
+  return items.map((c,i)=>{
+    const text = c.claim_text_normalized || c.claim_text_original || '';
+    const amt = c.amount ? '，标的额 ¥'+Number(c.amount).toLocaleString() : '';
+    const claimant = c.claimant ? c.claimant+' ' : '';
+    return '<p style="text-indent:2em">'+(i+1)+'. '+claimant+text+amt+'。</p>';
+  }).join('');
+}
+function renderDefenses(items){
+  if(!items?.length) return '<p>—</p>';
+  return items.map((d,i)=>{
+    const text = d.defense_text_original || d.defense_text_normalized || '';
+    const resp = d.response_type ? ' <span class="tag tag-yellow">'+d.response_type+'</span>' : '';
+    return '<p style="text-indent:2em">'+(i+1)+'. '+text+resp+'</p>';
+  }).join('');
+}
+function renderIssues(items){
+  if(!items?.length) return '<p>—</p>';
+  return items.map((iss,idx)=>{
+    const text = iss.issue_text || '';
+    const type = iss.issue_type ? ' <span class="tag tag-blue">'+iss.issue_type+'</span>' : '';
+    return '<p style="text-indent:2em">'+(idx+1)+'. '+text+type+'</p>';
+  }).join('');
+}
+function renderFactFindings(items){
+  if(!items?.length) return '<p>—</p>';
+  return items.map((f,idx)=>{
+    const text = f.reasoning || f.fact_finding_id || '';
+    const status = f.finding_status || '';
+    const cls = status==='proved'?'green':status==='not_proved'?'red':'yellow';
+    return '<p style="text-indent:2em">'+(idx+1)+'. '+text+' <span class="tag tag-'+cls+'">'+status+'</span></p>';
+  }).join('');
+}
+function renderCitedLaws(items){
+  if(!items?.length) return '<p>—</p>';
+  return items.map((law,idx)=>{
+    if(typeof law==='string') return '<p style="text-indent:2em">'+(idx+1)+'. '+law+'</p>'; // old format fallback
+    const name = law.law_name||'';
+    const art = law.article_no||'';
+    const text = law.rule_unit_text||'';
+    return '<p style="text-indent:2em">'+(idx+1)+'. <strong>'+name+'</strong> '+art+'：'+text+'</p>';
+  }).join('');
+}
+function renderSubsumptions(items){
+  if(!items?.length) return '<p>—</p>';
+  return items.map((s,idx)=>{
+    const result = s.judgment_result || '';
+    const summary = s.reasoning_summary || '';
+    const label = {supported:'✅ 支持', partially_supported:'⚠ 部分支持', rejected:'❌ 驳回', procedural_dismissal:'↩ 程序性驳回'}[result] || result;
+    return '<p style="text-indent:2em">'+(idx+1)+'. <strong>'+label+'</strong>：'+summary+'</p>';
+  }).join('');
+}
+// ── Demo mode ──────────────────────────
+let demoMode = false;
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function showDemoStatus(text){
+  const el = document.getElementById('demoStatus');
+  el.style.display = text ? 'block' : 'none';
+  el.textContent = text || '';
+}
+async function runDemo(){
+  if(demoMode) return;
+  demoMode = true;
+  const btn = document.getElementById('btnDemo');
+  btn.textContent='播放中…'; btn.disabled=true;
+  document.getElementById('sysStatus').className='badge badge-demo';
+  document.getElementById('sysStatus').textContent='Demo 模式';
+  showDemoStatus('正在加载演示案例数据…');
+  try{
+    if(typeof DEMO_DATA === 'undefined') throw new Error('Demo 数据未嵌入，请先运行 capture_demo.py 采集');
+    const demo = DEMO_DATA;
+    // Stage 1: fill textarea + render material review
+    document.getElementById('rawMaterial').value = demo.input_text || '';
+    showDemoStatus('正在进行材料规范层审核…');
+    await delay(600);
+    materialResult = { review: demo.material_review, normalized: demo.normalized_material };
+    renderReview(materialResult);
+    advanceStage(); goStage(2);
+    showDemoStatus('正在进行材料结构化处理…');
+    await delay(600);
+    renderNormalized(demo.normalized_material);
+    showDemoStatus('正在执行九步法法律分析…');
+    await delay(800);
+    // Stage 3: render workflow results
+    workflowResult = demo.workflow_result;
+    advanceStage(); goStage(3);
+    renderResults(workflowResult);
+    showDemoStatus('Demo 示例运行完成');
+    await delay(2000);
+    showDemoStatus('');
+  }catch(e){
+    alert('Demo 加载失败: '+e.message);
+    document.getElementById('sysStatus').className='badge badge-off';
+    document.getElementById('sysStatus').textContent='Demo 异常';
+    showDemoStatus('');
+  }finally{
+    demoMode = false;
+    btn.textContent='▶ 示例 Demo'; btn.disabled=false;
+  }
+}
+function renderList(items){ if(!items?.length) return '<p>—</p>'; return items.map(i=>'<p>'+(typeof i==='string'?i:JSON.stringify(i))+'</p>').join(''); }
+</script>
+</body>
+</html>

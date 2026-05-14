@@ -1,0 +1,424 @@
+{
+  "trace_id": "20260514-141402-a3a2a448",
+  "status": "failed",
+  "started_at": "2026-05-14 14:15:36",
+  "duration_seconds": 94.0,
+  "step_count": 2,
+  "steps": [
+    {
+      "index": 1,
+      "step_name": "接收请求",
+      "timestamp": "14:14:02",
+      "elapsed_ms": 2,
+      "input": {
+        "case_input": {
+          "case_basic_info": {
+            "case_id": null,
+            "case_name": "西某工业软件有限公司诉广州沃某模具有限公司侵害计算机软件著作权纠纷案",
+            "case_cause_text": "侵害计算机软件著作权纠纷",
+            "court": "广州知识产权法院",
+            "procedure_stage": "一审",
+            "filing_date": null,
+            "material_sources": [
+              "营业执照",
+              "法定代表人身份证明",
+              "软件著作权登记证书",
+              "软件版本说明",
+              "首次发表证明",
+              "源代码备份",
+              "正版软件销售合同",
+              "发票",
+              "官网报价截图",
+              "授权报价单",
+              "赔偿计算明细",
+              "律师费支付凭证",
+              "公证费支付凭证",
+              "差旅费凭证",
+              "法院证据保全记录"
+            ],
+            "case_summary": "原告西某工业软件有限公司主张其系NX系列计算机软件著作权人，被告广州沃某模具有限公司未经许可在其经营场所电脑中复制、安装并商业使用该软件。广州知识产权法院证据保全中，在已检查的17台电脑中发现9台安装13套侵权软件，被告采取断电、拒不开机等行为妨害后续保全，致剩余9台电脑未完成检查。原告请求判令被告停止侵害、删除侵权软件，并赔偿经济损失及合理开支共计2712827元。"
+          },
+          "party_info": [
+            {
+              "party_id": "p1",
+              "party_name": "西某工业软件有限公司",
+              "party_role": "原告",
+              "legal_status": "法人",
+              "relationship_to_case": "案涉软件著作权人",
+              "identity_evidence": [
+                "营业执照、法定代表人身份证明"
+              ],
+              "standing_issue": false
+            },
+            {
+              "party_id": "p2",
+              "party_name": "广州沃某模具有限公司",
+              "party_role": "被告",
+              "legal_status": "法人",
+              "relationship_to_case": "被控侵权人",
+              "identity_evidence": [
+                "[待核实：被告主体资格证明材料]"
+              ],
+              "standing_issue": true
+            }
+          ],
+          "claims": [
+            {
+              "claim_id": "c1",
+              "claim_text_original": "停止侵害，删除、卸载全部侵权复制件",
+              "claim_text_normalized": "判令被告停止侵害原告享有的NX系列计算机软件著作权，删除并卸载其经营场所电脑中安装的全部侵权软件复制件",
+              "claimant": "p1",
+              "respondent": "p2",
+              "claim_type_candidate": [
+                "停止侵害请求权"
+              ],
+              "object_type": "行为",
+              "amount": null,
+              "behavior_requested": null,
+              "is_clear": true,
+              "is_executable": true,
+              "conflict_with_other_claims": [],
+              "supplement_needed": false,
+              "priority_type": "primary"
+            },
+            {
+              "claim_id": "c2",
+              "claim_text_original": "赔偿经济损失及维权合理开支人民币2712827元",
+              "claim_text_normalized": "判令被告赔偿原告经济损失及为制止侵权行为所支付的合理开支共计人民币2712827元",
+              "claimant": "p1",
+              "respondent": "p2",
+              "claim_type_candidate": [
+                "损害赔偿请求权"
+              ],
+              "object_type": "金钱",
+              "amount": 2712827.0,
+              "behavior_requested": null,
+              "is_clear": true,
+              "is_executable": true,
+              "conflict_with_other_claims": [],
+              "supplement_needed": false,
+              "priority_type": "primary"
+            }
+          ],
+          "claim_facts": [
+            {
+              "fact_id": "f0",
+              "fact_text_original": "西某工业软件有限公司系依法成立并有效存续的企业法人",
+              "fact_text_normalized": "原告西某工业软件有限公司系依法成立并有效存续的企业法人（据原告主张）",
+              "fact_time": null,
+              "fact_actor": "p1",
+              "fact_counterparty": null,
+              "fact_type_candidate": [
+                "主体资格事实"
+              ],
+              "linked_claim_id": "c1",
+              "linked_evidence_ids": [
+                "e1"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            },
+            {
+              "fact_id": "f1",
+              "fact_text_original": "西某工业软件有限公司主张其系NX系列计算机软件的著作权人",
+              "fact_text_normalized": "原告西某工业软件有限公司系NX系列计算机软件的著作权人（据原告主张）",
+              "fact_time": null,
+              "fact_actor": "p1",
+              "fact_counterparty": null,
+              "fact_type_candidate": [
+                "权属事实"
+              ],
+              "linked_claim_id": "c1",
+              "linked_evidence_ids": [
+                "e2",
+                "e3",
+                "e4",
+                "e5"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            },
+            {
+              "fact_id": "f2",
+              "fact_text_original": "广州沃某模具有限公司未经许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件，未能提供正版授权许可、采购合同或合法来源证明",
+              "fact_text_normalized": "被告广州沃某模具有限公司未经原告许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件，且未能提供正版授权许可、采购合同或合法来源证明（据原告主张）",
+              "fact_time": null,
+              "fact_actor": "p2",
+              "fact_counterparty": "p1",
+              "fact_type_candidate": [
+                "侵权行为"
+              ],
+              "linked_claim_id": "c1",
+              "linked_evidence_ids": [
+                "e6"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            },
+            {
+              "fact_id": "f3",
+              "fact_text_original": "经现场统计，广州沃某模具有限公司办公室共有26台电脑。广州知识产权法院已完成对其中17台电脑的保全检查，其中9台电脑显示安装有13套NX系列计算机软件。",
+              "fact_text_normalized": "广州知识产权法院证据保全中，对被告办公室26台电脑中的17台完成检查，发现9台电脑安装有13套NX系列计算机软件（据法院证据保全记录）",
+              "fact_time": null,
+              "fact_actor": "p1",
+              "fact_counterparty": "p2",
+              "fact_type_candidate": [
+                "侵权事实查明"
+              ],
+              "linked_claim_id": "c1",
+              "linked_evidence_ids": [
+                "e6"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            },
+            {
+              "fact_id": "f4",
+              "fact_text_original": "在法院继续对其余电脑进行保全时，广州沃某模具有限公司突然采取对抗措施，包括拒不打开部分电脑、断电等方式，妨害法院证据保全工作，导致证据保全被迫终止，其余9台电脑未完成保全。",
+              "fact_text_normalized": "被告在广州知识产权法院继续对剩余电脑进行证据保全时，采取拒不打开电脑、断电等对抗措施，妨害证据保全工作，致保全终止、剩余9台电脑未完成检查（据法院证据保全记录）",
+              "fact_time": null,
+              "fact_actor": "p2",
+              "fact_counterparty": null,
+              "fact_type_candidate": [
+                "妨害诉讼行为"
+              ],
+              "linked_claim_id": "c2",
+              "linked_evidence_ids": [
+                "e6"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            },
+            {
+              "fact_id": "f5",
+              "fact_text_original": "西某工业软件有限公司主张，因广州沃某模具有限公司无正当理由妨害证据保全，应依法承担不利后果，请求法院推定未完成保全的9台电脑亦安装并使用案涉NX系列计算机软件，并在确定侵权规模和赔偿数额时一并考虑。",
+              "fact_text_normalized": "原告主张，因被告无正当理由妨害证据保全，依法应承担不利后果，请求法院推定未完成保全的9台电脑亦安装并使用案涉软件，并在确定侵权规模和赔偿数额时予以考虑（据原告主张）",
+              "fact_time": null,
+              "fact_actor": "p1",
+              "fact_counterparty": "p2",
+              "fact_type_candidate": [
+                "法律推定主张"
+              ],
+              "linked_claim_id": "c2",
+              "linked_evidence_ids": [
+                "e6"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            },
+            {
+              "fact_id": "f6",
+              "fact_text_original": "西某工业软件有限公司主张按照侵权软件数量乘以正版软件价格，并结合律师费、公证费、差旅费等维权合理开支计算损失。西某工业软件有限公司拟提交正版软件销售合同、发票、官网报价截图、授权报价单及赔偿计算明细，证明其经济损失；拟提交律师费、公证费等支付凭证，证明维权合理开支。",
+              "fact_text_normalized": "原告主张经济损失按侵权软件数量乘以正版软件价格计算，并主张维权合理开支包括律师费、公证费、差旅费等（据原告主张）",
+              "fact_time": null,
+              "fact_actor": "p1",
+              "fact_counterparty": null,
+              "fact_type_candidate": [
+                "损失计算依据"
+              ],
+              "linked_claim_id": "c2",
+              "linked_evidence_ids": [
+                "e7",
+                "e8"
+              ],
+              "possible_fact_slot": [],
+              "clarity_status": "明确",
+              "opponent_response": "不明确"
+            }
+          ],
+          "defense_opinions": [],
+          "counterclaims": [],
+          "evidence_list": [
+            {
+              "evidence_id": "e1",
+              "evidence_name": "原告营业执照及法定代表人身份证明",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明其主体资格",
+              "proof_purpose_normalized": "证明原告主体资格适格",
+              "linked_claim_id": null,
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f0"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e2",
+              "evidence_name": "案涉软件著作权登记证书",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明其对案涉软件享有著作权",
+              "proof_purpose_normalized": "证明原告系案涉软件著作权人",
+              "linked_claim_id": null,
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f1"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e3",
+              "evidence_name": "软件版本说明",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明其对案涉软件享有著作权",
+              "proof_purpose_normalized": "佐证案涉软件权属及版本信息",
+              "linked_claim_id": null,
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f1"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e4",
+              "evidence_name": "首次发表证明",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明其对案涉软件享有著作权",
+              "proof_purpose_normalized": "佐证案涉软件著作权取得时间",
+              "linked_claim_id": null,
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f1"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e5",
+              "evidence_name": "源代码备份",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明其对案涉软件享有著作权",
+              "proof_purpose_normalized": "佐证案涉软件著作权归属",
+              "linked_claim_id": null,
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f1"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e6",
+              "evidence_name": "广州知识产权法院证据保全笔录及现场记录",
+              "submitted_by": "p1",
+              "evidence_type": "勘验笔录",
+              "proof_purpose_original": "证明被告侵权事实及妨害证据保全行为",
+              "proof_purpose_normalized": "证明被告未经许可使用侵权软件的事实及妨害法院证据保全的行为",
+              "linked_claim_id": "c1",
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f2",
+                "f3",
+                "f4",
+                "f5"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e7",
+              "evidence_name": "正版软件销售合同、发票、官网报价截图、授权报价单、赔偿计算明细",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明其经济损失",
+              "proof_purpose_normalized": "证明原告经济损失计算依据",
+              "linked_claim_id": "c2",
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f6"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            },
+            {
+              "evidence_id": "e8",
+              "evidence_name": "律师费、公证费、差旅费支付凭证",
+              "submitted_by": "p1",
+              "evidence_type": "书证",
+              "proof_purpose_original": "证明维权合理开支",
+              "proof_purpose_normalized": "证明原告为制止侵权行为所支付的合理开支",
+              "linked_claim_id": "c2",
+              "linked_defense_id": null,
+              "linked_fact_ids": [
+                "f6"
+              ],
+              "linked_element_ids": [],
+              "opponent_cross_examination": null,
+              "legality_status": null,
+              "relevance_status": null,
+              "authenticity_status": null,
+              "probative_force": null,
+              "adopted_status": null
+            }
+          ],
+          "cross_examinations": [],
+          "court_records": [],
+          "legal_arguments": [],
+          "procedural_info": null,
+          "existing_judgment_or_mediation": null,
+          "fallback_user_choice": null
+        },
+        "model_name": ""
+      },
+      "logic": [
+        "接收前端 /api/workflow/run 请求",
+        "校验 model_name 与 CaseInput"
+      ]
+    },
+    {
+      "index": 2,
+      "step_name": "异常捕获",
+      "timestamp": "14:15:36",
+      "elapsed_ms": 94046,
+      "error": "'tuple' object has no attribute 'model_dump'"
+    }
+  ]
+}

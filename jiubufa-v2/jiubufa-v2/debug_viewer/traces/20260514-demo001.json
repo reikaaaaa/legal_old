@@ -1,0 +1,576 @@
+{
+  "trace_id": "20260514-demo001",
+  "status": "success",
+  "started_at": "2026-05-14 09:30:00",
+  "duration_seconds": 674.5,
+  "step_count": 13,
+  "steps": [
+    {
+      "index": 1,
+      "step_name": "接收请求",
+      "timestamp": "09:30:00",
+      "elapsed_ms": 5,
+      "input": {
+        "case_input": {
+          "raw_text": "西某工业软件有限公司系依法成立的企业法人...（完整案件材料长度约1200字）",
+          "user_role": "原告",
+          "case_type": ""
+        },
+        "model_name": null
+      },
+      "output": null,
+      "logic": [
+        "接收前端 POST /api/workflow/run 请求",
+        "校验 model_name 与 CaseInput 字段完整性",
+        "model_name 未指定 → 使用默认模型 dashscope-qwen-plus"
+      ],
+      "metadata": {
+        "endpoint": "/api/workflow/run",
+        "client_ip": "127.0.0.1"
+      }
+    },
+    {
+      "index": 2,
+      "step_name": "Step 1: 固定权利请求与请求类型",
+      "timestamp": "09:30:05",
+      "elapsed_ms": 95972,
+      "input": {
+        "raw_text": "西某工业软件有限公司主张...",
+        "user_role": "原告"
+      },
+      "output": {
+        "case_cause_inferred": ["侵害计算机软件著作权纠纷"],
+        "legal_domain_inferred": ["侵权"],
+        "fixed_claims": [
+          {
+            "claim_id": "C1",
+            "claim_text_normalized": "判令被告立即停止侵害原告NX系列计算机软件著作权的行为，删除并卸载全部侵权复制件",
+            "claim_type": ["injunction_claim"],
+            "object_type": "行为",
+            "amount": null
+          },
+          {
+            "claim_id": "C2",
+            "claim_text_normalized": "判令被告赔偿原告经济损失及维权合理开支共计人民币2712827元",
+            "claim_type": ["damages_claim"],
+            "object_type": "金钱",
+            "amount": 2712827.0
+          }
+        ]
+      },
+      "logic": [
+        "1. 从原始输入中提取诉讼请求表述",
+        "2. 区分 '停止侵害' 与 '损害赔偿' 两类请求",
+        "3. 检查请求是否明确、可执行",
+        "4. 标注请求权竞合/聚合关系",
+        "5. 推断案由：侵害计算机软件著作权纠纷"
+      ],
+      "prompt_system": "你是一位资深民事法官，擅长从当事人陈述中固定诉讼请求。识别并规范化原告的全部诉讼请求，注意区分独立的请求项，判断请求是否明确、可执行，标注请求类型。",
+      "prompt": "## 案件材料\n西某工业软件有限公司主张其系NX系列计算机软件的著作权人...\n广州沃某模具有限公司未经许可，在其经营场所电脑中复制、安装并商业使用案涉NX系列计算机软件...\n\n## 任务\n输出JSON：1.识别所有诉讼请求 2.规范化每条请求 3.判断明确性/可执行性 4.标注请求类型",
+      "llm_raw": "{\n  \"case_cause_inferred\": [\"侵害计算机软件著作权纠纷\"],\n  \"fixed_claims\": [\n    {\"claim_id\": \"C1\", \"claim_type\": [\"injunction_claim\"], \"object_type\": \"行为\", \"is_clear\": true},\n    {\"claim_id\": \"C2\", \"claim_type\": [\"damages_claim\"], \"object_type\": \"金钱\", \"amount\": 2712827.0, \"is_clear\": true}\n  ]\n}",
+      "parsed_json": {
+        "claim_count": 2,
+        "all_clear": true,
+        "competition_note": "C1与C2构成请求权聚合"
+      }
+    },
+    {
+      "index": 3,
+      "step_name": "Step 2: 确定权利请求基础规范",
+      "timestamp": "09:31:41",
+      "elapsed_ms": 147011,
+      "input": {
+        "fixed_claims": ["C1", "C2"],
+        "case_cause": "侵害计算机软件著作权纠纷"
+      },
+      "output": {
+        "request_basis_candidates": [
+          {
+            "rule_unit_id": "著作权法_53_001",
+            "rule_title": "著作权侵权 — 停止侵害",
+            "text": "未经著作权人许可，复制、发行、表演...其作品的，应当根据情况，承担停止侵害、消除影响、赔礼道歉、赔偿损失等民事责任。",
+            "linked_claim_ids": ["C1"],
+            "relevance_score": 0.95,
+            "source": "kb"
+          },
+          {
+            "rule_unit_id": "著作权法_54_001",
+            "rule_title": "著作权侵权 — 损害赔偿",
+            "text": "侵犯著作权或者与著作权有关的权利的，侵权人应当按照权利人因此受到的实际损失或者侵权人的违法所得给予赔偿...",
+            "linked_claim_ids": ["C2"],
+            "relevance_score": 0.92,
+            "source": "kb"
+          }
+        ]
+      },
+      "logic": [
+        "1. 在法条知识库中检索与 C1/C2 匹配的基础规范",
+        "2. 检索维度：案由标签 + 请求类型 + 法条构成要件关键词",
+        "3. 每个请求返回 top-K 候选法条 (K=12)",
+        "4. 附带 relevance_score 和法条原文",
+        "5. 联网搜索补充不在库中的法条 (ENABLE_WEB_SEARCH=true)"
+      ],
+      "prompt": "## 任务：为以下诉讼请求检索请求权基础规范\n\nC1: 停止侵害（injunction_claim）\nC2: 损害赔偿（damages_claim）2712827元\n\n案由：侵害计算机软件著作权纠纷\n\n请从法条库中检索匹配的基础规范，每条附带 relevance_score。",
+      "llm_raw": "检索完成: kb命中2条, web补充0条\n著作权法_53_001 (score: 0.95): 停止侵害民事责任条款\n著作权法_54_001 (score: 0.92): 损害赔偿计算条款",
+      "parsed_json": {
+        "total_candidates": 2,
+        "kb_hits": 2,
+        "web_hits": 0,
+        "avg_relevance": 0.935
+      }
+    },
+    {
+      "index": 4,
+      "step_name": "Step 3: 确定抗辩权基础规范",
+      "timestamp": "09:32:29",
+      "elapsed_ms": 195630,
+      "input": {
+        "defense_opinions": [],
+        "counterclaims": [],
+        "case_cause": "侵害计算机软件著作权纠纷"
+      },
+      "output": {
+        "defense_basis_candidates": [],
+        "note": "本案材料仅含原告单方陈述，被告尚未提交答辩意见，无可辨识的抗辩权基础。待被告答辩后补充审查。"
+      },
+      "logic": [
+        "1. 从输入材料中提取被告答辩/反诉意见",
+        "2. 区分 '否认'（对原告事实的否定）和 '抗辩'（主张新事实阻却法律效果）",
+        "3. 如存在抗辩 → 检索对应的抗辩权基础规范",
+        "4. 本案被告未回应 → 跳过（正常，立案阶段无需被告已答辩）"
+      ],
+      "parsed_json": {
+        "defense_count": 0,
+        "reason": "被告尚未答辩，无抗辩可分析"
+      }
+    },
+    {
+      "index": 5,
+      "step_name": "Step 4: 分析基础规范构成要件",
+      "timestamp": "09:32:30",
+      "elapsed_ms": 196500,
+      "input": {
+        "request_basis": ["著作权法_53_001", "著作权法_54_001"],
+        "defense_basis": []
+      },
+      "output": {
+        "element_matrix": [
+          {
+            "rule_unit_id": "著作权法_53_001",
+            "elements": [
+              {"element_id": "E_53_1", "name": "原告系权利人", "type": "positive"},
+              {"element_id": "E_53_2", "name": "被告实施受控行为（复制/发行等）", "type": "positive"},
+              {"element_id": "E_53_3", "name": "未经权利人许可", "type": "positive"},
+              {"element_id": "E_53_4", "name": "无免责事由", "type": "negative"}
+            ]
+          },
+          {
+            "rule_unit_id": "著作权法_54_001",
+            "elements": [
+              {"element_id": "E_54_1", "name": "侵权行为成立（满足53条要件）", "type": "positive"},
+              {"element_id": "E_54_2", "name": "权利人遭受损失或有侵权获利", "type": "positive"},
+              {"element_id": "E_54_3", "name": "损失/获利可量化计算", "type": "positive"}
+            ]
+          }
+        ]
+      },
+      "logic": [
+        "1. 对每个候选法条拆解构成要件（完全性法条分解）",
+        "2. 区分积极要件（需原告证明）和消极要件（由被告主张）",
+        "3. 拆解结果与后续步骤的要素级事实对应"
+      ],
+      "parsed_json": {
+        "total_rules": 2,
+        "total_elements": 7
+      }
+    },
+    {
+      "index": 6,
+      "step_name": "Step 5: 诉讼主张的检索",
+      "timestamp": "09:32:31",
+      "elapsed_ms": 197100,
+      "input": {
+        "claims": ["C1", "C2"],
+        "element_matrix": [
+          {"rule_unit_id": "著作权法_53_001", "elements": ["E_53_1", "E_53_2", "E_53_3", "E_53_4"]},
+          {"rule_unit_id": "著作权法_54_001", "elements": ["E_54_1", "E_54_2", "E_54_3"]}
+        ],
+        "claim_facts": ["f1", "f2", "f3", "f4", "f5", "f6"]
+      },
+      "output": {
+        "claim_fact_mapping": [
+          {"claim_id": "C1", "element_id": "E_53_1", "covered_by_facts": ["f0", "f1"], "status": "covered"},
+          {"claim_id": "C1", "element_id": "E_53_2", "covered_by_facts": ["f2", "f3"], "status": "covered"},
+          {"claim_id": "C1", "element_id": "E_53_3", "covered_by_facts": ["f2"], "status": "covered"},
+          {"claim_id": "C1", "element_id": "E_53_4", "covered_by_facts": [], "status": "gap_noted"},
+          {"claim_id": "C2", "element_id": "E_54_1", "covered_by_facts": ["f2", "f3", "f4"], "status": "covered"},
+          {"claim_id": "C2", "element_id": "E_54_2", "covered_by_facts": ["f6"], "status": "covered"},
+          {"claim_id": "C2", "element_id": "E_54_3", "covered_by_facts": ["f6"], "status": "covered"}
+        ]
+      },
+      "logic": [
+        "1. 将每个诉讼主张（事实陈述）与法条构成要件对应",
+        "2. 检查每个要件是否有对应的事实主张支撑",
+        "3. 标注 'covered' / 'gap_noted' / 'missing'",
+        "4. 为后续争点整理和事实证明提供映射关系"
+      ],
+      "parsed_json": {
+        "total_mappings": 7,
+        "covered": 6,
+        "gaps": 1,
+        "gap_element": "E_53_4（无免责事由 — 需待被告主张后填充）"
+      }
+    },
+    {
+      "index": 7,
+      "step_name": "Step 6: 争点整理",
+      "timestamp": "09:38:45",
+      "elapsed_ms": 376521,
+      "input": {
+        "fixed_claims": ["C1", "C2"],
+        "request_basis": "著作权法_53_001",
+        "defense_basis": [],
+        "element_matrix": [],
+        "claim_fact_mapping": []
+      },
+      "output": {
+        "issues": [
+          {
+            "issue_id": "I1",
+            "issue_type": "fact_issue",
+            "issue_text": "原告是否系案涉NX系列计算机软件的著作权人且主体适格",
+            "burden_party": "原告",
+            "priority": "high"
+          },
+          {
+            "issue_id": "I2",
+            "issue_type": "fact_issue",
+            "issue_text": "被告是否在已保全9台电脑中未经许可复制、安装案涉软件",
+            "burden_party": "原告",
+            "priority": "high"
+          },
+          {
+            "issue_id": "I3",
+            "issue_type": "fact_issue",
+            "issue_text": "是否应因被告妨害证据保全行为推定剩余9台电脑亦存在侵权",
+            "burden_party": "原告",
+            "priority": "high"
+          },
+          {
+            "issue_id": "I4",
+            "issue_type": "fact_issue",
+            "issue_text": "原告主张的经济损失赔偿数额2712827元是否有事实及法律依据",
+            "burden_party": "原告",
+            "priority": "medium"
+          },
+          {
+            "issue_id": "I5",
+            "issue_type": "fact_issue",
+            "issue_text": "原告主张的维权合理开支是否真实、合理且必要",
+            "burden_party": "原告",
+            "priority": "low"
+          }
+        ],
+        "review_order": ["I1", "I2", "I3", "I4", "I5"]
+      },
+      "logic": [
+        "1. 从前序步骤汇聚已确认的诉求和要件",
+        "2. 对比原告诉求与可能的抗辩，识别双方争议点",
+        "3. 按 '事实争点' 和 '法律争点' 分类",
+        "4. 为每个争点分配举证责任",
+        "5. 按对裁判影响程度设定优先级",
+        "6. 确定庭审审查顺序"
+      ],
+      "prompt_system": "你是一位经验丰富的民事审判法官。请根据案件材料和前序分析结果，系统性地整理本案的全部争议焦点。争点整理应涵盖事实争点和法律争点，明确举证责任分配，并按重要性排序。",
+      "prompt": "## 案件基本信息\n- 案由：侵害计算机软件著作权纠纷\n- 原告：西某工业软件有限公司\n- 被告：广州沃某模具有限公司\n- 核心事实：被告经营场所26台电脑中17台完成保全检查，9台发现侵权软件；被告以断电等方式妨害剩余9台电脑的保全...\n\n## 任务\n整理本案争议焦点，含：争点类型、表述、举证责任、优先级。",
+      "llm_raw": "{\n  \"issues\": [\n    {\"issue_id\": \"I1\", \"issue_type\": \"fact_issue\", \"burden_party\": \"原告\", \"priority\": \"high\"},\n    {\"issue_id\": \"I2\", \"issue_type\": \"fact_issue\", \"burden_party\": \"原告\", \"priority\": \"high\"},\n    {\"issue_id\": \"I3\", \"issue_type\": \"fact_issue\", \"burden_party\": \"原告\", \"priority\": \"high\"},\n    {\"issue_id\": \"I4\", \"issue_type\": \"fact_issue\", \"burden_party\": \"原告\", \"priority\": \"medium\"},\n    {\"issue_id\": \"I5\", \"issue_type\": \"fact_issue\", \"burden_party\": \"原告\", \"priority\": \"low\"}\n  ],\n  \"review_order\": [\"I1\", \"I2\", \"I3\", \"I4\", \"I5\"]\n}",
+      "parsed_json": {
+        "total_issues": 5,
+        "fact_issues": 5,
+        "law_issues": 0,
+        "high_priority": 3,
+        "medium_priority": 1,
+        "low_priority": 1
+      }
+    },
+    {
+      "index": 8,
+      "step_name": "Step 7: 要件事实证明",
+      "timestamp": "09:40:15",
+      "elapsed_ms": 466265,
+      "input": {
+        "issues": ["I1", "I2", "I3", "I4", "I5"],
+        "evidence_list": ["e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8"]
+      },
+      "output": {
+        "proof_plan": [
+          {
+            "issue_id": "I1",
+            "fact_to_prove": "原告系案涉NX系列软件著作权人且主体适格",
+            "burden_party": "原告",
+            "proof_standard": "高度盖然性",
+            "existing_evidence_ids": ["e1", "e2", "e3", "e4", "e5"],
+            "proof_gap": "无明显缺口，著作权登记证书具有初步证明力",
+            "effect_if_unknown": "由原告承担举证不能的不利后果，驳回诉请"
+          },
+          {
+            "issue_id": "I3",
+            "fact_to_prove": "因被告妨害证据保全，推定剩余9台电脑亦存在侵权",
+            "burden_party": "原告",
+            "proof_standard": "高度盖然性",
+            "existing_evidence_ids": ["e6"],
+            "suggested_evidence_types": ["现场录像", "法官情况说明"],
+            "proof_gap": "需法院认定被告行为构成举证妨碍，结合已发现侵权比例推定",
+            "effect_if_unknown": "若法院不适用举证妨碍推定，赔偿数额可能降低"
+          }
+        ]
+      },
+      "logic": [
+        "1. 为每个争点制定举证计划",
+        "2. 标注证明标准（高度盖然性/排除合理怀疑）",
+        "3. 列出现有证据 + 建议补充的证据类型",
+        "4. 评估证据缺口",
+        "5. 提示举证不能的法律后果"
+      ],
+      "prompt": "## 争点列表\nI1: 著作权权属与主体资格...\nI2: 已保全电脑侵权事实...\nI3: 妨害保全推定...\nI4: 赔偿数额依据...\nI5: 合理开支真实性...\n\n## 现有证据\n8份证据(e1-e8)...\n\n## 任务\n为每个争点制定举证计划：证明标准、现有证据、建议补充、证据缺口、举证不能后果。",
+      "llm_raw": "各争点举证计划已生成，3个high优先级争点证据覆盖充分，I3需补充现场录像佐证。",
+      "parsed_json": {
+        "total_plans": 5,
+        "fully_covered": 3,
+        "partial_gap": 1,
+        "gapped": 1
+      }
+    },
+    {
+      "index": 9,
+      "step_name": "Step 8: 事实认定",
+      "timestamp": "09:41:13",
+      "elapsed_ms": 525000,
+      "input": {
+        "proof_plan": ["I1~I5的举证计划"],
+        "evidence_list": ["e1~e8"],
+        "claim_facts": ["f0~f6"]
+      },
+      "output": {
+        "fact_findings": [
+          {
+            "fact_finding_id": "F1",
+            "element_id": "f0",
+            "fact_slot": "原告主体资格及著作权权属",
+            "finding_status": "proved",
+            "adopted_evidence_ids": ["e1", "e2", "e3", "e4", "e5"],
+            "reasoning": "证据e1证明原告合法存续；e2为著作权登记证书系权利初步证明；e3~e5佐证版本及权属。证据来源合法、与待证事实关联、真实性无异议，形成完整证据链。"
+          },
+          {
+            "fact_finding_id": "F2",
+            "element_id": "f2",
+            "fact_slot": "被告在已保全9台电脑中安装使用侵权软件",
+            "finding_status": "proved",
+            "adopted_evidence_ids": ["e6"],
+            "reasoning": "e6系法院勘验笔录，记载17台中9台安装13套NX软件。该证据由法院制作，合法性、真实性、关联性均强，证明力高。被告未提供合法授权证明，足以认定该部分侵权事实。"
+          },
+          {
+            "fact_finding_id": "F3",
+            "element_id": "f4",
+            "fact_slot": "被告妨害证据保全及剩余电脑侵权推定",
+            "finding_status": "proved",
+            "adopted_evidence_ids": ["e6"],
+            "reasoning": "e6记载被告断电、拒不开机等妨害保全行为，致9台电脑未检查。该行为构成举证妨碍。根据《知识产权证据规定》第13条，妨碍方承担不利后果，原告主张的剩余电脑侵权推定成立。"
+          },
+          {
+            "fact_finding_id": "F4",
+            "element_id": "f6",
+            "fact_slot": "经济损失计算依据及数额",
+            "finding_status": "proved",
+            "adopted_evidence_ids": ["e7"],
+            "reasoning": "e7含销售合同、发票及报价单，证明正版软件市场价格。虽为原告单方证据，被告未提交反证，可作为赔偿计算参考。"
+          },
+          {
+            "fact_finding_id": "F5",
+            "element_id": "f6",
+            "fact_slot": "维权合理开支真实性及合理性",
+            "finding_status": "proved",
+            "adopted_evidence_ids": ["e8"],
+            "reasoning": "e8为律师费、公证费等支付凭证，票据真实，与本案维权行为关联，金额符合行业标准。"
+          }
+        ]
+      },
+      "logic": [
+        "1. 逐一审查各方所举证据的三性（合法性、真实性、关联性）",
+        "2. 对采纳/排除的证据逐份说明理由",
+        "3. 结合证据规则判断是否达到证明标准",
+        "4. 对每个待证事实作出 proved / disproved / unproven 认定",
+        "5. 特别注意：妨害举证推定规则在本案中的适用"
+      ],
+      "prompt_system": "你是一位知识产权庭法官，正在进行事实认定。请严格遵守证据规则，逐一审查证据的三性（合法性、真实性、关联性），结合证明标准作出事实认定。对采纳与排除的证据均应说明理由。",
+      "prompt": "## 待证事实\n- f0: 原告主体资格\n- f1: 原告著作权权属\n- f2: 被告安装侵权软件\n- f3: 法院保全记录\n- f4: 被告妨害保全\n- f5: 妨害保全推定的法律主张\n- f6: 损失及开支计算\n\n## 在案证据\n8份证据(e1~e8)...\n\n## 任务\n逐项认定待证事实，含：finding_status(proved/disproved/unproven)、采纳/排除的证据及理由。",
+      "llm_raw": "事实认定完成，5项关键事实均认定proved。证据e1~e5形成权属链，e6法院笔录为核心公文证据证明力最高，e7~e8为赔偿和开支提供支撑。",
+      "parsed_json": {
+        "total_findings": 5,
+        "proved": 5,
+        "disproved": 0,
+        "unproven": 0,
+        "core_evidence": "e6（法院保全笔录）— 公文证据，三性无争议",
+        "special_rule_applied": "举证妨碍推定规则（知产证据规定第13条）"
+      }
+    },
+    {
+      "index": 10,
+      "step_name": "Step 9: 要件归入并作出裁判",
+      "timestamp": "09:43:12",
+      "elapsed_ms": 643589,
+      "input": {
+        "claims": ["C1", "C2"],
+        "request_basis": ["著作权法_53_001", "著作权法_54_001"],
+        "defense_basis": [],
+        "element_matrix": [],
+        "fact_findings": ["F1", "F2", "F3", "F4", "F5"]
+      },
+      "output": {
+        "subsumption_results": [
+          {
+            "claim_id": "C1",
+            "request_basis_rule_unit_id": "著作权法_53_001",
+            "request_elements_result": [
+              {"element_id": "E_53_1", "element_name": "原告享有案涉软件著作权", "finding_status": "proved", "note": "依据事实认定F1"},
+              {"element_id": "E_53_2", "element_name": "被告未经许可复制、使用软件", "finding_status": "proved", "note": "依据事实认定F2、F3"},
+              {"element_id": "E_53_3", "element_name": "未经权利人许可", "finding_status": "proved", "note": "被告未提供授权证明"},
+              {"element_id": "E_53_4", "element_name": "无合法抗辩事由", "finding_status": "proved", "note": "被告未提出任何抗辩"}
+            ],
+            "legal_effect_tags": ["liability_arises", "injunction_granted"],
+            "disposition_type": "支持停止侵害",
+            "judgment_result": "supported",
+            "reasoning_summary": "本院认为，原告系案涉NX系列计算机软件著作权人，主体适格。被告未经许可在其经营场所电脑中复制、安装并商业使用案涉软件，且妨害证据保全，依法推定其侵权规模涵盖全部涉案电脑。被告行为构成对原告著作权的侵害，应承担停止侵害的民事责任。",
+            "cited_rules": ["著作权法_53_001", "计算机软件保护条例_24_001"]
+          },
+          {
+            "claim_id": "C2",
+            "request_basis_rule_unit_id": "著作权法_54_001",
+            "request_elements_result": [
+              {"element_id": "E_54_1", "element_name": "侵权行为成立", "finding_status": "proved", "note": "基于C1要件归入结果"},
+              {"element_id": "E_54_2", "element_name": "权利人遭受经济损失", "finding_status": "proved", "note": "依据事实认定F4、F5"},
+              {"element_id": "E_54_3", "element_name": "赔偿数额计算依据充分", "finding_status": "proved", "note": "结合被告妨害举证情节，推定原告主张成立"}
+            ],
+            "legal_effect_tags": ["liability_arises", "damages_awarded"],
+            "disposition_type": "支持赔偿损失",
+            "judgment_result": "supported",
+            "reasoning_summary": "本院认为，被告侵害原告著作权，应当赔偿损失。原告提交了正版软件销售合同、发票及维权费用凭证。鉴于被告妨害证据保全，法院依法推定原告主张的侵权规模成立，认定原告主张的赔偿数额2712827元具有事实及法律依据。",
+            "cited_rules": ["著作权法_54_001", "最高人民法院关于审理著作权民事纠纷案件适用法律若干问题的解释_25_001"]
+          }
+        ]
+      },
+      "logic": [
+        "1. 将已认定的事实逐项归入法条构成要件（三段论）",
+        "2. 判断每个要件是否满足（proved/disproved/unknown）",
+        "3. 若无有效抗辩且全部积极要件满足 → 产生法律效果",
+        "4. 生成裁判文书'本院认为'说理段落",
+        "5. 引用对应法条",
+        "6. 生成判决主文"
+      ],
+      "prompt_system": "你是一位资深知识产权法官，正在进行要件归入与裁判说理。严格遵循三段论结构，将已认定事实归入法律规范构成要件，逐项说明是否满足。说理应逻辑严密、层次清晰，法条引用准确完整。",
+      "prompt": "## 已认定事实\nF1: 原告著作权权属成立\nF2: 9台电脑侵权事实成立\nF3: 妨害保全推定剩余9台亦侵权\nF4: 正版价格及损失计算依据\nF5: 维权开支真实合理\n\n## 适用法条\n著作权法第53条、第54条\n\n## 任务\n进行要件归入分析，对C1(停止侵害)和C2(赔偿2712827元)作出裁判。",
+      "llm_raw": "{\n  \"subsumption_results\": [\n    {\"claim_id\": \"C1\", \"judgment_result\": \"supported\", \"all_elements_proved\": true},\n    {\"claim_id\": \"C2\", \"judgment_result\": \"supported\", \"all_elements_proved\": true}\n  ],\n  \"overall\": \"全部诉请予以支持\"\n}",
+      "parsed_json": {
+        "claims_analyzed": 2,
+        "both_supported": true,
+        "total_cited_rules": 4
+      }
+    },
+    {
+      "index": 11,
+      "step_name": "保底机制门（Fallback Gate）",
+      "timestamp": "09:43:13",
+      "elapsed_ms": 644000,
+      "input": {
+        "sufficiency_score": 71,
+        "thresholds": {
+          "strong": 80,
+          "medium": 60,
+          "weak": 40
+        }
+      },
+      "output": {
+        "risk_triggered": true,
+        "risk_level": "medium",
+        "reason": ["输入完整度评分 71 处于中风险区间（60-79）。"],
+        "recommended_action": "proceed_with_risk_notes",
+        "available_choices": [
+          {"choice": "supplement", "description": "停止裁判输出，按缺口清单补充材料后回退"},
+          {"choice": "proceed_with_risk_notes", "description": "继续输出强裁判结果并附风险提示"},
+          {"choice": "continue_weak_judgment", "description": "改用弱裁判通道（更保守）"}
+        ],
+        "default_choice": "proceed_with_risk_notes",
+        "hard_block": false
+      },
+      "logic": [
+        "1. 综合 Step1~Step8 计算输入完整度评分（0-100）",
+        "2. 与三级阈值对比：≥80 强裁判 / 60-79 中风险 / 40-59 弱裁判 / <40 硬阻断",
+        "3. 评分71 → 中风险区间 → 推荐 'proceed_with_risk_notes'",
+        "4. 前端用户可手动选择其他通道"
+      ]
+    },
+    {
+      "index": 12,
+      "step_name": "一致性校验",
+      "timestamp": "09:43:14",
+      "elapsed_ms": 674000,
+      "input": {
+        "step1_claims": ["C1", "C2"],
+        "step9_results": ["C1: supported", "C2: supported"],
+        "step6_issues": ["I1", "I2", "I3", "I4", "I5"],
+        "step8_findings": ["F1", "F2", "F3", "F4", "F5"],
+        "cited_rules": ["著作权法_53_001", "著作权法_54_001", "计算机软件保护条例_24_001"]
+      },
+      "output": {
+        "诉求-固定一致": true,
+        "固定-涵摄一致": true,
+        "缺漏的诉求（涵摄阶段未覆盖）": [],
+        "多出的诉求（涵摄阶段凭空出现）": [],
+        "争点已使用": true,
+        "事实已认定": true,
+        "法条已引用": true
+      },
+      "logic": [
+        "1. 校验 Step1 固定诉求 vs Step9 裁判覆盖 —— 防止 '漏判' 或 '超判'",
+        "2. 校验 Step6 争点 vs Step8 认定 —— 所有争点均有事实认定结论",
+        "3. 校验 Step8 认定 vs Step9 引用 —— 事实认定在裁判说理中被使用",
+        "4. 校验法条引用完整性",
+        "5. 所有检查通过 ✓"
+      ]
+    },
+    {
+      "index": 13,
+      "step_name": "返回结果",
+      "timestamp": "09:43:14",
+      "elapsed_ms": 674452,
+      "input": null,
+      "output": {
+        "case_id": "case-2024-mc-0001",
+        "status": "success",
+        "errors": [],
+        "warnings": [
+          "评分处于中风险区间（71/100），已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。",
+          "被告主体资格证明缺失——立案硬性障碍，务必优先补正。"
+        ],
+        "timings_ms": {
+          "step1_claim_fixing": 95972,
+          "step2_request_basis": 51039,
+          "step3_defense_basis": 48619,
+          "step4_element_analysis": 870,
+          "step5_claim_fact_search": 600,
+          "step6_issue_organize": 179421,
+          "step7_proof": 89744,
+          "step8_fact_finding": 58735,
+          "step9_subsumption": 118589,
+          "total": 674452
+        }
+      },
+      "logic": [
+        "汇总工作流执行结果",
+        "打包 Step1~Step9 全部输出 + 保底门 + 一致性校验",
+        "附加耗时统计和各步骤耗时明细",
+        "返回给前端渲染"
+      ]
+    }
+  ]
+}

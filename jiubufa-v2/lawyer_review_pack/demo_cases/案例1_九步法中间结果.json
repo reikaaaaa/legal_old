@@ -1,0 +1,789 @@
+{
+  "case_id": null,
+  "status": "ok",
+  "fallback_gate": {
+    "risk_triggered": true,
+    "risk_level": "medium",
+    "reason": [
+      "输入完整度评分 69 处于中风险区间。"
+    ],
+    "recommended_action": "proceed_with_risk_notes",
+    "available_choices": [
+      {
+        "choice": "supplement",
+        "description": "停止裁判输出，按缺口清单补充材料后回退"
+      },
+      {
+        "choice": "proceed_with_risk_notes",
+        "description": "继续输出强裁判结果并附风险提示"
+      },
+      {
+        "choice": "continue_weak_judgment",
+        "description": "改用弱裁判通道（更保守）"
+      }
+    ],
+    "default_choice": "proceed_with_risk_notes",
+    "hard_block": false
+  },
+  "step1": {
+    "case_cause_inferred": [
+      "著作权侵权纠纷"
+    ],
+    "legal_domain_inferred": [
+      "侵权"
+    ],
+    "fixed_claims": [
+      {
+        "claim_id": "C1",
+        "claim_text_normalized": "判令被告立即停止侵害原告对 NX 系列计算机软件享有的著作权的行为，删除、卸载其经营场所内所有未经授权复制、安装的 NX 系列计算机软件复制件。",
+        "claim_type": [
+          "injunction_claim"
+        ],
+        "object_type": "行为",
+        "amount": null,
+        "claimant": "西某工业软件有限公司",
+        "respondent": "广州沃某模具有限公司",
+        "is_clear": true,
+        "is_executable": true,
+        "issues": [],
+        "clarification_questions": [],
+        "priority_type": "primary",
+        "competition_note": "与 C2 项损害赔偿请求构成侵权责任承担方式的聚合关系"
+      },
+      {
+        "claim_id": "C2",
+        "claim_text_normalized": "判令被告赔偿原告经济损失及为制止侵权所支付的合理开支共计人民币 2712827 元。",
+        "claim_type": [
+          "damages_claim"
+        ],
+        "object_type": "金钱",
+        "amount": 2712827.0,
+        "claimant": "西某工业软件有限公司",
+        "respondent": "广州沃某模具有限公司",
+        "is_clear": true,
+        "is_executable": true,
+        "issues": [],
+        "clarification_questions": [],
+        "priority_type": "primary",
+        "competition_note": "与 C1 项停止侵害请求构成侵权责任承担方式的聚合关系"
+      }
+    ],
+    "overall_clarification": []
+  },
+  "step2": {
+    "request_basis_candidates": [],
+    "competition_analysis": {
+      "summary": "候选规则单元均不匹配著作权侵权纠纷案由，无著作权法专门条文",
+      "claims_analysis": [
+        {
+          "claim_id": "C1",
+          "claim_type": "injunction_claim",
+          "issue": "候选规则单元涉及未成年人保护、电子商务平台责任、老年人权益、广告侵权、消费者权益、妇女权益、证券交易、网络侵权一般规定等领域，均非著作权侵权停止侵害责任的专门规定",
+          "closest_candidate": {
+            "rule_unit_id": "民法典_1194_001",
+            "reason": "网络侵权一般规定可适用于著作权侵权，但非特别法，且本案系软件复制安装使用而非典型网络传播侵权"
+          },
+          "suggested_rule": {
+            "law_name": "中华人民共和国著作权法",
+            "article_no": "第五十二条、第五十三条",
+            "reason": "明确规定著作权侵权行为应承担停止侵害、删除侵权复制件等民事责任，系特别法优先适用"
+          }
+        },
+        {
+          "claim_id": "C2",
+          "claim_type": "damages_claim",
+          "issue": "候选规则单元涉及合同第三人履行、老年人继承权、劳务派遣、交通事故、航空器侵权、电子商务平台责任、海事诉讼等领域，均无著作权侵权损害赔偿专门规定",
+          "closest_candidate": null,
+          "suggested_rule": {
+            "law_name": "中华人民共和国著作权法",
+            "article_no": "第五十四条",
+            "reason": "明确规定著作权侵权损害赔偿计算方式（实际损失、违法所得、权利使用费、法定赔偿）及合理开支赔偿范围，系本案赔偿请求的直接法律依据"
+          }
+        }
+      ],
+      "recommendation": "建议上游回退并补充著作权法相关规则单元至候选列表，包括著作权法第 52 条（民事责任类型）、第 53 条（侵权行为及责任）、第 54 条（损害赔偿计算）"
+    }
+  },
+  "step3": {
+    "defense_basis_candidates": []
+  },
+  "step6": {
+    "issues": [
+      {
+        "issue_id": "I1",
+        "issue_type": "fact_issue",
+        "issue_text": "原告是否享有案涉 NX 系列计算机软件著作权",
+        "linked_element_ids": [],
+        "linked_claim_id": "C1",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I2",
+        "issue_type": "fact_issue",
+        "issue_text": "被告是否在已保全检查的 9 台电脑中未经许可安装使用案涉软件",
+        "linked_element_ids": [],
+        "linked_claim_id": "C1",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e8",
+          "e10",
+          "e11"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I3",
+        "issue_type": "fact_issue",
+        "issue_text": "是否应因被告妨害证据保全行为推定剩余 9 台电脑存在侵权使用",
+        "linked_element_ids": [],
+        "linked_claim_id": "C1",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e11"
+        ],
+        "priority": "high"
+      },
+      {
+        "issue_id": "I4",
+        "issue_type": "fact_issue",
+        "issue_text": "原告主张的经济损失及合理开支数额是否成立",
+        "linked_element_ids": [],
+        "linked_claim_id": "C2",
+        "linked_defense_id": null,
+        "burden_party": "原告",
+        "linked_evidence_ids": [
+          "e11"
+        ],
+        "priority": "medium"
+      }
+    ],
+    "review_order": [
+      "I1",
+      "I2",
+      "I3",
+      "I4"
+    ]
+  },
+  "step7": {
+    "proof_plan": [
+      {
+        "issue_id": "I1",
+        "element_id": "",
+        "fact_to_prove": "原告系 NX 系列计算机软件著作权人",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6"
+        ],
+        "suggested_evidence_types": [],
+        "proof_gap": "著作权登记证书、版本说明、首次发表证明及源代码备份已形成完整证据链，无明显缺口",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，可能导致著作权权属不被认定，驳回诉请"
+      },
+      {
+        "issue_id": "I2",
+        "element_id": "",
+        "fact_to_prove": "被告在已保全检查的 9 台电脑中未经许可安装使用案涉软件",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e8",
+          "e10",
+          "e11"
+        ],
+        "suggested_evidence_types": [],
+        "proof_gap": "法院保全笔录已确认 9 台电脑安装 13 套软件，证据较为充分，缺口较小",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，该部分侵权事实可能不被认定"
+      },
+      {
+        "issue_id": "I3",
+        "element_id": "",
+        "fact_to_prove": "被告妨害证据保全致使剩余 9 台电脑无法检查，应推定存在侵权",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e11"
+        ],
+        "suggested_evidence_types": [
+          "执法记录仪视频",
+          "法院情况说明",
+          "见证人证言"
+        ],
+        "proof_gap": "仅有保全笔录记载妨害行为，若有现场录像或法院正式情况说明更佳，以强化妨害事实认定及推定依据",
+        "effect_if_unknown": "若妨害事实认定不足，法院可能不予推定剩余电脑侵权，赔偿数额将仅基于已查实的 9 台电脑计算"
+      },
+      {
+        "issue_id": "I4",
+        "element_id": "",
+        "fact_to_prove": "原告主张的经济损失及合理开支数额 2712827 元成立",
+        "burden_party": "原告",
+        "proof_standard": "高度盖然性",
+        "existing_evidence_ids": [
+          "e11"
+        ],
+        "suggested_evidence_types": [
+          "许可使用费合同",
+          "维权费用发票",
+          "被告获利审计报告",
+          "同类软件市场价格证明"
+        ],
+        "proof_gap": "缺乏具体的损失计算依据、被告获利证据或许可费参照，仅靠侵权数量难以直接证明 271 万余元的具体数额",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，法院可能适用法定赔偿或酌情降低赔偿数额"
+      }
+    ]
+  },
+  "step8": {
+    "fact_findings": [
+      {
+        "fact_finding_id": "F1",
+        "element_id": "E1",
+        "fact_slot": "原告享有 NX 系列计算机软件著作权",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e3",
+          "e4",
+          "e5",
+          "e6"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e3 著作权登记证书为国家机关出具的书证，具有较高证明力；e4 版本说明、e5 首次发表证明及 e6 源代码备份相互印证，形成完整证据链，足以认定原告享有案涉软件著作权。无相反证据推翻。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      },
+      {
+        "fact_finding_id": "F2",
+        "element_id": "E2",
+        "fact_slot": "被告在已保全检查的 9 台电脑中未经许可安装使用案涉软件",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e8",
+          "e10",
+          "e11"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e11 为法院证据保全笔录及现场记录，系国家机关依职权制作的公文书证，证明力最高，明确记载 9 台电脑安装 13 套软件；e8 现场取证记录与 e10 软件安装界面截图/日志内容一致，相互印证，足以认定侵权事实。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      },
+      {
+        "fact_finding_id": "F3",
+        "element_id": "E3",
+        "fact_slot": "被告妨害证据保全致使剩余 9 台电脑无法检查，推定存在侵权",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e11"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e11 明确记载被告采取断电、拒开电脑等对抗措施妨害保全，导致 9 台电脑未检。根据最高人民法院关于知识产权民事诉讼证据的若干规定，被告无正当理由妨害举证，法院可推定原告主张成立。该妨害事实清楚，适用举证妨碍规则推定剩余电脑存在侵权。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      },
+      {
+        "fact_finding_id": "F4",
+        "element_id": "E4",
+        "fact_slot": "原告主张的经济损失及合理开支数额 2712827 元成立",
+        "finding_status": "unknown",
+        "adopted_evidence_ids": [
+          "e9",
+          "e11"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e11 仅能证明侵权电脑数量，e9 为原告单方陈述。原告未提交许可使用费合同、被告获利审计报告或具体损失计算依据，导致具体赔偿数额真伪不明。",
+        "burden_party": "原告",
+        "effect_if_unknown": "由原告承担举证不能的不利后果，法院将不适用该具体数额，而是依据侵权情节适用法定赔偿或酌情确定赔偿数额"
+      },
+      {
+        "fact_finding_id": "F5",
+        "element_id": "E5",
+        "fact_slot": "原被告主体资格合法有效",
+        "finding_status": "proved",
+        "adopted_evidence_ids": [
+          "e1",
+          "e2",
+          "e7"
+        ],
+        "rejected_evidence_ids": [],
+        "reasoning": "证据 e1、e2 证明原告依法成立及法定代表人身份；e7 证明被告主体资格。均为书证，形式合法，内容真实，双方无异议，予以采信。",
+        "burden_party": "原告",
+        "effect_if_unknown": null
+      }
+    ]
+  },
+  "step9": {
+    "subsumption_results": [
+      {
+        "claim_id": "C1",
+        "request_basis_rule_unit_id": "著作权法_53_001",
+        "request_elements_result": [
+          {
+            "element_id": "E1",
+            "element_name": "原告享有 NX 系列计算机软件著作权",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E2",
+            "element_name": "被告在已保全电脑中未经许可安装使用案涉软件",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E3",
+            "element_name": "被告妨害证据保全推定剩余电脑存在侵权",
+            "finding_status": "proved",
+            "note": null
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises",
+          "injunction_granted"
+        ],
+        "disposition_type": "停止侵害",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，原告享有案涉软件著作权，被告未经许可复制安装软件的行为已构成侵权。被告妨害证据保全导致部分电脑未检，依法推定存在侵权。原告请求停止侵害、删除侵权复制件符合法律规定，应予支持。",
+        "cited_rules": [
+          "著作权法_53_001",
+          "计算机软件保护条例_24_001"
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "request_basis_rule_unit_id": "著作权法_54_001",
+        "request_elements_result": [
+          {
+            "element_id": "E2",
+            "element_name": "被告在已保全电脑中未经许可安装使用案涉软件",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E3",
+            "element_name": "被告妨害证据保全推定剩余电脑存在侵权",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E4",
+            "element_name": "原告主张的经济损失及合理开支数额 2712827 元成立",
+            "finding_status": "not_proved",
+            "note": "原告未提交损失计算依据，具体数额真伪不明"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises",
+          "damages_awarded"
+        ],
+        "disposition_type": "赔偿损失",
+        "judgment_result": "partially_supported",
+        "reasoning_summary": "本院认为，被告侵权行为成立，应赔偿损失。但原告未举证证明具体损失数额，依法适用法定赔偿。合理开支部分结合维权必要性酌情支持，故对赔偿请求部分支持。",
+        "cited_rules": [
+          "著作权法_54_001",
+          "著作权法司法解释_25_001"
+        ]
+      }
+    ]
+  },
+  "strong_judgment": {
+    "mode": "strong_judgment",
+    "sufficiency_score": {
+      "claim_clarity": 19,
+      "legal_relation_stability": 13,
+      "request_basis_stability": 5,
+      "defense_path_completeness": 3,
+      "element_fact_coverage": 11,
+      "evidence_coverage": 10,
+      "fact_finding_reliability": 8
+    },
+    "risk_level": "medium",
+    "subsumption_results": [
+      {
+        "claim_id": "C1",
+        "request_basis_rule_unit_id": "著作权法_53_001",
+        "request_elements_result": [
+          {
+            "element_id": "E1",
+            "element_name": "原告享有 NX 系列计算机软件著作权",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E2",
+            "element_name": "被告在已保全电脑中未经许可安装使用案涉软件",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E3",
+            "element_name": "被告妨害证据保全推定剩余电脑存在侵权",
+            "finding_status": "proved",
+            "note": null
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises",
+          "injunction_granted"
+        ],
+        "disposition_type": "停止侵害",
+        "judgment_result": "supported",
+        "reasoning_summary": "本院认为，原告享有案涉软件著作权，被告未经许可复制安装软件的行为已构成侵权。被告妨害证据保全导致部分电脑未检，依法推定存在侵权。原告请求停止侵害、删除侵权复制件符合法律规定，应予支持。",
+        "cited_rules": [
+          "著作权法_53_001",
+          "计算机软件保护条例_24_001"
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "request_basis_rule_unit_id": "著作权法_54_001",
+        "request_elements_result": [
+          {
+            "element_id": "E2",
+            "element_name": "被告在已保全电脑中未经许可安装使用案涉软件",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E3",
+            "element_name": "被告妨害证据保全推定剩余电脑存在侵权",
+            "finding_status": "proved",
+            "note": null
+          },
+          {
+            "element_id": "E4",
+            "element_name": "原告主张的经济损失及合理开支数额 2712827 元成立",
+            "finding_status": "not_proved",
+            "note": "原告未提交损失计算依据，具体数额真伪不明"
+          }
+        ],
+        "defense_results": [],
+        "legal_effect_tags": [
+          "liability_arises",
+          "damages_awarded"
+        ],
+        "disposition_type": "赔偿损失",
+        "judgment_result": "partially_supported",
+        "reasoning_summary": "本院认为，被告侵权行为成立，应赔偿损失。但原告未举证证明具体损失数额，依法适用法定赔偿。合理开支部分结合维权必要性酌情支持，故对赔偿请求部分支持。",
+        "cited_rules": [
+          "著作权法_54_001",
+          "著作权法司法解释_25_001"
+        ]
+      }
+    ],
+    "document_skeleton": {
+      "原告诉讼请求": [
+        {
+          "claim_id": "C1",
+          "claim_text_normalized": "判令被告立即停止侵害原告对 NX 系列计算机软件享有的著作权的行为，删除、卸载其经营场所内所有未经授权复制、安装的 NX 系列计算机软件复制件。",
+          "claim_type": [
+            "injunction_claim"
+          ],
+          "object_type": "行为",
+          "amount": null,
+          "claimant": "西某工业软件有限公司",
+          "respondent": "广州沃某模具有限公司",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": "与 C2 项损害赔偿请求构成侵权责任承担方式的聚合关系"
+        },
+        {
+          "claim_id": "C2",
+          "claim_text_normalized": "判令被告赔偿原告经济损失及为制止侵权所支付的合理开支共计人民币 2712827 元。",
+          "claim_type": [
+            "damages_claim"
+          ],
+          "object_type": "金钱",
+          "amount": 2712827.0,
+          "claimant": "西某工业软件有限公司",
+          "respondent": "广州沃某模具有限公司",
+          "is_clear": true,
+          "is_executable": true,
+          "issues": [],
+          "clarification_questions": [],
+          "priority_type": "primary",
+          "competition_note": "与 C1 项停止侵害请求构成侵权责任承担方式的聚合关系"
+        }
+      ],
+      "被告辩称": [],
+      "争议焦点": [
+        {
+          "issue_id": "I1",
+          "issue_type": "fact_issue",
+          "issue_text": "原告是否享有案涉 NX 系列计算机软件著作权",
+          "linked_element_ids": [],
+          "linked_claim_id": "C1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I2",
+          "issue_type": "fact_issue",
+          "issue_text": "被告是否在已保全检查的 9 台电脑中未经许可安装使用案涉软件",
+          "linked_element_ids": [],
+          "linked_claim_id": "C1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e8",
+            "e10",
+            "e11"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I3",
+          "issue_type": "fact_issue",
+          "issue_text": "是否应因被告妨害证据保全行为推定剩余 9 台电脑存在侵权使用",
+          "linked_element_ids": [],
+          "linked_claim_id": "C1",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e11"
+          ],
+          "priority": "high"
+        },
+        {
+          "issue_id": "I4",
+          "issue_type": "fact_issue",
+          "issue_text": "原告主张的经济损失及合理开支数额是否成立",
+          "linked_element_ids": [],
+          "linked_claim_id": "C2",
+          "linked_defense_id": null,
+          "burden_party": "原告",
+          "linked_evidence_ids": [
+            "e11"
+          ],
+          "priority": "medium"
+        }
+      ],
+      "本院查明": [
+        {
+          "fact_finding_id": "F1",
+          "element_id": "E1",
+          "fact_slot": "原告享有 NX 系列计算机软件著作权",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e3 著作权登记证书为国家机关出具的书证，具有较高证明力；e4 版本说明、e5 首次发表证明及 e6 源代码备份相互印证，形成完整证据链，足以认定原告享有案涉软件著作权。无相反证据推翻。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F2",
+          "element_id": "E2",
+          "fact_slot": "被告在已保全检查的 9 台电脑中未经许可安装使用案涉软件",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e8",
+            "e10",
+            "e11"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e11 为法院证据保全笔录及现场记录，系国家机关依职权制作的公文书证，证明力最高，明确记载 9 台电脑安装 13 套软件；e8 现场取证记录与 e10 软件安装界面截图/日志内容一致，相互印证，足以认定侵权事实。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F3",
+          "element_id": "E3",
+          "fact_slot": "被告妨害证据保全致使剩余 9 台电脑无法检查，推定存在侵权",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e11"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e11 明确记载被告采取断电、拒开电脑等对抗措施妨害保全，导致 9 台电脑未检。根据最高人民法院关于知识产权民事诉讼证据的若干规定，被告无正当理由妨害举证，法院可推定原告主张成立。该妨害事实清楚，适用举证妨碍规则推定剩余电脑存在侵权。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        },
+        {
+          "fact_finding_id": "F4",
+          "element_id": "E4",
+          "fact_slot": "原告主张的经济损失及合理开支数额 2712827 元成立",
+          "finding_status": "unknown",
+          "adopted_evidence_ids": [
+            "e9",
+            "e11"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e11 仅能证明侵权电脑数量，e9 为原告单方陈述。原告未提交许可使用费合同、被告获利审计报告或具体损失计算依据，导致具体赔偿数额真伪不明。",
+          "burden_party": "原告",
+          "effect_if_unknown": "由原告承担举证不能的不利后果，法院将不适用该具体数额，而是依据侵权情节适用法定赔偿或酌情确定赔偿数额"
+        },
+        {
+          "fact_finding_id": "F5",
+          "element_id": "E5",
+          "fact_slot": "原被告主体资格合法有效",
+          "finding_status": "proved",
+          "adopted_evidence_ids": [
+            "e1",
+            "e2",
+            "e7"
+          ],
+          "rejected_evidence_ids": [],
+          "reasoning": "证据 e1、e2 证明原告依法成立及法定代表人身份；e7 证明被告主体资格。均为书证，形式合法，内容真实，双方无异议，予以采信。",
+          "burden_party": "原告",
+          "effect_if_unknown": null
+        }
+      ],
+      "本院认为": [
+        {
+          "claim_id": "C1",
+          "request_basis_rule_unit_id": "著作权法_53_001",
+          "request_elements_result": [
+            {
+              "element_id": "E1",
+              "element_name": "原告享有 NX 系列计算机软件著作权",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "E2",
+              "element_name": "被告在已保全电脑中未经许可安装使用案涉软件",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "E3",
+              "element_name": "被告妨害证据保全推定剩余电脑存在侵权",
+              "finding_status": "proved",
+              "note": null
+            }
+          ],
+          "defense_results": [],
+          "legal_effect_tags": [
+            "liability_arises",
+            "injunction_granted"
+          ],
+          "disposition_type": "停止侵害",
+          "judgment_result": "supported",
+          "reasoning_summary": "本院认为，原告享有案涉软件著作权，被告未经许可复制安装软件的行为已构成侵权。被告妨害证据保全导致部分电脑未检，依法推定存在侵权。原告请求停止侵害、删除侵权复制件符合法律规定，应予支持。",
+          "cited_rules": [
+            "著作权法_53_001",
+            "计算机软件保护条例_24_001"
+          ]
+        },
+        {
+          "claim_id": "C2",
+          "request_basis_rule_unit_id": "著作权法_54_001",
+          "request_elements_result": [
+            {
+              "element_id": "E2",
+              "element_name": "被告在已保全电脑中未经许可安装使用案涉软件",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "E3",
+              "element_name": "被告妨害证据保全推定剩余电脑存在侵权",
+              "finding_status": "proved",
+              "note": null
+            },
+            {
+              "element_id": "E4",
+              "element_name": "原告主张的经济损失及合理开支数额 2712827 元成立",
+              "finding_status": "not_proved",
+              "note": "原告未提交损失计算依据，具体数额真伪不明"
+            }
+          ],
+          "defense_results": [],
+          "legal_effect_tags": [
+            "liability_arises",
+            "damages_awarded"
+          ],
+          "disposition_type": "赔偿损失",
+          "judgment_result": "partially_supported",
+          "reasoning_summary": "本院认为，被告侵权行为成立，应赔偿损失。但原告未举证证明具体损失数额，依法适用法定赔偿。合理开支部分结合维权必要性酌情支持，故对赔偿请求部分支持。",
+          "cited_rules": [
+            "著作权法_54_001",
+            "著作权法司法解释_25_001"
+          ]
+        }
+      ],
+      "判决主文": [
+        "支持原告关于 C1 的诉讼请求。",
+        "部分支持原告关于 C2 的诉讼请求。"
+      ],
+      "引用法条": [
+        {
+          "rule_unit_id": "著作权法_53_001",
+          "law_name": "中华人民共和国著作权法",
+          "article_no": "第五十三条",
+          "rule_unit_text": "有下列侵权行为的，应当根据情况，承担本法第五十二条规定的民事责任：（一）未经著作权人许可，复制、发行、表演、放映、广播、汇编、通过信息网络向公众传播其作品的，本法另有规定的除外；（二）出版他人享有专有出版权的图书的；（三）未经表演者许可，复制、发行录有其表演的录音录像制品，或者通过信息网络向公众传播其表演的，本法另有规定的除外；（四）未经录音录像制作者许可，复制、发行、通过信息网络向公众传播其制作的录音录像制品的，本法另有规定的除外；（五）未经许可，播放、复制或者通过信息网络向公众传播广播、电视的，本法另有规定的除外；（六）未经著作权人或者与著作权有关的权利人许可，故意避开或者破坏技术措施的，故意制造、进口或者向他人提供主要用于避开、破坏技术措施的装置或者部件的，或者故意为他人避开或者破坏技术措施提供技术服务的，法律、行政法规另有规定的除外；（七）未经著作权人或者与著作权有关的权利人许可，故意删除或者改变作品、版式设计、表演、录音录像制品或者广播、电视上的权利管理信息的，知道或者应当知道作品、版式设计、表演、录音录像制品或者广播、电视上的权利管理信息未经许可被删除或者改变，仍然向公众提供的，法律、行政法规另有规定的除外；（八）制作、出售假冒他人署名的作品的。"
+        },
+        {
+          "rule_unit_id": "著作权法_54_001",
+          "law_name": "中华人民共和国著作权法",
+          "article_no": "第五十四条",
+          "rule_unit_text": "侵犯著作权或者与著作权有关的权利的，侵权人应当按照权利人因此受到的实际损失或者侵权人的违法所得给予赔偿；权利人的实际损失或者侵权人的违法所得难以计算的，可以参照该权利使用费给予赔偿。对故意侵犯著作权或者与著作权有关的权利，情节严重的，可以在按照上述方法确定数额的一倍以上五倍以下给予赔偿。权利人的实际损失、侵权人的违法所得、权利使用费难以计算的，由人民法院根据侵权行为的情节，判决给予五百元以上五百万元以下的赔偿。赔偿数额还应当包括权利人为制止侵权行为所支付的合理开支。"
+        },
+        {
+          "rule_unit_id": "著作权法司法解释_25_001",
+          "law_name": "",
+          "article_no": "",
+          "rule_unit_text": ""
+        },
+        {
+          "rule_unit_id": "计算机软件保护条例_24_001",
+          "law_name": "",
+          "article_no": "",
+          "rule_unit_text": ""
+        }
+      ]
+    },
+    "consistency_check": {
+      "诉求-固定一致": false,
+      "固定-涵摄一致": true,
+      "缺漏的诉求（涵摄阶段未覆盖）": [],
+      "多出的诉求（涵摄阶段凭空出现）": [],
+      "争点已使用": true,
+      "事实已认定": true,
+      "法条已引用": true
+    }
+  },
+  "timings_ms": {
+    "step1_claim_fixing": 70464,
+    "step2_request_basis": 82151,
+    "step3_defense_basis": 0,
+    "step4_element_analysis": 0,
+    "step5_claim_fact_search": 0,
+    "step6_issue_organize": 113866,
+    "step7_proof": 92303,
+    "step8_fact_finding": 104409,
+    "step9_subsumption": 50227,
+    "total": 590586
+  },
+  "errors": [],
+  "warnings": [
+    "评分处于中风险区间，已按 proceed_with_risk_notes 输出强裁判结果，请关注风险提示。"
+  ]
+}
