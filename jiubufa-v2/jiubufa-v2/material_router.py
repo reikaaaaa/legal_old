@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Optional
@@ -101,9 +102,22 @@ async def material_full(req: MaterialReviewRequest):
     完整流水线：先审核，can_proceed=true 时继续规范化。
     返回 MaterialFullResult { review, normalized }。
     """
+    trace = None
+    if os.getenv("DEBUG_TRACE", "false").lower() == "true":
+        from debug_viewer.trace_collector import TraceCollector
+        trace = TraceCollector()
+        trace.log_step(step_name="材料接收", input_data={"raw_material_preview": req.raw_material[:500]},
+                       logic=["接收用户原始案件材料", "传入材料规范层流水线"])
+
     try:
         pipeline = get_pipeline()
-        result = pipeline.full(req.raw_material)
+        result = pipeline.full(req.raw_material, trace=trace)
+
+        if trace:
+            trace.log_step(step_name="前端返回结果", output_data={"review_keys": list(result.review.model_dump(mode="json").keys()),
+                            "can_proceed": result.review.can_proceed, "has_normalized": result.normalized is not None})
+            trace.finish(status="success")
+
         return {
             "review": result.review.model_dump(mode="json"),
             "normalized": (
@@ -114,6 +128,9 @@ async def material_full(req: MaterialReviewRequest):
         }
     except Exception as exc:
         logger.exception("材料审核+规范化失败")
+        if trace:
+            trace.log_step(step_name="异常捕获", error=str(exc))
+            trace.finish(status="failed")
         raise HTTPException(status_code=500, detail=f"材料处理失败：{exc}")
 
 
@@ -124,9 +141,21 @@ async def material_supplement(req: MaterialSupplementRequest):
     将原始材料与补充材料合并后重新执行完整流水线。
     """
     merged = f"{req.original}\n\n【用户补充材料】\n{req.supplement}"
+
+    trace = None
+    if os.getenv("DEBUG_TRACE", "false").lower() == "true":
+        from debug_viewer.trace_collector import TraceCollector
+        trace = TraceCollector()
+        trace.log_step(step_name="补充材料接收", input_data={"original_preview": req.original[:300], "supplement_preview": req.supplement[:300]},
+                       logic=["合并原始材料与补充材料", "重新执行完整材料规范层流水线"])
+
     try:
         pipeline = get_pipeline()
-        result = pipeline.full(merged)
+        result = pipeline.full(merged, trace=trace)
+
+        if trace:
+            trace.finish(status="success")
+
         return {
             "review": result.review.model_dump(mode="json"),
             "normalized": (
@@ -137,4 +166,7 @@ async def material_supplement(req: MaterialSupplementRequest):
         }
     except Exception as exc:
         logger.exception("补充材料处理失败")
+        if trace:
+            trace.log_step(step_name="异常捕获", error=str(exc))
+            trace.finish(status="failed")
         raise HTTPException(status_code=500, detail=f"补充材料处理失败：{exc}")

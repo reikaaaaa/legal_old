@@ -14,6 +14,7 @@ FastAPI 服务层。
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -51,6 +52,12 @@ app.add_middleware(
 
 # 注册材料规范层路由
 app.include_router(material_router)
+
+# ── Debug Viewer（仅 DEBUG_TRACE=true 时挂载） ──
+if os.getenv("DEBUG_TRACE", "false").lower() == "true":
+    from debug_viewer.debug_router import router as debug_router
+    app.include_router(debug_router)
+    logger.info("DEBUG_TRACE=true，已挂载 /debug 检阅器路由")
 
 # ---------------------------------------------------------------------------
 # 健康检查
@@ -120,20 +127,32 @@ class RunWorkflowRequest(BaseModel):
 @app.post("/api/workflow/run", response_model=WorkflowResult)
 def workflow_run(req: RunWorkflowRequest) -> WorkflowResult:
     """执行完整的九步法工作流。"""
+    trace = None
+    if os.getenv("DEBUG_TRACE", "false").lower() == "true":
+        from debug_viewer.trace_collector import TraceCollector
+        trace = TraceCollector()
+        trace.log_step(step_name="接收请求", input_data=req.model_dump(mode="json"),
+                       logic=["接收前端 /api/workflow/run 请求", "校验 model_name 与 CaseInput"])
     try:
         if req.model_name and req.model_name not in MODEL_REGISTRY:
             raise HTTPException(
                 status_code=400,
                 detail=f"未注册的模型：{req.model_name}。可用：{list(MODEL_REGISTRY)}",
             )
-        # model_name 通过环境/配置层切换；当前 LLMClient 无 per-call alias，
-        # 走默认客户端即可；如需覆盖默认模型，请改 settings.DEFAULT_MODEL。
-        result = run_workflow(req.case_input)
+        result = run_workflow(req.case_input, trace=trace)
+        if trace:
+            trace.log_step(step_name="返回结果", output_data={"status": result.status, "errors": result.errors, "warnings": result.warnings})
+            trace.finish(status=result.status)
         return result
     except HTTPException:
+        if trace:
+            trace.finish(status="blocked")
         raise
     except Exception as exc:  # noqa: BLE001
         logger.exception("workflow_run 内部异常")
+        if trace:
+            trace.log_step(step_name="异常捕获", error=str(exc))
+            trace.finish(status="failed")
         raise HTTPException(status_code=500, detail=f"工作流执行失败：{exc}")
 
 

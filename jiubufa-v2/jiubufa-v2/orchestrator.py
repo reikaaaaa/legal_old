@@ -79,6 +79,7 @@ def run_workflow(
     case_input: CaseInput,
     *,
     llm: Optional[LLMClient] = None,
+    trace=None,
 ) -> WorkflowResult:
     """
     跑一遍九步法工作流并返回 WorkflowResult。
@@ -86,6 +87,7 @@ def run_workflow(
     参数：
         case_input：案件输入，已通过 Pydantic 校验。
         llm：可选的 LLMClient；不传则使用默认全局客户端。
+        trace：可选的 TraceCollector，记录九步法各步骤中间数据。
     """
     llm = llm or get_default_client()
     state = WorkflowState(case_input=case_input)
@@ -93,27 +95,78 @@ def run_workflow(
 
     # ---------- step1: 诉求固定 ----------
     _safe_run_step(state, "step1", lambda: step1_fix_claims.run(state, llm=llm))
+    if trace:
+        trace.log_step(
+            step_name="Step1 固定权利请求", input_data={"claims_count": len(case_input.claims)},
+            output_data=models_to_dicts(state.step1) if state.step1 else None,
+            logic=["规范化诉请表述", "判断每项请求明确性与可执行性", "映射 L3 claim_type", "识别请求权竞合/聚合/备位关系", "推断案由与法律领域"],
+        )
 
     # ---------- step2: 请求权基础检索 ----------
     _safe_run_step(state, "step2", lambda: step2_request_basis.run(state, llm=llm))
+    if trace:
+        cands = state.step2.request_basis_candidates if state.step2 else []
+        trace.log_step(
+            step_name="Step2 请求权基础规范", input_data={"step1_case_causes": state.step1.case_cause_inferred if state.step1 else []},
+            output_data=models_to_dicts(state.step2) if state.step2 else None,
+            logic=[f"检索到 {len(cands)} 个候选规则单元", "五层标签加权打分召回", "LLM 选择最适合的请求权基础", "特别法优先于一般法"],
+        )
 
     # ---------- step3: 抗辩权基础检索 ----------
     _safe_run_step(state, "step3", lambda: step3_defense_basis.run(state, llm=llm))
+    if trace:
+        trace.log_step(
+            step_name="Step3 抗辩权基础规范", input_data={"defense_count": len(case_input.defense_opinions)},
+            output_data=models_to_dicts(state.step3) if state.step3 else None,
+            logic=["检索抗辩/否认/程序异议对应规则", "区分抗辩与否认", "匹配抗辩类型→规则单元"],
+        )
 
     # ---------- step4: 要件分析 ----------
     _safe_run_step(state, "step4", lambda: step4_elements.run(state, llm=llm))
+    if trace:
+        elems = state.step4.element_matrix if state.step4 else []
+        trace.log_step(
+            step_name="Step4 要件分析", input_data={"step2_candidates": len(state.step2.request_basis_candidates) if state.step2 else 0},
+            output_data={"element_count": len(elems)},
+            logic=["分解完全性法条为构成要件+法律效果", "识别隐含要件/消极要件/例外要件", "处理 AND/OR/NOT 逻辑", f"生成 {len(elems)} 行要件矩阵"],
+        )
 
     # ---------- step5: 待证事实搜索 ----------
     _safe_run_step(state, "step5", lambda: step5_claim_facts.run(state, llm=llm))
+    if trace:
+        trace.log_step(
+            step_name="Step5 待证事实搜索", input_data={"fact_count": len(case_input.claim_facts)},
+            output_data=models_to_dicts(state.step5) if state.step5 else None,
+            logic=["将事实主张映射到要件", "标注 assertion_status", "标记缺失/模糊/矛盾主张"],
+        )
 
     # ---------- step6: 争点整理 ----------
     _safe_run_step(state, "step6", lambda: step6_issues.run(state, llm=llm))
+    if trace:
+        issues = state.step6.issues if state.step6 else []
+        trace.log_step(
+            step_name="Step6 争点整理", output_data={"issue_count": len(issues)},
+            logic=["区分事实争点/法律争点/证据争点", "按优先级排序", f"生成 {len(issues)} 个争点"],
+        )
 
     # ---------- step7: 举证质证 ----------
     _safe_run_step(state, "step7", lambda: step7_proof.run(state, llm=llm))
+    if trace:
+        trace.log_step(
+            step_name="Step7 举证质证", input_data={"evidence_count": len(case_input.evidence_list)},
+            output_data=models_to_dicts(state.step7) if state.step7 else None,
+            logic=["为每个待证事实分配举证责任", "匹配证据→要件事实", "标记证据缺口(proof_gap)", "审查证据能力与证明力"],
+        )
 
     # ---------- step8: 事实认定 ----------
     _safe_run_step(state, "step8", lambda: step8_facts.run(state, llm=llm))
+    if trace:
+        findings = state.step8.fact_findings if state.step8 else []
+        proved = sum(1 for f in findings if getattr(f, "finding_status", "") == "proved")
+        trace.log_step(
+            step_name="Step8 事实认定", output_data={"finding_count": len(findings), "proved": proved},
+            logic=["基于证据对每个事实做出认定", "已证明/未证明/真伪不明", f"共 {len(findings)} 项，其中 {proved} 项已证明"],
+        )
 
     # ---------- 保底裁判机制：硬拦截 + 评分 + 选择门 ----------
     hard_reasons = check_hard_block(state)
@@ -127,12 +180,28 @@ def run_workflow(
     score = score_sufficiency(state, llm=llm)
     state.sufficiency_score = score
 
+    if trace:
+        trace.log_step(
+            step_name="充足度评分", output_data={"score": score.model_dump(), "total": score.total, "level": score.level()},
+            logic=[f"claim_clarity={score.claim_clarity}", f"legal_relation={score.legal_relation_stability}",
+                   f"request_basis={score.request_basis_stability}", f"defense_path={score.defense_path_completeness}",
+                   f"element_fact={score.element_fact_coverage}", f"evidence={score.evidence_coverage}",
+                   f"fact_finding={score.fact_finding_reliability}", f"total={score.total}"],
+        )
+
     gate = build_fallback_gate(
         score=score,
         hard_block_reasons=hard_reasons,
         extra_reasons=extra_reasons,
     )
     state.fallback_gate = gate
+
+    if trace:
+        trace.log_step(
+            step_name="保底裁判门", output_data=gate.model_dump(),
+            logic=["硬拦截=" + str(gate.hard_block), "风险等级=" + gate.risk_level,
+                   "推荐动作=" + gate.recommended_action, "用户选择=" + str(case_input.fallback_user_choice or "(未设置)")],
+        )
 
     # ---------- 分支：硬拦截 ----------
     if gate.hard_block:
@@ -219,7 +288,7 @@ def run_workflow(
                 )
         # 默认或显式 proceed_with_risk_notes：跑 step9 并带风险提示
         return _run_strong_branch(
-            state, llm=llm, score=score, started_at=started_at, with_risk_notes=True
+            state, llm=llm, score=score, started_at=started_at, with_risk_notes=True, trace=trace
         )
 
     # 4) 评分=strong：直接强裁判（即便用户传了别的选择也尊重之）
@@ -242,7 +311,7 @@ def run_workflow(
         return _make_result(state, status="blocked", started_at=started_at)
 
     return _run_strong_branch(
-        state, llm=llm, score=score, started_at=started_at, with_risk_notes=False
+        state, llm=llm, score=score, started_at=started_at, with_risk_notes=False, trace=trace
     )
 
 
@@ -269,6 +338,7 @@ def _run_strong_branch(
     score: SufficiencyScore,
     started_at: float,
     with_risk_notes: bool,
+    trace=None,
 ) -> WorkflowResult:
     """跑 step9 并构建强裁判输出。"""
     try:
@@ -280,6 +350,13 @@ def _run_strong_branch(
     subs: List[SubsumptionResult] = (
         list(state.step9.subsumption_results) if state.step9 else []
     )
+
+    if trace:
+        trace.log_step(
+            step_name="Step9 要件归入并裁判", output_data=models_to_dicts(state.step9) if state.step9 else None,
+            logic=["逐项审查请求权要件是否成立", "审查抗辩要件与效果", "调用 L5 决定裁判结论",
+                   f"涵摄 {len(subs)} 项诉请", "生成 reasoning_summary"],
+        )
 
     document_skeleton = _build_document_skeleton(state, subs)
     consistency_check = _build_consistency_check(state, subs)

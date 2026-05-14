@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九步法法律分析工作流检阅器</title>
+<link rel="stylesheet" href="/debug/static/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <h2>Trace 列表</h2>
+    <div id="traceList"><p class="hint">加载中…</p></div>
+    <div style="margin-top:16px;font-size:12px;color:#9ca3af">
+      最多保留最近 20 条<br>
+      DEBUG_TRACE=true 时记录
+    </div>
+  </aside>
+
+  <main class="main">
+    <header>
+      <h1>九步法法律分析工作流检阅器</h1>
+      <div id="traceMeta"><span class="hint">请从左侧选择一条 Trace</span></div>
+    </header>
+
+    <section class="content">
+      <div class="steps" id="stepList">
+        <p class="hint">—</p>
+      </div>
+      <div class="detail">
+        <h2 id="stepTitle">请选择步骤</h2>
+        <div class="tabs">
+          <button onclick="showTab('input')">输入</button>
+          <button onclick="showTab('output')">输出</button>
+          <button onclick="showTab('logic')">处理逻辑</button>
+          <button onclick="showTab('prompt_system')">System Prompt</button>
+          <button onclick="showTab('prompt')">User Prompt</button>
+          <button onclick="showTab('llm_raw')">LLM 原文</button>
+          <button onclick="showTab('parsed_json')">解析 JSON</button>
+          <button onclick="showTab('error')" class="danger">错误</button>
+          <button onclick="showTab('metadata')">元数据</button>
+        </div>
+        <pre id="jsonViewer">—</pre>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="/debug/static/app.js"></script>
+</body>
+</html>

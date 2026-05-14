@@ -400,21 +400,23 @@ class MaterialPipeline:
     # 阶段一：材料审核
     # ------------------------------------------------------------------
 
-    def review(self, raw_material: str) -> MaterialReviewResult:
+    def review(self, raw_material: str, trace=None) -> MaterialReviewResult:
         """
         对用户原始材料执行双维度审核。
 
         参数:
             raw_material: 用户提交的口语化原始案件材料
+            trace: 可选 TraceCollector，记录中间数据
 
         返回:
             MaterialReviewResult（含 can_proceed、缺失清单、补充指引）
         """
         logger.info("=== 阶段一：材料审核开始 ===")
+        review_system = self._review_system
         user_prompt = prompts.build_review_user_prompt(raw_material)
 
         content = _call_dashscope(
-            self._review_system,
+            review_system,
             user_prompt,
             model=self.review_model,
             enable_thinking=True,
@@ -468,6 +470,23 @@ class MaterialPipeline:
             result.can_proceed,
             result.case_type_check.core_provided_rate * 100,
         )
+        if trace:
+            trace.log_step(
+                step_name="材料审核",
+                input_data={"raw_material": raw_material[:500]},
+                output_data=result.model_dump(mode="json"),
+                logic=[
+                    "识别案件类型：" + result.case_module,
+                    "案由专项材料核对，核心提供率：" + str(int(result.case_type_check.core_provided_rate * 100)) + "%",
+                    "九步法逐步骤输入需求诊断",
+                    "综合判定 can_proceed=" + str(result.can_proceed),
+                    "can_proceed 条件：核心提供率≥80% + 步骤1-7无严重缺失 + 被告身份已提供 + 非仅有当事人陈述",
+                ],
+                prompt_system=review_system[:3000],
+                prompt=user_prompt[:3000],
+                llm_raw=content[:5000],
+                parsed_json=data,
+            )
         return result
 
     # ------------------------------------------------------------------
@@ -478,6 +497,7 @@ class MaterialPipeline:
         self,
         raw_material: str,
         case_module: str = "无法确定",
+        trace=None,
     ) -> NormalizedCaseInput:
         """
         将用户原始材料规范化为 NormalizedCaseInput（对齐 CaseInput）。
@@ -520,13 +540,30 @@ class MaterialPipeline:
             len(result.claim_facts),
             len(result.evidence_list),
         )
+        if trace:
+            trace.log_step(
+                step_name="材料规范化",
+                input_data={"raw_material": raw_material[:500], "case_module": case_module},
+                output_data=result.model_dump(mode="json"),
+                logic=[
+                    "抽取当事人信息：%d 方" % len(result.party_info),
+                    "抽取诉讼请求：%d 项" % len(result.claims),
+                    "抽取事实主张：%d 条" % len(result.claim_facts),
+                    "抽取证据清单：%d 件" % len(result.evidence_list),
+                    "非证据元数据不进入 CaseInput",
+                ],
+                prompt_system=self._normalize_system[:3000],
+                prompt=user_prompt[:3000],
+                llm_raw=content[:5000],
+                parsed_json=data,
+            )
         return result
 
     # ------------------------------------------------------------------
     # 串联：审核 + 规范化
     # ------------------------------------------------------------------
 
-    def full(self, raw_material: str) -> MaterialFullResult:
+    def full(self, raw_material: str, trace=None) -> MaterialFullResult:
         """
         执行完整的两阶段流水线：先审核，can_proceed=true 时继续规范化。
 
@@ -536,7 +573,7 @@ class MaterialPipeline:
         返回:
             MaterialFullResult（review + normalized）
         """
-        review = self.review(raw_material)
+        review = self.review(raw_material, trace=trace)
 
         if not review.can_proceed:
             logger.warning(
@@ -547,7 +584,7 @@ class MaterialPipeline:
         # 前端通过 review.can_proceed 和缺失清单来提示用户风险，
         # 不再阻断用户进入九步法分析。
         try:
-            normalized = self.normalize(raw_material, review.case_module)
+            normalized = self.normalize(raw_material, review.case_module, trace=trace)
         except Exception as exc:
             logger.exception("规范化失败，使用空壳数据")
             normalized = NormalizedCaseInput(
