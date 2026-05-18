@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./jiubufa-v2
+      dockerfile: Dockerfile
+    container_name: jiubufa-backend
+    restart: unless-stopped
+    environment:
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY:-}
+      - ENABLE_REAL_LLM=${ENABLE_REAL_LLM:-true}
+      - ENABLE_WEB_SEARCH=${ENABLE_WEB_SEARCH:-false}
+      - DEBUG_TRACE=${DEBUG_TRACE:-false}
+      - JIUBUFA_LOG_LEVEL=${JIUBUFA_LOG_LEVEL:-INFO}
+      - JIUBUFA_MODEL_OVERRIDE=${JIUBUFA_MODEL_OVERRIDE:-}
+    volumes:
+      - ./jiubufa-v2/data:/app/data:ro
+      - ./jiubufa-v2/runtime_tasks:/app/runtime_tasks
+      - ./jiubufa-v2/logs:/app/logs
+      - ./jiubufa-v2/debug_viewer/traces:/app/debug_viewer/traces
+      - ./jiubufa-v2/front_test:/app/front_test:ro
+      - ./cailiaoceng_rule5.11:/cailiaoceng_rule5.11:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: jiubufa-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./jiubufa-v2/front_test:/usr/share/nginx/html:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
