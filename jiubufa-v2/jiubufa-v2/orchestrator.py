@@ -80,6 +80,7 @@ def run_workflow(
     *,
     llm: Optional[LLMClient] = None,
     trace=None,
+    progress_callback=None,
 ) -> WorkflowResult:
     """
     跑一遍九步法工作流并返回 WorkflowResult。
@@ -88,13 +89,19 @@ def run_workflow(
         case_input：案件输入，已通过 Pydantic 校验。
         llm：可选的 LLMClient；不传则使用默认全局客户端。
         trace：可选的 TraceCollector，记录九步法各步骤中间数据。
+        progress_callback：可选，签名 (step_number: int, step_name: str,
+                          status: str, summary: str) -> None。
+                          每步完成后调用，用于异步任务模式下的进度上报。
     """
     llm = llm or get_default_client()
     state = WorkflowState(case_input=case_input)
     started_at = time.time()
 
+    step_counter = [0]  # mutable int，在 _safe_run_step 内部自增
+
     # ---------- step1: 诉求固定 ----------
     _safe_run_step(state, "step1", lambda: step1_fix_claims.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step1", "Step1 固定权利请求")
     if trace:
         trace.log_step(
             step_name="Step1 固定权利请求", input_data={"claims_count": len(case_input.claims)},
@@ -104,6 +111,7 @@ def run_workflow(
 
     # ---------- step2: 请求权基础检索 ----------
     _safe_run_step(state, "step2", lambda: step2_request_basis.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step2", "Step2 请求权基础规范")
     if trace:
         cands = state.step2.request_basis_candidates if state.step2 else []
         trace.log_step(
@@ -114,6 +122,7 @@ def run_workflow(
 
     # ---------- step3: 抗辩权基础检索 ----------
     _safe_run_step(state, "step3", lambda: step3_defense_basis.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step3", "Step3 抗辩权基础规范")
     if trace:
         trace.log_step(
             step_name="Step3 抗辩权基础规范", input_data={"defense_count": len(case_input.defense_opinions)},
@@ -123,6 +132,7 @@ def run_workflow(
 
     # ---------- step4: 要件分析 ----------
     _safe_run_step(state, "step4", lambda: step4_elements.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step4", "Step4 构成要件分析")
     if trace:
         elems = state.step4.element_matrix if state.step4 else []
         trace.log_step(
@@ -133,6 +143,7 @@ def run_workflow(
 
     # ---------- step5: 待证事实搜索 ----------
     _safe_run_step(state, "step5", lambda: step5_claim_facts.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step5", "Step5 诉讼主张检索")
     if trace:
         trace.log_step(
             step_name="Step5 待证事实搜索", input_data={"fact_count": len(case_input.claim_facts)},
@@ -142,6 +153,7 @@ def run_workflow(
 
     # ---------- step6: 争点整理 ----------
     _safe_run_step(state, "step6", lambda: step6_issues.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step6", "Step6 争点整理")
     if trace:
         issues = state.step6.issues if state.step6 else []
         trace.log_step(
@@ -151,6 +163,7 @@ def run_workflow(
 
     # ---------- step7: 举证质证 ----------
     _safe_run_step(state, "step7", lambda: step7_proof.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step7", "Step7 要件事实证明")
     if trace:
         trace.log_step(
             step_name="Step7 举证质证", input_data={"evidence_count": len(case_input.evidence_list)},
@@ -160,6 +173,7 @@ def run_workflow(
 
     # ---------- step8: 事实认定 ----------
     _safe_run_step(state, "step8", lambda: step8_facts.run(state, llm=llm))
+    _notify_progress(progress_callback, step_counter, "step8", "Step8 事实认定")
     if trace:
         findings = state.step8.fact_findings if state.step8 else []
         proved = sum(1 for f in findings if getattr(f, "finding_status", "") == "proved")
@@ -189,6 +203,7 @@ def run_workflow(
                    f"fact_finding={score.fact_finding_reliability}", f"total={score.total}"],
         )
 
+    _notify_progress(progress_callback, step_counter, "fallback", "保底裁判门与充足度评分")
     gate = build_fallback_gate(
         score=score,
         hard_block_reasons=hard_reasons,
@@ -288,7 +303,8 @@ def run_workflow(
                 )
         # 默认或显式 proceed_with_risk_notes：跑 step9 并带风险提示
         return _run_strong_branch(
-            state, llm=llm, score=score, started_at=started_at, with_risk_notes=True, trace=trace
+            state, llm=llm, score=score, started_at=started_at, with_risk_notes=True,
+            trace=trace, progress_callback=progress_callback, step_counter=step_counter,
         )
 
     # 4) 评分=strong：直接强裁判（即便用户传了别的选择也尊重之）
@@ -311,13 +327,25 @@ def run_workflow(
         return _make_result(state, status="blocked", started_at=started_at)
 
     return _run_strong_branch(
-        state, llm=llm, score=score, started_at=started_at, with_risk_notes=False, trace=trace
+        state, llm=llm, score=score, started_at=started_at, with_risk_notes=False,
+        trace=trace, progress_callback=progress_callback, step_counter=step_counter,
     )
 
 
 # ---------------------------------------------------------------------------
 # 辅助函数
 # ---------------------------------------------------------------------------
+
+
+def _notify_progress(callback, counter: list, step_attr: str, step_name: str) -> None:
+    """调用 progress_callback（如有）。counter 是可变整数列表。"""
+    if callback is None:
+        return
+    counter[0] += 1
+    try:
+        callback(counter[0], step_name, "ok", f"{step_name} 完成")
+    except Exception:
+        pass
 
 
 def _safe_run_step(state: WorkflowState, step_attr: str, fn) -> None:
@@ -339,6 +367,8 @@ def _run_strong_branch(
     started_at: float,
     with_risk_notes: bool,
     trace=None,
+    progress_callback=None,
+    step_counter=None,
 ) -> WorkflowResult:
     """跑 step9 并构建强裁判输出。"""
     try:
@@ -346,6 +376,7 @@ def _run_strong_branch(
     except Exception as exc:  # noqa: BLE001
         state.errors.append(f"step9 执行异常：{exc}")
         logger.exception("step9 执行异常")
+    _notify_progress(progress_callback, step_counter or [0], "step9", "Step9 要件归入与裁判")
 
     subs: List[SubsumptionResult] = (
         list(state.step9.subsumption_results) if state.step9 else []

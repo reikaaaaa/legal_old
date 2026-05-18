@@ -83,6 +83,18 @@ tr:hover{background:var(--bg)}
 .field-preview .key{font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}
 .field-preview .val{font-size:14px;padding:6px 10px;background:var(--bg);border-radius:4px;margin-top:2px}
 pre{background:var(--bg);padding:12px;border-radius:6px;font-size:13px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+.fast-markdown{font-family:"Noto Serif SC","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;white-space:pre-wrap;word-break:break-word;overflow-x:auto;font-size:14px}
+.fast-markdown table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0}
+.fast-markdown th{padding:8px 12px;border-bottom:2px solid var(--line);text-align:left;font-weight:600;color:var(--ink2);font-size:12px;background:var(--bg)}
+.fast-markdown td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left}
+.fast-markdown tr:hover{background:var(--bg)}
+.fast-markdown hr{margin:16px 0;border:none;border-top:1px solid var(--line)}
+.fast-markdown h2{font-size:20px;font-weight:700;margin:24px 0 12px;color:var(--red)}
+.fast-markdown h3{font-size:17px;font-weight:700;margin:20px 0 10px;color:var(--ink)}
+.fast-markdown h4{font-size:15px;font-weight:700;margin:16px 0 8px;color:var(--blue)}
+.fast-markdown strong{color:var(--ink)}
+.fast-markdown ul, .fast-markdown ol{margin:8px 0;padding-left:20px}
+.fast-markdown li{margin:4px 0}
 </style>
 </head>
 <body>
@@ -114,15 +126,19 @@ pre{background:var(--bg);padding:12px;border-radius:6px;font-size:13px;overflow-
       </div>
       <div style="margin-top:16px;display:flex;gap:10px">
         <button class="btn btn-primary" id="btnSubmit" onclick="submitMaterial()">真实分析</button>
+        <button class="btn btn-gold" id="btnFastMode" onclick="runFastMode()">⚡ 快速模式</button>
         <button class="btn btn-outline" onclick="loadSample()">加载示例</button>
         <button class="btn btn-outline" id="btnDemo" onclick="runDemo()" style="border-color:var(--blue);color:var(--blue)">▶ 示例 Demo</button>
       </div>
-      <p style="font-size:12px;color:var(--ink2);margin-top:8px">真实分析：调用后端完整流程，耗时较长（10-20分钟）&nbsp;&nbsp;|&nbsp;&nbsp;示例 Demo：展示固定案例的完整运行效果，即时展示，不调用后端</p>
+      <p style="font-size:12px;color:var(--ink2);margin-top:8px"><strong>真实分析：提交后后台异步执行，页面可安全关闭</strong>（约10-20分钟）&nbsp;&nbsp;|&nbsp;&nbsp;快速模式：单轮分析，约2-5分钟&nbsp;&nbsp;|&nbsp;&nbsp;示例 Demo：展示固定案例的完整运行效果，即时展示</p>
     </div>
 
     <div id="reviewResult" style="display:none">
       <!-- Populated after review -->
     </div>
+
+    <div id="fastModeProgress" style="display:none" class="card loading">快速模式分析进行中，请耐心等候（约2-5分钟）…</div>
+    <div id="fastModeResult" style="display:none"></div>
   </div>
 
   <!-- ============ STAGE 2: Jiubufa Confirm ============ -->
@@ -138,7 +154,7 @@ pre{background:var(--bg);padding:12px;border-radius:6px;font-size:13px;overflow-
         <span id="stage2Status" style="font-size:13px;color:var(--ink2)"></span>
       </div>
     </div>
-    <div id="jiubufaProgress" style="display:none" class="card loading">九步法分析进行中，请稍候…</div>
+    <div id="jiubufaProgress" style="display:none" class="card"></div>
   </div>
 
   <!-- ============ STAGE 3: Results ============ -->
@@ -199,27 +215,320 @@ function loadSample(){
   document.getElementById('rawMaterial').value = '我是做小生意的，有个客户李某从我这买了混凝土，欠我8万块钱一直不给。当时也没签什么正式合同，就是微信上说的，他说要买混凝土，我就给他送了。送了三次货，分别是去年9月20号、9月25号、9月27号。一开始他用个人微信给我转过一部分钱，后来就不给了。我有微信聊天记录，他说"你放心，我会付的"，但是一直拖着。我现在想起诉他，让他把8万货款付了。';
 }
 
-// ── Stage 1: Submit Material ────────
+// ── Stage 1: Submit Material (Async Polling) ──
+let pollingTimer = null;
 async function submitMaterial(){
   const raw = document.getElementById('rawMaterial').value.trim();
   if(!raw) return alert('请输入案件材料');
+
+  // Stop any existing polling
+  if(pollingTimer){ clearInterval(pollingTimer); pollingTimer = null; }
+
   const btn = document.getElementById('btnSubmit');
-  btn.textContent='审核中…'; btn.disabled=true;
+  btn.textContent='提交中…'; btn.disabled=true;
+
+  // Show progress bar
+  const progressDiv = document.getElementById('jiubufaProgress');
+  progressDiv.style.display='block';
+  progressDiv.innerHTML = '<div class="loading">正在创建分析任务…</div>';
+
   try{
-    const res = await fetch(API+'/material/full',{
+    const model = document.getElementById('modelSelect').value;
+    const res = await fetch(API+'/api/case/start',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({raw_material: raw})
+      body: JSON.stringify({raw_material: raw, model_name: model})
     });
     if(!res.ok){ const err=await res.json().catch(()=>({})); throw new Error(err.detail||'HTTP '+res.status); }
     const data = await res.json();
-    materialResult = data;
-    if(!data.review) throw new Error('API 返回数据缺少 review 字段');
-    renderReview(data);
-    advanceStage();
-    if(data.review.can_proceed){ goStage(2); renderNormalized(data.normalized); }
-    else{ showSupplement(data.review); goStage(2); renderNormalized(data.normalized); }
-  }catch(e){ alert('材料审核失败: '+e.message); }
-  finally{ btn.textContent='提交审核'; btn.disabled=false; }
+    const taskId = data.task_id;
+
+    // Start polling
+    pollTask(taskId, btn);
+  }catch(e){
+    alert('任务提交失败: '+e.message);
+    progressDiv.style.display='none';
+    btn.textContent='提交审核'; btn.disabled=false;
+  }
+}
+
+function pollTask(taskId, submitBtn){
+  goStage(2);
+  const progressDiv = document.getElementById('jiubufaProgress');
+  progressDiv.style.display='block';
+  progressDiv.innerHTML = '<div class="loading">正在初始化分析流程…</div>';
+
+  pollingTimer = setInterval(async () => {
+    try{
+      const res = await fetch(API+'/api/case/status/'+taskId);
+      if(!res.ok) return;
+      const status = await res.json();
+
+      const pct = status.progress || 0;
+      const step = status.current_step || '处理中';
+      const msg = status.message || '';
+      const steps = status.step_results || [];
+
+      // Color based on progress
+      const barColor = pct < 30 ? 'var(--blue)' : pct < 70 ? 'var(--gold)' : 'var(--green)';
+      const barGlow = pct < 30 ? 'rgba(44,82,130,0.3)' : pct < 70 ? 'rgba(168,132,63,0.3)' : 'rgba(74,107,83,0.3)';
+
+      let html = '<div style="text-align:center;padding:16px 0">';
+
+      // ── Circular percentage gauge ──
+      const r = 52, circ = 2 * Math.PI * r;
+      const offset = circ - (pct / 100) * circ;
+      html += '<div style="display:inline-block;position:relative;width:130px;height:130px;margin-bottom:12px">';
+      html += '<svg width="130" height="130" style="transform:rotate(-90deg)">';
+      html += '<circle cx="65" cy="65" r="'+r+'" fill="none" stroke="var(--line)" stroke-width="8"/>';
+      html += '<circle cx="65" cy="65" r="'+r+'" fill="none" stroke="'+barColor+'" stroke-width="8"';
+      html += ' stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'"';
+      html += ' style="transition:stroke-dashoffset .6s,stroke .6s;filter:drop-shadow(0 0 6px '+barGlow+')"/>';
+      html += '</svg>';
+      html += '<div style="position:absolute;inset:0;display:grid;place-items:center">';
+      html += '<span style="font-size:36px;font-weight:900;color:'+barColor+';transition:color .6s;line-height:1">'+pct+'</span>';
+      html += '<span style="font-size:11px;color:var(--ink2);margin-top:-4px">%</span>';
+      html += '</div>';
+      html += '</div>';
+
+      // ── Step name ──
+      html += '<p style="font-size:15px;font-weight:700;margin:0 0 4px">'+step+'</p>';
+      if(msg) html += '<p style="font-size:13px;color:var(--ink2);margin:0 0 12px">'+msg+'</p>';
+
+      html += '</div>';
+
+      // ── Gradient progress bar ──
+      html += '<div style="background:var(--line);border-radius:8px;height:12px;overflow:hidden;margin-bottom:16px">';
+      html += '<div style="background:linear-gradient(90deg,var(--blue),var(--gold),var(--green));height:100%;width:'+pct+'%;';
+      html += 'border-radius:8px;transition:width .6s;box-shadow:0 0 8px '+barGlow+'"></div>';
+      html += '</div>';
+
+      // ── Step timeline ──
+      if(steps.length > 0){
+        html += '<div style="max-height:340px;overflow-y:auto;padding-right:4px">';
+        steps.forEach((s, i) => {
+          const isLast = i === steps.length - 1;
+          const icon = isLast && status.status === 'running' ? '⏳' : '✅';
+          const opacity = isLast && status.status === 'running' ? '' : 'opacity:0.7';
+          html += '<div style="display:flex;gap:12px;align-items:flex-start;padding:8px 0;'+opacity+'">';
+          html += '<span style="flex-shrink:0;font-size:18px;margin-top:1px">'+icon+'</span>';
+          html += '<div style="flex:1;min-width:0">';
+          html += '<p style="font-size:14px;font-weight:600;margin:0">'+s.step_name+'</p>';
+          if(s.summary) html += '<p style="font-size:12px;color:var(--ink2);margin:2px 0 0;word-break:break-all">'+s.summary+'</p>';
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+
+      html += '<p style="font-size:12px;color:var(--ink2);margin-top:12px;text-align:center">⏱ 任务在后台执行</p>';
+
+      progressDiv.innerHTML = html;
+
+      if(status.status === 'finished'){
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+
+        progressDiv.innerHTML = '<div style="text-align:center;padding:24px">'
+          + '<div style="display:inline-block;position:relative;width:130px;height:130px;margin-bottom:12px">'
+          + '<svg width="130" height="130" style="transform:rotate(-90deg)">'
+          + '<circle cx="65" cy="65" r="52" fill="none" stroke="var(--green)" stroke-width="8"/>'
+          + '</svg>'
+          + '<div style="position:absolute;inset:0;display:grid;place-items:center;font-size:42px">✅</div>'
+          + '</div>'
+          + '<p style="font-size:15px;font-weight:700;color:var(--green);margin:8px 0">分析完成，正在加载结果…</p>'
+          + '</div>';
+
+        const resultRes = await fetch(API+'/api/case/result/'+taskId);
+        const resultData = await resultRes.json();
+
+        if(resultData.result){
+          const r = resultData.result;
+          // Build materialResult for render functions
+          if(r.review){
+            materialResult = { review: r.review, normalized: r.normalized };
+            renderReview(materialResult);
+            advanceStage();
+            if(r.normalized) renderNormalized(r.normalized);
+          }
+          // Build workflowResult for render functions
+          if(r.jiubufa){
+            workflowResult = r.jiubufa;
+            advanceStage(); goStage(3);
+            renderResults(workflowResult);
+          }
+        }
+
+        progressDiv.style.display='none';
+        if(submitBtn){ submitBtn.textContent='提交审核'; submitBtn.disabled=false; }
+
+        // Show summary
+        if(resultData.errors?.length){
+          alert('分析完成，但存在以下问题：\n'+resultData.errors.join('\n'));
+        }
+      }
+
+      if(status.status === 'failed'){
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+        progressDiv.innerHTML = '<div class="error-bar">❌ 分析失败：'+(status.message||'未知错误')+'</div>';
+        if(submitBtn){ submitBtn.textContent='提交审核'; submitBtn.disabled=false; }
+      }
+    }catch(e){
+      // Network errors during polling are non-fatal
+      console.warn('Polling error:', e);
+    }
+  }, 3000);
+}
+
+// ── Fast Mode ─────────────────────────
+async function runFastMode(){
+  const raw = document.getElementById('rawMaterial').value.trim();
+  if(!raw) return alert('请输入案件材料');
+  if(raw.length<50) return alert('材料内容过短，请提供更详细的案件信息以获得准确分析。');
+
+  // 确认
+  if(!confirm('快速模式将使用进行一次完整九步法分析，约需2-5分钟。\n\n注意：快速模式不经过材料规范层，建议材料较完整时使用。\n\n是否继续？')) return;
+
+  const btn = document.getElementById('btnFastMode');
+  const progress = document.getElementById('fastModeProgress');
+  const resultDiv = document.getElementById('fastModeResult');
+
+  // 隐藏其他面板
+  document.getElementById('reviewResult').style.display='none';
+
+  btn.textContent='分析中…'; btn.disabled=true;
+  progress.style.display='block';
+  resultDiv.style.display='none';
+
+  try{
+    const t0 = Date.now();
+    const res = await fetch(API+'/material/fast-mode',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({raw_material: raw})
+    });
+    const elapsed = ((Date.now()-t0)/1000).toFixed(1);
+    if(!res.ok){ const err=await res.json().catch(()=>({})); throw new Error(err.detail||'HTTP '+res.status); }
+    const data = await res.json();
+
+    progress.style.display='none';
+    resultDiv.style.display='block';
+    resultDiv.innerHTML = `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h2 style="border:none;margin:0;padding:0">⚡ 快速模式分析结果</h2>
+          <span class="tag tag-blue">耗时 ${elapsed} 秒</span>
+        </div>
+        <div class="info-bar" style="margin-bottom:16px">
+          ⚠️ 快速模式输出限制较少，内容仅供参考。
+        </div>
+        <div class="fast-markdown">${renderMarkdown(data.result)}</div>
+      </div>`;
+
+    // 滚动到结果
+    resultDiv.scrollIntoView({behavior:'smooth'});
+  }catch(e){
+    progress.style.display='none';
+    alert('快速模式分析失败: '+e.message);
+  }
+  finally{ btn.textContent='⚡ 快速模式'; btn.disabled=false; }
+}
+
+function escapeHtml(text){
+  return text
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// 简易 Markdown → HTML 转换（处理快速模式输出的表格、标题、粗体、列表）
+function renderMarkdown(md){
+  if(!md) return '';
+  let html = escapeHtml(md);
+
+  // 代码块（```...```）
+  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code)=>`<pre style="background:#f4f2ed;padding:12px;border-radius:6px;overflow-x:auto;font-size:13px;line-height:1.6">${code.trim()}</pre>`);
+
+  // 标题（必须在行首）
+  html = html.replace(/^### (.+)$/gm, '<h4 style="font-size:15px;font-weight:700;margin:16px 0 8px;color:#2c5282">$1</h4>');
+  html = html.replace(/^## (.+)$/gm, '<h3 style="font-size:17px;font-weight:700;margin:20px 0 10px;color:#1a1d24;border-bottom:1px solid #e2dcd0;padding-bottom:6px">$1</h3>');
+  html = html.replace(/^# (.+)$/gm, '<h2 style="font-size:20px;font-weight:700;margin:24px 0 12px;color:#9b2a23">$1</h2>');
+
+  // 水平线
+  html = html.replace(/^---$/gm, '<hr style="border:none;border-top:1px solid #e2dcd0;margin:20px 0">');
+  html = html.replace(/^\*\*\*$/gm, '<hr style="border:none;border-top:1px solid #e2dcd0;margin:20px 0">');
+
+  // 粗体
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // 无序列表
+  html = html.replace(/^- (.+)$/gm, '<li style="margin-left:20px">$1</li>');
+
+  // Markdown 表格：逐行处理
+  const lines = html.split('\n');
+  const processed = [];
+  let inTable = false;
+  let tableRows = [];
+  let headerSep = false;
+
+  for(let i=0; i<lines.length; i++){
+    const line = lines[i].trim();
+
+    // 检测表格行（以 | 开头或以 | 结尾，且包含多个 |）
+    if(line.startsWith('|') && line.includes('|')){
+      const cells = line.split('|').filter(c => c.trim() !== '');
+      // 跳过分隔行 (|---|---|)
+      if(cells.every(c => /^[-:]+$/.test(c.trim()))){
+        headerSep = true;
+        continue;
+      }
+      if(!inTable){
+        inTable = true;
+        tableRows = [];
+        headerSep = false;
+      }
+      tableRows.push({cells, isHeader: inTable && tableRows.length===0});
+      continue;
+    }
+
+    // 非表格行
+    if(inTable){
+      // 输出表格
+      let tbl = '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:12px 0">';
+      tableRows.forEach((row,idx)=>{
+        const tag = row.isHeader ? 'th' : 'td';
+        const style = row.isHeader ? 'font-weight:600;color:#5a5e6a;font-size:12px;text-transform:uppercase;letter-spacing:.05em;background:#f8f5f0' : '';
+        tbl += '<tr>';
+        row.cells.forEach(c=>{
+          tbl += `<${tag} style="padding:8px 12px;border-bottom:1px solid #e2dcd0;text-align:left;${style}">${c.trim()}</${tag}>`;
+        });
+        tbl += '</tr>';
+      });
+      tbl += '</table>';
+      processed.push(tbl);
+      inTable = false;
+      tableRows = [];
+    }
+    processed.push(line);
+  }
+
+  // 末尾残留表格
+  if(inTable && tableRows.length>0){
+    let tbl = '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:12px 0">';
+    tableRows.forEach((row,idx)=>{
+      const tag = row.isHeader ? 'th' : 'td';
+      const style = row.isHeader ? 'font-weight:600;color:#5a5e6a;font-size:12px;background:#f8f5f0' : '';
+      tbl += '<tr>';
+      row.cells.forEach(c=>{
+        tbl += `<${tag} style="padding:8px 12px;border-bottom:1px solid #e2dcd0;text-align:left;${style}">${c.trim()}</${tag}>`;
+      });
+      tbl += '</tr>';
+    });
+    tbl += '</table>';
+    processed.push(tbl);
+  }
+
+  return processed.join('\n');
 }
 
 // ── Render Review ───────────────────

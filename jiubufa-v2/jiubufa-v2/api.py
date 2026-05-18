@@ -28,6 +28,8 @@ from kb import get_default_kb
 from material_router import material_router
 from orchestrator import run_workflow
 from schemas import CaseInput, WorkflowResult
+from task_router import task_router
+from task_store import RUNTIME_DIR, cleanup_expired
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,6 +54,19 @@ app.add_middleware(
 
 # 注册材料规范层路由
 app.include_router(material_router)
+
+# 注册异步任务路由（轮询/SSE 模式）
+app.include_router(task_router)
+
+# ── 启动事件 ──
+@app.on_event("startup")
+async def on_startup():
+    RUNTIME_DIR.mkdir(parents=True, exist_ok=True)
+    removed = cleanup_expired()
+    if removed:
+        logger.info("启动时清理了 %d 个过期任务文件", removed)
+    logger.info("runtime_tasks 目录已就绪: %s", RUNTIME_DIR)
+
 
 # ── Debug Viewer（仅 DEBUG_TRACE=true 时挂载） ──
 if os.getenv("DEBUG_TRACE", "false").lower() == "true":
